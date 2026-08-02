@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Snap Jigsaw - Daily Puzzle Challenge</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #1a1a2e; 
+            overflow: hidden;
+            touch-action: none;
+            font-family: 'Arial Black', sans-serif;
+        }
+        canvas { 
+            display: block; 
+            width: 100vw; 
+            height: 100vh;
+        }
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">Loading...</div>
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Foundation Layer -->
+    <script src="../foundation/Foundation.js"></script>
+    
+    <!-- GRID ENGINE (for puzzle games) -->
+    <script>
+    const GridEngine = (() => {
+        return {
+            config: {
+                gridSize: 4,
+                piecePadding: 2,
+                snapThreshold: 30,
+                shuffleCount: 3
+            },
+
+            state: {
+                pieces: [],
+                grid: [],
+                selectedPiece: null,
+                completed: false,
+                score: 0,
+                moves: 0,
+                combo: 0
+            },
+
+            init(canvas, Foundation) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.Foundation = Foundation;
+                
+                Foundation.JuiceKit.init(canvas);
+                Foundation.InputKit.init(canvas);
+                Foundation.UIKit.init(canvas);
+                
+                this.setupInput();
+            },
+
+            setupInput() {
+                const { InputKit } = this.Foundation;
+                
+                InputKit.on('tap', (pos) => {
+                    if (this.state.completed) return;
+                    
+                    // Check if tapping a piece
+                    const clickedPiece = this.getPieceAt(pos.x, pos.y);
+                    
+                    if (clickedPiece && !clickedPiece.locked) {
+                        if (this.state.selectedPiece === clickedPiece) {
+                            // Deselect
+                            this.state.selectedPiece = null;
+                        } else {
+                            // Select new piece
+                            if (this.state.selectedPiece) {
+                                this.tryPlacePiece(this.state.selectedPiece, pos.x, pos.y);
+                            }
+                            this.state.selectedPiece = clickedPiece;
+                            this.Foundation.AudioKit.playSFX('pop');
+                        }
+                    } else if (this.state.selectedPiece) {
+                        // Try to place at tap location
+                        this.tryPlacePiece(this.state.selectedPiece, pos.x, pos.y);
+                    }
+                });
+                
+                InputKit.on('drag', (data) => {
+                    if (this.state.selectedPiece && !this.state.selectedPiece.locked) {
+                        this.state.selectedPiece.x = data.x;
+                        this.state.selectedPiece.y = data.y;
+                    }
+                });
+                
+                InputKit.on('release', () => {
+                    if (this.state.selectedPiece && !this.state.selectedPiece.locked) {
+                        // Snap back to original position if not placed
+                        const targetPos = this.findSnapPosition(this.state.selectedPiece);
+                        if (targetPos) {
+                            this.placePiece(this.state.selectedPiece, targetPos.gridX, targetPos.gridY);
+                        }
+                        this.state.selectedPiece = null;
+                    }
+                });
+            },
+
+            start(config) {
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                const size = Math.min(w, h) * 0.7;
+                const cellSize = size / this.config.gridSize;
+                
+                this.state = {
+                    pieces: [],
+                    grid: [],
+                    selectedPiece: null,
+                    completed: false,
+                    score: 0,
+                    moves: 0,
+                    combo: 0,
+                    level: config.level || 1,
+                    cellSize,
+                    offsetX: (w - size) / 2,
+                    offsetY: (h - size) / 2 + 50
+                };
+                
+                // Create grid positions
+                for (let row = 0; row < this.config.gridSize; row++) {
+                    this.state.grid[row] = [];
+                    for (let col = 0; col < this.config.gridSize; col++) {
+                        this.state.grid[row][col] = {
+                            x: this.state.offsetX + col * cellSize,
+                            y: this.state.offsetY + row * cellSize,
+                            width: cellSize - this.config.piecePadding,
+                            height: cellSize - this.config.piecePadding,
+                            filled: false,
+                            correctPiece: row * this.config.gridSize + col
+                        };
+                    }
+                }
+                
+                // Create pieces with unique shapes
+                const colors = this.generateColorPalette(config.theme || 'default');
+                for (let i = 0; i < this.config.gridSize * this.config.gridSize; i++) {
+                    const row = Math.floor(i / this.config.gridSize);
+                    const col = i % this.config.gridSize;
+                    
+                    this.state.pieces.push({
+                        id: i,
+                        x: Math.random() * (w - 100) + 50,
+                        y: Math.random() * (h - 200) + 150,
+                        width: cellSize - this.config.piecePadding,
+                        height: cellSize - this.config.piecePadding,
+                        color: colors[i],
+                        pattern: this.generatePattern(i, colors),
+                        locked: false,
+                        shape: this.generatePieceShape(row, col, this.config.gridSize),
+                        targetRow: row,
+                        targetCol: col
+                    });
+                }
+                
+                // Shuffle pieces
+                for (let s = 0; s < this.config.shuffleCount; s++) {
+                    for (let i = this.state.pieces.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        const temp = { ...this.state.pieces[i] };
+                        this.state.pieces[i].x = this.state.pieces[j].x;
+                        this.state.pieces[i].y = this.state.pieces[j].y;
+                        this.state.pieces[j].x = temp.x;
+                        this.state.pieces[j].y = temp.y;
+                    }
+                }
+                
+                this.Foundation.EconomyKit.init();
+                this.Foundation.MetaKit.init();
+                
+                document.getElementById('loading').style.display = 'none';
+            },
+
+            generateColorPalette(theme) {
+                const palettes = {
+                    default: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9', '#F8B500', '#FF6F61', '#6B5B95', '#88B04B', '#F7CAC9', '#92A8D1'],
+                    nature: ['#2E7D32', '#66BB6A', '#81C784', '#A5D6A7', '#C8E6C9', '#1B5E20', '#388E3C', '#4CAF50', '#8BC34A', '#CDDC39', '#DCEDC8', '#F1F8E9', '#558B2F', '#689F38', '#7CB342', '#9CCC65'],
+                    ocean: ['#0D47A1', '#1565C0', '#1976D2', '#1E88E5', '#2196F3', '#42A5F5', '#64B5F6', '#90CAF9', '#BBDEFB', '#E3F2FD', '#0277BD', '#0288D1', '#039BE5', '#03A9F4', '#00BCD4', '#4DD0E1'],
+                    sunset: ['#FF5722', '#FF7043', '#FF8A65', '#FFAB91', '#FFCCBC', '#FBE9E7', '#D84315', '#E64A19', '#F4511E', '#FF5722', '#FF6E40', '#FF8A65', '#FFAB91', '#FFCCBC', '#FBE9E7', '#BF360C']
+                };
+                return palettes[theme] || palettes.default;
+            },
+
+            generatePattern(index, colors) {
+                const patterns = ['stripes', 'dots', 'gradient', 'crosshatch'];
+                const pattern = patterns[index % patterns.length];
+                const baseColor = colors[index % colors.length];
+                
+                return { type: pattern, color: baseColor };
+            },
+
+            generatePieceShape(row, col, gridSize) {
+                // Generate jigsaw-like tabs and blanks
+                const shape = {
+                    top: row === 0 ? 'flat' : (Math.random() > 0.5 ? 'tab' : 'blank'),
+                    right: col === gridSize - 1 ? 'flat' : (Math.random() > 0.5 ? 'tab' : 'blank'),
+                    bottom: row === gridSize - 1 ? 'flat' : (Math.random() > 0.5 ? 'tab' : 'blank'),
+                    left: col === 0 ? 'flat' : (Math.random() > 0.5 ? 'tab' : 'blank')
+                };
+                return shape;
+            },
+
+            getPieceAt(x, y) {
+                for (let i = this.state.pieces.length - 1; i >= 0; i--) {
+                    const p = this.state.pieces[i];
+                    if (!p.locked &&
+                        x >= p.x && x <= p.x + p.width &&
+                        y >= p.y && y <= p.y + p.height) {
+                        return p;
+                    }
+                }
+                return null;
+            },
+
+            findSnapPosition(piece) {
+                for (let row = 0; row < this.config.gridSize; row++) {
+                    for (let col = 0; col < this.config.gridSize; col++) {
+                        const gridCell = this.state.grid[row][col];
+                        if (!gridCell.filled) {
+                            const dx = piece.x - gridCell.x;
+                            const dy = piece.y - gridCell.y;
+                            const dist = Math.sqrt(dx*dx + dy*dy);
+                            
+                            if (dist < this.config.snapThreshold) {
+                                return { gridX: col, gridY: row, cell: gridCell };
+                            }
+                        }
+                    }
+                }
+                return null;
+            },
+
+            tryPlacePiece(piece, x, y) {
+                const targetPos = this.findSnapPosition(piece);
+                
+                if (targetPos) {
+                    this.placePiece(piece, targetPos.gridX, targetPos.gridY);
+                } else {
+                    // Wrong placement feedback
+                    this.Foundation.JuiceKit.particles(piece.x + piece.width/2, piece.y + piece.height/2, '#f44336', 10);
+                    this.Foundation.AudioKit.playSFX('fail');
+                }
+                
+                this.state.moves++;
+            },
+
+            placePiece(piece, gridX, gridY) {
+                const gridCell = this.state.grid[gridY][gridX];
+                
+                // Animate to position
+                this.Foundation.JuiceKit.tween(piece, 'x', gridCell.x, 200, 'easeOut');
+                this.Foundation.JuiceKit.tween(piece, 'y', gridCell.y, 200, 'easeOut');
+                
+                piece.locked = true;
+                gridCell.filled = true;
+                
+                // Check if correct placement
+                const isCorrect = piece.targetRow === gridY && piece.targetCol === gridX;
+                
+                if (isCorrect) {
+                    this.Foundation.JuiceKit.particles(gridCell.x + gridCell.width/2, gridCell.y + gridCell.height/2, '#4CAF50', 30);
+                    this.Foundation.JuiceKit.haptic('success');
+                    this.Foundation.AudioKit.playSFX('match');
+                    this.state.combo++;
+                    this.Foundation.AudioKit.setComboPitch(this.state.combo);
+                    this.state.score += 100 * this.state.combo;
+                    this.Foundation.EconomyKit.earn(10 * this.state.combo);
+                    
+                    // Check completion
+                    this.checkCompletion();
+                } else {
+                    this.Foundation.JuiceKit.particles(gridCell.x + gridCell.width/2, gridCell.y + gridCell.height/2, '#FF9800', 20);
+                    this.Foundation.AudioKit.playSFX('pop');
+                }
+            },
+
+            checkCompletion() {
+                const allFilled = this.state.grid.every(row => 
+                    row.every(cell => cell.filled)
+                );
+                
+                if (allFilled) {
+                    this.state.completed = true;
+                    this.Foundation.JuiceKit.screenshake(15);
+                    this.Foundation.JuiceKit.particles(this.canvas.width/2, this.canvas.height/2, '#FFD700', 100, 'star');
+                    this.Foundation.AudioKit.playSFX('win');
+                    this.Foundation.AudioKit.resetComboPitch();
+                    
+                    setTimeout(() => {
+                        this.completeLevel();
+                    }, 1000);
+                }
+            },
+
+            update(deltaTime) {
+                const { JuiceKit } = this.Foundation;
+                JuiceKit.update();
+            },
+
+            render() {
+                const ctx = this.ctx;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                const { JuiceKit, UIKit } = this.Foundation;
+                
+                ctx.save();
+                ctx.translate(JuiceKit.state.screenshake.x, JuiceKit.state.screenshake.y);
+                
+                // Background gradient
+                const gradient = ctx.createLinearGradient(0, 0, 0, h);
+                gradient.addColorStop(0, '#1a1a2e');
+                gradient.addColorStop(1, '#16213e');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, w, h);
+                
+                // Draw grid placeholders
+                for (let row = 0; row < this.config.gridSize; row++) {
+                    for (let col = 0; col < this.config.gridSize; col++) {
+                        const cell = this.state.grid[row][col];
+                        ctx.fillStyle = cell.filled ? 'rgba(76, 175, 80, 0.3)' : 'rgba(255,255,255,0.1)';
+                        ctx.strokeStyle = cell.filled ? '#4CAF50' : 'rgba(255,255,255,0.2)';
+                        ctx.lineWidth = 2;
+                        
+                        ctx.beginPath();
+                        ctx.roundRect(cell.x, cell.y, cell.width, cell.height, 8);
+                        ctx.fill();
+                        ctx.stroke();
+                    }
+                }
+                
+                // Draw pieces
+                this.state.pieces.forEach(piece => {
+                    ctx.save();
+                    
+                    // Shadow
+                    if (!piece.locked) {
+                        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                        ctx.shadowBlur = 10;
+                        ctx.shadowOffsetY = 5;
+                    }
+                    
+                    // Piece background
+                    ctx.fillStyle = piece.pattern.color;
+                    ctx.beginPath();
+                    ctx.roundRect(piece.x, piece.y, piece.width, piece.height, 8);
+                    ctx.fill();
+                    
+                    // Pattern overlay
+                    this.renderPattern(ctx, piece.pattern, piece.x, piece.y, piece.width, piece.height);
+                    
+                    // Border
+                    ctx.strokeStyle = piece === this.state.selectedPiece ? '#FFD700' : 'rgba(255,255,255,0.5)';
+                    ctx.lineWidth = piece === this.state.selectedPiece ? 4 : 2;
+                    ctx.stroke();
+                    
+                    // Lock indicator
+                    if (piece.locked) {
+                        ctx.fillStyle = 'rgba(76, 175, 80, 0.5)';
+                        ctx.beginPath();
+                        ctx.roundRect(piece.x, piece.y, piece.width, piece.height, 8);
+                        ctx.fill();
+                    }
+                    
+                    ctx.restore();
+                });
+                
+                // Render juice
+                JuiceKit.render();
+                
+                // HUD
+                UIKit.drawHUD({
+                    level: this.state.level,
+                    score: this.state.score,
+                    stars: this.state.completed ? 3 : 0
+                });
+                
+                // Combo indicator
+                if (this.state.combo > 1) {
+                    ctx.fillStyle = '#FF9800';
+                    ctx.font = 'bold 20px Arial Black';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`COMBO x${this.state.combo}`, w/2, 80);
+                }
+                
+                // Completion message
+                if (this.state.completed) {
+                    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                    ctx.fillRect(0, 0, w, h);
+                    
+                    ctx.fillStyle = '#FFD700';
+                    ctx.font = 'bold 48px Arial Black';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('PUZZLE COMPLETE!', w/2, h/2);
+                }
+                
+                ctx.restore();
+            },
+
+            renderPattern(ctx, pattern, x, y, w, h) {
+                ctx.save();
+                ctx.clip();
+                
+                switch(pattern.type) {
+                    case 'stripes':
+                        for (let i = 0; i < w; i += 10) {
+                            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+                            ctx.fillRect(x + i, y, 5, h);
+                        }
+                        break;
+                    case 'dots':
+                        for (let i = 0; i < w; i += 15) {
+                            for (let j = 0; j < h; j += 15) {
+                                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                                ctx.beginPath();
+                                ctx.arc(x + i + 7, y + j + 7, 3, 0, Math.PI * 2);
+                                ctx.fill();
+                            }
+                        }
+                        break;
+                    case 'gradient':
+                        const grad = ctx.createLinearGradient(x, y, x + w, y + h);
+                        grad.addColorStop(0, 'rgba(255,255,255,0.3)');
+                        grad.addColorStop(1, 'rgba(255,255,255,0)');
+                        ctx.fillStyle = grad;
+                        ctx.fillRect(x, y, w, h);
+                        break;
+                }
+                
+                ctx.restore();
+            },
+
+            completeLevel() {
+                const stars = this.state.moves < 20 ? 3 : this.state.moves < 30 ? 2 : 1;
+                const coins = this.Foundation.EconomyKit.getBalance();
+                
+                this.Foundation.LevelKit.complete(this.state.level, stars);
+                
+                this.Foundation.UIKit.showLevelComplete(stars, {
+                    coins: coins
+                }, () => {
+                    const nextLevel = this.Foundation.LevelKit.getNextLevel();
+                    this.start({ level: nextLevel });
+                });
+            }
+        };
+    })();
+    </script>
+
+    <!-- Game Implementation -->
+    <script>
+    (function() {
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+        
+        // Initialize game
+        const engine = GridEngine;
+        engine.init(canvas, Foundation);
+        
+        // Start game with daily streak bonus
+        const streakMultiplier = Foundation.MetaKit.getStreakMultiplier();
+        engine.start({ 
+            level: 1, 
+            theme: 'default',
+            streakBonus: streakMultiplier
+        });
+        
+        // Game loop
+        let lastTime = Date.now();
+        function gameLoop() {
+            const now = Date.now();
+            const deltaTime = now - lastTime;
+            lastTime = now;
+            
+            engine.update(deltaTime);
+            engine.render();
+            
+            requestAnimationFrame(gameLoop);
+        }
+        gameLoop();
+        
+        // Handle level completion
+        engine.completeLevel = function() {
+            const stars = this.state.moves < 15 ? 3 : this.state.moves < 25 ? 2 : 1;
+            const coins = this.Foundation.EconomyKit.getBalance();
+            
+            this.Foundation.LevelKit.complete(this.state.level, stars);
+            
+            // Apply daily streak bonus
+            const multiplier = this.Foundation.MetaKit.getStreakMultiplier();
+            const bonusCoins = Math.floor(coins * multiplier);
+            
+            this.Foundation.UIKit.showLevelComplete(stars, {
+                coins: bonusCoins,
+                streakBonus: multiplier > 1 ? `+${Math.floor((multiplier-1)*100)}% streak bonus!` : null
+            }, () => {
+                const nextLevel = this.Foundation.LevelKit.getNextLevel();
+                
+                // Show interstitial every 3 levels
+                if (this.Foundation.AdKit.shouldShowInterstitial()) {
+                    this.Foundation.AdKit.showInterstitial();
+                }
+                
+                this.start({ level: nextLevel, theme: this.getRandomTheme() });
+            });
+        }.bind(engine);
+        
+        engine.getRandomTheme = function() {
+            const themes = ['default', 'nature', 'ocean', 'sunset'];
+            return themes[Math.floor(Math.random() * themes.length)];
+        };
+        
+        // Add daily puzzle streak tracking
+        Foundation.MetaKit.checkDailyStreak();
+        
+        console.log('Snap Jigsaw loaded - Daily puzzle streaks enabled!');
+    })();
+    </script>
+</body>
+</html>
