@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#080d2b" />
+  <title>Tic Tac Toe — Beat the Bot</title>
+  <style>
+    :root { --ink:#080d2b; --panel:#111b54; --cyan:#43ddff; --coral:#ff866b; --line:#3550a4; --text:#f8fbff; }
+    * { box-sizing:border-box; } body { margin:0; min-height:100svh; display:grid; place-items:center; overflow:hidden; color:var(--text); font-family:Inter,ui-rounded,system-ui,-apple-system,sans-serif; background:radial-gradient(circle at 15% 10%,#172c77 0,transparent 25%),radial-gradient(circle at 90% 85%,#4a174a 0,transparent 28%),var(--ink); }
+    .game { width:min(100%,520px); min-height:100svh; padding:max(24px,env(safe-area-inset-top)) 22px max(24px,env(safe-area-inset-bottom)); display:flex; flex-direction:column; justify-content:center; gap:20px; position:relative; }
+    .stars { position:fixed; inset:0; opacity:.45; pointer-events:none; background-image:radial-gradient(#9ff5ff 1px,transparent 1.5px),radial-gradient(#ffbdc1 1px,transparent 1.5px); background-size:64px 71px,113px 101px; background-position:5px 9px,43px 27px; }
+    header, .board, .status, .controls { position:relative; z-index:1; } h1 { font-size:clamp(2.3rem,11vw,4rem); line-height:.88; letter-spacing:-.08em; margin:0; text-align:center; font-weight:950; text-shadow:0 0 22px #35d6ff55; } h1 span:first-child{color:var(--cyan)} h1 span:last-child{color:var(--coral)} p { text-align:center; margin:10px 0 0; color:#dce5ff; font-size:1rem; font-weight:650; }
+    .score { display:flex; justify-content:center; gap:28px; color:#aabbeb; font-size:.8rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; } .score b { color:white; margin-left:5px; }
+    .board { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:8px; border:2px solid var(--line); border-radius:22px; background:#09113dbe; box-shadow:0 0 44px #1c46b77a; aspect-ratio:1; }
+    .cell { appearance:none; border:0; border-radius:14px; background:linear-gradient(145deg,#122269,#07103c); color:var(--text); font-size:clamp(3.8rem,20vw,7rem); font-weight:900; line-height:1; cursor:pointer; min-width:0; touch-action:manipulation; transition:transform .12s,background .2s; } .cell:active { transform:scale(.94); } .cell.x { color:var(--cyan); text-shadow:0 0 18px #30e1ff; } .cell.o { color:var(--coral); text-shadow:0 0 18px #ff755e; } .cell.win { background:#1c3b8b; animation:pulse .75s infinite alternate; }
+    .status { text-align:center; min-height:32px; color:var(--cyan); font-weight:950; letter-spacing:.13em; font-size:1rem; text-transform:uppercase; } .status.bot { color:var(--coral); }
+    .controls { display:grid; gap:12px; } button { font:inherit; } #new { border:2px solid #54e5ff; border-radius:16px; padding:17px; color:#04122b; background:linear-gradient(135deg,#4beaff,#1c9ee8); font-size:1.2rem; font-weight:900; box-shadow:0 8px 26px #24cdff5a; cursor:pointer; touch-action:manipulation; } #new:active { transform:scale(.98); }
+    .difficulty { display:flex; justify-content:center; gap:4px; background:#070d32b8; border:1px solid #2d418d; border-radius:99px; padding:4px; align-self:center; } .difficulty button { border:0; background:transparent; color:#9fb3e6; padding:8px 17px; border-radius:99px; font-weight:850; font-size:.78rem; letter-spacing:.07em; cursor:pointer; } .difficulty button.active { color:#09102f; background:var(--coral); box-shadow:0 0 13px #ff795d; }
+    @keyframes pulse { to { box-shadow:inset 0 0 0 2px var(--cyan),0 0 22px var(--cyan); } }
+    @media (max-height:680px) { .game { gap:13px; padding-top:18px; padding-bottom:18px; } h1 { font-size:2.4rem; } .board { width:min(78vw,390px); justify-self:center; align-self:center; } .cell { font-size:4rem; } }
+  </style>
+</head>
+<body>
+  <main class="game"><div class="stars"></div><header><h1><span>TIC</span> <span>TAC TOE</span></h1><p>Beat the bot. You are X.</p></header><div class="score"><span>You <b id="you">0</b></span><span>Draws <b id="draws">0</b></span><span>Bot <b id="bot">0</b></span></div><section class="board" aria-label="Tic tac toe board" id="board"></section><div id="status" class="status" aria-live="polite">YOUR TURN</div><div class="controls"><button id="new">New game</button><div class="difficulty"><button class="active" data-mode="easy">EASY</button><button data-mode="hard">HARD</button></div></div></main>
+  <script>
+    const boardEl=document.querySelector('#board'), status=document.querySelector('#status'); let board=Array(9).fill(''), turn='X', over=false, mode='easy'; const scores={X:0,O:0,D:0}; const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    function render(){ boardEl.innerHTML=''; board.forEach((v,i)=>{const b=document.createElement('button'); b.className='cell '+(v?v.toLowerCase():''); b.textContent=v; b.setAttribute('aria-label',v||`Cell ${i+1}`); b.onclick=()=>move(i); boardEl.appendChild(b)}); ['X','O','D'].forEach(k=>document.querySelector('#'+({X:'you',O:'bot',D:'draws'}[k])).textContent=scores[k]); }
+    function winner(b=board){ for(const line of lines) if(b[line[0]]&&b[line[0]]===b[line[1]]&&b[line[1]]===b[line[2]]) return {who:b[line[0]],line}; return b.every(Boolean)?{who:'D',line:[]}:null; }
+    function end(r){over=true; if(r.who==='D'){scores.D++;status.textContent='DRAW — GOOD GAME';} else {scores[r.who]++;status.textContent=r.who==='X'?'YOU WIN!':'BOT WINS'; status.className='status '+(r.who==='O'?'bot':''); r.line.forEach(i=>boardEl.children[i].classList.add('win'));} render(); if(r.line?.length) r.line.forEach(i=>boardEl.children[i].classList.add('win'));}
+    function move(i){ if(over||turn!=='X'||board[i]) return; board[i]='X'; render(); const r=winner(); if(r) return end(r); turn='O';status.textContent='BOT IS THINKING';status.className='status bot'; setTimeout(botMove,350); }
+    function bestMove(b,player){ const r=winner(b); if(r) return r.who==='O'?10:r.who==='X'?-10:0; let best=player==='O'?-Infinity:Infinity; for(let i=0;i<9;i++)if(!b[i]){b[i]=player;let s=bestMove(b,player==='O'?'X':'O');b[i]='';best=player==='O'?Math.max(best,s):Math.min(best,s)} return best; }
+    function botMove(){ if(over)return; const open=board.map((v,i)=>v?'':i).filter(v=>v!==''); let pick; if(mode==='easy'&&Math.random()<.63) pick=open[Math.floor(Math.random()*open.length)]; else {let top=-Infinity;for(const i of open){board[i]='O';const s=bestMove(board,'X');board[i]='';if(s>top){top=s;pick=i}}} board[pick]='O';render(); const r=winner();if(r)return end(r);turn='X';status.textContent='YOUR TURN';status.className='status'; }
+    function reset(){board=Array(9).fill('');turn='X';over=false;status.textContent='YOUR TURN';status.className='status';render();} document.querySelector('#new').onclick=reset; document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('active',x===b));reset()}); render();
+  </script>
+</body></html>
