@@ -52,6 +52,8 @@
   }
 
   * { box-sizing: border-box; }
+  /* Author display rules (.seg is flex, .view is block) otherwise beat the UA's [hidden]. */
+  [hidden] { display: none !important; }
   html, body { margin: 0; padding: 0; }
   body {
     background: var(--bg); color: var(--text);
@@ -94,14 +96,20 @@
   }
   .header-tools { display: flex; align-items: center; gap: 6px; }
 
-  .datenav { display: flex; align-items: center; gap: 2px; background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 2px; }
+  .datenav { display: flex; align-items: center; gap: 2px; background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 2px; position: relative; }
+  /* Anchors the native date popover near the button without showing the input itself. */
+  #datePicker { position: absolute; left: 50%; bottom: 2px; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; }
   .datenav button {
     background: none; border: none; color: var(--muted); cursor: pointer;
     padding: 6px 9px; border-radius: 8px; font-size: 15px; line-height: 1;
   }
   .datenav button:hover:not(:disabled) { background: var(--card-2); color: var(--text); }
   .datenav button:disabled { opacity: 0.3; cursor: default; }
-  .datenav .cur { font-size: 13px; font-weight: 600; color: var(--text); padding: 6px 4px; min-width: 76px; text-align: center; }
+  .datenav .cur {
+    font-size: 13px; font-weight: 600; color: var(--text); padding: 6px 8px;
+    min-width: 76px; text-align: center; background: none; border: none; cursor: pointer; border-radius: 8px;
+  }
+  .datenav .cur:hover { background: var(--card-2); }
   .icon-btn {
     background: var(--card); border: 1px solid var(--border); color: var(--muted);
     width: 38px; height: 38px; border-radius: 11px; cursor: pointer; font-size: 16px;
@@ -321,6 +329,7 @@
   .food-row .fi-meta { color: var(--muted); font-size: 11.5px; margin-top: 2px; }
   .food-row .fi-kcal { font-weight: 700; color: var(--accent); font-size: 14px; white-space: nowrap; }
   .hint { color: var(--muted); font-size: 11.5px; margin-top: 8px; }
+  .hint:empty { display: none; }
 
   .qty-preview { background: var(--card-2); border: 1px solid var(--border-soft); border-radius: 11px; padding: 12px; margin-bottom: 12px; }
   .qty-preview .qp-name { font-weight: 700; font-size: 15px; }
@@ -367,7 +376,8 @@
     <div class="header-tools">
       <div class="datenav">
         <button id="prevDay" aria-label="Previous day">‹</button>
-        <span class="cur" id="dateLabel">Today</span>
+        <button class="cur" id="dateBtn" aria-label="Jump to a date"><span id="dateLabel">Today</span></button>
+        <input type="date" id="datePicker" aria-label="Jump to a date" tabindex="-1" />
         <button id="nextDay" aria-label="Next day">›</button>
       </div>
       <button class="icon-btn" id="themeBtn" aria-label="Toggle colour theme" title="Toggle theme"></button>
@@ -562,7 +572,7 @@
       <button class="icon-btn" data-close aria-label="Close">✕</button>
     </div>
 
-    <div class="seg" role="tablist" aria-label="Add food method">
+    <div class="seg" id="foodSeg" role="tablist" aria-label="Add food method">
       <button role="tab" id="segSearch" aria-selected="true" aria-controls="paneSearch">Search</button>
       <button role="tab" id="segCustom" aria-selected="false" aria-controls="paneCustom">Custom</button>
     </div>
@@ -904,6 +914,7 @@ const state = {
   view: "Today",
   pendingMeal: null,
   pendingFood: null,
+  editing: null,
   searchHits: [],
   activeHit: -1,
   lastUndo: null,
@@ -1003,6 +1014,7 @@ function renderHeader() {
   else if (state.date === shiftISO(today, -1)) label.textContent = "Yesterday";
   else label.textContent = fromISO(state.date).toLocaleDateString(undefined, { month: "short", day: "numeric" });
   $("#nextDay").disabled = state.date >= today;
+  $("#datePicker").max = today;
 
   const streak = computeStreak();
   $("#streakLabel").textContent = streak > 0
@@ -1171,12 +1183,20 @@ function removeItem(mealId, idx) {
 
 function editQty(mealId, idx) {
   const it = state.day.meals[mealId][idx];
-  const input = prompt(`Servings of ${it.name}:`, String(it.qty));
-  if (input === null) return;
-  const qty = parseFloat(input);
-  if (!Number.isFinite(qty) || qty <= 0) { toast("Enter a number greater than zero."); return; }
-  it.qty = Math.round(qty * 100) / 100;
-  persist(); render();
+  state.editing = { mealId, idx };
+  state.pendingMeal = mealId;
+  state.pendingFood = { name: it.name, kcal: it.kcal, p: it.p, c: it.c, f: it.f };
+  $("#foodDialogTitle").textContent = "Edit servings";
+  $("#foodSeg").hidden = true;
+  $("#portionBack").hidden = true;
+  $("#portionAdd").textContent = "Save";
+  $("#paneCustom").hidden = true;
+  $("#paneSearch").hidden = false;
+  $("#portionQty").value = it.qty;
+  updatePortionPreview();
+  showStep("portion");
+  openDialog(foodDialog);
+  setTimeout(() => $("#portionQty").select(), 40);
 }
 
 function renderWater() {
@@ -1466,7 +1486,14 @@ function goToDate(iso) {
 }
 $("#prevDay").addEventListener("click", () => goToDate(shiftISO(state.date, -1)));
 $("#nextDay").addEventListener("click", () => goToDate(shiftISO(state.date, 1)));
-$("#dateLabel").addEventListener("click", () => goToDate(todayISO()));
+$("#dateBtn").addEventListener("click", () => {
+  const picker = $("#datePicker");
+  picker.value = state.date;
+  try { picker.showPicker(); } catch { picker.focus(); }
+});
+$("#datePicker").addEventListener("change", (e) => {
+  if (e.target.value) goToDate(e.target.value);
+});
 
 $("#themeBtn").addEventListener("click", () => {
   state.prefs.theme = state.prefs.theme === "dark" ? "light" : "dark";
@@ -1502,7 +1529,11 @@ const searchInput = $("#foodSearch");
 function openFoodDialog(mealId) {
   state.pendingMeal = mealId;
   state.pendingFood = null;
+  state.editing = null;
   $("#foodDialogTitle").textContent = "Add to " + MEALS.find(m => m.id === mealId).name.toLowerCase();
+  $("#foodSeg").hidden = false;
+  $("#portionBack").hidden = false;
+  $("#portionAdd").textContent = "Add food";
   searchInput.value = "";
   showStep("search");
   selectPane("search");
@@ -1554,12 +1585,14 @@ function renderResults(q) {
   box.innerHTML = "";
   if (hits.length === 0) {
     box.innerHTML = `<div class="empty-state" style="padding:20px 10px">No match for “${escapeHTML(q)}”.<br/>Add it on the <strong>Custom</strong> tab.</div>`;
+    searchInput.setAttribute("aria-activedescendant", "");
     return;
   }
   hits.forEach((f, i) => {
     const [name, kcal, p, c, fat] = f;
     const b = document.createElement("button");
     b.type = "button";
+    b.id = "food-opt-" + i;
     b.className = "food-row" + (i === 0 ? " active" : "");
     b.setAttribute("role", "option");
     b.setAttribute("aria-selected", String(i === 0));
@@ -1569,6 +1602,7 @@ function renderResults(q) {
     b.addEventListener("click", () => pickFood(f));
     box.appendChild(b);
   });
+  searchInput.setAttribute("aria-activedescendant", "food-opt-0");
 }
 
 function highlightHit(i) {
@@ -1576,9 +1610,10 @@ function highlightHit(i) {
   rows.forEach((r, idx) => {
     const on = idx === i;
     r.classList.toggle("active", on);
-    if (r.setAttribute) r.setAttribute("aria-selected", String(on));
+    r.setAttribute("aria-selected", String(on));
   });
   rows[i]?.scrollIntoView({ block: "nearest" });
+  searchInput.setAttribute("aria-activedescendant", rows[i] ? rows[i].id : "");
 }
 
 searchInput.addEventListener("input", (e) => renderResults(e.target.value));
@@ -1627,15 +1662,32 @@ $("#portionBack").addEventListener("click", () => {
   showStep("search");
   searchInput.focus();
 });
-$("#portionAdd").addEventListener("click", () => {
+function commitPortion() {
   const f = state.pendingFood;
   if (!f) return;
-  const item = { ...f, qty: currentQty() };
-  state.day.meals[state.pendingMeal].push(item);
+  const qty = currentQty();
+
+  if (state.editing) {
+    const item = state.day.meals[state.editing.mealId][state.editing.idx];
+    const before = item.qty;
+    item.qty = qty;
+    persist(); render();
+    foodDialog.close();
+    toast(`${f.name.split(",")[0]} → ${qty} serving${qty === 1 ? "" : "s"}`, () => {
+      item.qty = before; persist(); render();
+    });
+    return;
+  }
+
+  state.day.meals[state.pendingMeal].push({ ...f, qty });
   bumpRecent(f);
   persist(); render();
   foodDialog.close();
   toast(`Added ${f.name.split(",")[0]}`);
+}
+$("#portionAdd").addEventListener("click", commitPortion);
+$("#portionQty").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") { e.preventDefault(); commitPortion(); }
 });
 
 function customDerived() {
@@ -1848,11 +1900,13 @@ $("#importFile").addEventListener("change", async (e) => {
 
 /* ---------- Global keyboard shortcuts ---------- */
 document.addEventListener("keydown", (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.target.matches("input, select, textarea") || $$("dialog").some(d => d.open)) return;
+  if (e.key === "ArrowLeft") { goToDate(shiftISO(state.date, -1)); return; }
+  if (e.key === "ArrowRight") { goToDate(shiftISO(state.date, 1)); return; }
+  if (state.view !== "Today") return;
   if (e.key === "a" || e.key === "A") { e.preventDefault(); openFoodDialog(guessMeal()); }
   else if (e.key === "w" || e.key === "W") { $("#waterPlus").click(); }
-  else if (e.key === "ArrowLeft") { goToDate(shiftISO(state.date, -1)); }
-  else if (e.key === "ArrowRight") { goToDate(shiftISO(state.date, 1)); }
 });
 
 /* ---------- Boot ---------- */
