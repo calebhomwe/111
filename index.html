@@ -709,6 +709,10 @@
       <h2>Devices <span class="h2-action" id="btStatus" style="color: var(--muted)"></span></h2>
       <p class="hint" id="deviceNote" style="margin-top:0"></p>
       <div class="devices" id="deviceList"></div>
+      <div id="nativeHealthRow" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;" hidden>
+        <button class="btn sm primary" id="syncHealth">Sync from the health store</button>
+        <button class="btn sm ghost" id="healthSettings">Health settings</button>
+      </div>
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;">
         <button class="btn sm" id="connectHr">Heart-rate monitor</button>
         <button class="btn sm" id="connectScale">Smart scale</button>
@@ -2163,8 +2167,18 @@ function deviceReason() {
 
 function renderDevices() {
   const ok = btAvailable();
+  const native = !!nativeHealth();
+
+  $("#nativeHealthRow").hidden = !native;
+  if (native) {
+    $("#syncHealth").textContent = "Sync from " + healthStoreName();
+    $("#healthSettings").textContent = nativePlatform() === "ios" ? "Apple Health settings" : "Health Connect settings";
+  }
+
   $("#btStatus").textContent = ok ? "Bluetooth ready" : "Bluetooth unavailable";
-  $("#deviceNote").textContent = deviceReason();
+  $("#deviceNote").textContent = native
+    ? `Watch and phone data comes from ${healthStoreName()}. Bluetooth pairing below is for chest straps and scales.`
+    : deviceReason();
   $("#connectHr").disabled = !ok;
   $("#connectScale").disabled = !ok;
 
@@ -2276,6 +2290,106 @@ async function connectScale() {
   }
 }
 
+/* ---- Native health store (Apple Health / Health Connect) ----
+
+   Capacitor registers plugins on window.Capacitor.Plugins at runtime, so the
+   same unbundled index.html works in a browser and inside the native shell —
+   no build step, no second codebase. In a browser this resolves to null and
+   the native controls never render. See NOTES-native-health.md.
+*/
+const nativeHealth = () => globalThis.Capacitor?.Plugins?.Health ?? null;
+const nativePlatform = () => globalThis.Capacitor?.getPlatform?.() ?? "web";
+const healthStoreName = () =>
+  nativePlatform() === "ios" ? "Apple Health"
+  : nativePlatform() === "android" ? "Health Connect"
+  : "the health store";
+
+const HEALTH_PERMS = ["READ_WEIGHT", "READ_ACTIVE_CALORIES", "READ_WORKOUTS"];
+
+// iOS rejects timestamps without fractional seconds; toISOString supplies them.
+const isoAt = (iso, endOfDay) =>
+  new Date(iso + (endOfDay ? "T23:59:59.999" : "T00:00:00.000")).toISOString();
+
+async function syncNativeHealth(days = 30) {
+  const Health = nativeHealth();
+  if (!Health) return;
+  const btn = $("#syncHealth");
+  const label = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Syncing…";
+  try {
+    const { available } = await Health.isHealthAvailable();
+    if (!available) {
+      toast(`${healthStoreName()} isn't available on this device.`);
+      if (nativePlatform() === "android") await Health.showHealthConnectInPlayStore();
+      return;
+    }
+
+    // HealthKit deliberately hides whether a read was denied, so this call
+    // reports success either way. Row counts below are the only honest signal.
+    await Health.requestHealthPermissions({ permissions: HEALTH_PERMS });
+
+    const startDate = isoAt(shiftISO(state.date, -(days - 1)), false);
+    const endDate = isoAt(state.date, true);
+
+    const [weights, energy] = await Promise.all([
+      Health.queryRecords({ startDate, endDate, dataType: "weight" }).catch(() => null),
+      Health.queryAggregated({ startDate, endDate, dataType: "active-calories", bucket: "day" }).catch(() => null),
+    ]);
+
+    let wCount = 0, eCount = 0;
+    const touched = new Set();
+
+    for (const rec of weights?.records ?? []) {
+      const date = (rec.startDate || rec.date || "").slice(0, 10);
+      const kg = Number(rec.value ?? rec.weight);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(kg)) continue;
+      const day = loadDay(date);
+      day.weight = kg;
+      saveDay(date, day);
+      touched.add(date); wCount++;
+    }
+
+    for (const b of energy?.aggregatedData ?? []) {
+      const date = (b.startDate || b.date || "").slice(0, 10);
+      const kcal = Math.round(Number(b.value));
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(kcal) || kcal <= 0) continue;
+      const day = loadDay(date);
+      const name = `${healthStoreName()} activity`;
+      const existing = day.exercises.find(x => x.name === name);
+      if (existing) existing.kcal = kcal;
+      else day.exercises.push({ name, min: 0, kcal });
+      saveDay(date, day);
+      touched.add(date); eCount++;
+    }
+
+    state.day = loadDay(state.date);
+    render();
+
+    if (wCount === 0 && eCount === 0) {
+      toast(`No data returned. Check FitTrack's permissions in ${healthStoreName()}.`);
+    } else {
+      toast(`Synced ${wCount} weight${wCount === 1 ? "" : "s"} and ${eCount} activity day${eCount === 1 ? "" : "s"}`);
+    }
+  } catch (err) {
+    toast("Sync failed: " + (err?.message || err));
+  } finally {
+    btn.disabled = false;
+    btn.textContent = label;
+  }
+}
+
+async function openHealthSettings() {
+  const Health = nativeHealth();
+  if (!Health) return;
+  try {
+    if (nativePlatform() === "ios") await Health.openAppleHealthSettings();
+    else await Health.openHealthConnectSettings();
+  } catch (err) {
+    toast("Couldn't open settings: " + (err?.message || err));
+  }
+}
+
 /* ---- Health export import (works in every browser) ---- */
 function parseAppleHealth(xml) {
   const byDate = {};
@@ -2350,6 +2464,8 @@ $("#healthFile").addEventListener("change", async (e) => {
   }
 });
 
+$("#syncHealth").addEventListener("click", () => syncNativeHealth(30));
+$("#healthSettings").addEventListener("click", openHealthSettings);
 $("#connectHr").addEventListener("click", connectHeartRate);
 $("#connectScale").addEventListener("click", connectScale);
 
