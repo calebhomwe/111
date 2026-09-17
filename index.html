@@ -15,7 +15,11 @@
   :root {
     --radius: 16px;
     --display: "Didot", "Bodoni MT", "Hoefler Text", ui-serif, Georgia, "Times New Roman", serif;
-    --sheen: none;
+    /* Macros read as one considered palette, not three competing hues.
+       Both theme accents plus a muted step keeps the three separable. */
+    --tone-1: var(--accent);
+    --tone-2: var(--accent-2);
+    --tone-3: color-mix(in srgb, var(--accent) 30%, var(--muted));
   }
 
   /* ---- Obsidian & Gold (default) ---- */
@@ -25,10 +29,8 @@
     --border: #35333f; --border-soft: #272630;
     --text: #f4efe6; --muted: #9c9488;
     --accent: #d4af37; --accent-2: #f0dda4; --accent-ink: #181204;
-    --danger: #e2685f; --protein: #dd8fb4; --carbs: #d4af37; --fat: #8fa6d8;
-    --water: #78b4c9; --burn: #dd8f5c;
+    --danger: #e2685f;
     --shadow: 0 10px 30px rgba(0,0,0,0.45);
-    --sheen: radial-gradient(120% 90% at 85% -20%, rgba(212,175,55,0.10), transparent 60%);
   }
 
   /* ---- Platinum Noir ---- */
@@ -38,10 +40,8 @@
     --border: #3c414a; --border-soft: #2d3137;
     --text: #eef1f5; --muted: #949ca7;
     --accent: #cfd8e3; --accent-2: #8fa2b8; --accent-ink: #0b0c0e;
-    --danger: #e4736e; --protein: #c79bc9; --carbs: #cbb07a; --fat: #8fb0d6;
-    --water: #7fbcd2; --burn: #d59470;
+    --danger: #e4736e;
     --shadow: 0 10px 30px rgba(0,0,0,0.5);
-    --sheen: linear-gradient(160deg, rgba(207,216,227,0.07), transparent 45%);
   }
 
   /* ---- Emerald Club ---- */
@@ -51,10 +51,8 @@
     --border: #27493b; --border-soft: #1c372c;
     --text: #e9f3ed; --muted: #85a396;
     --accent: #4ec79b; --accent-2: #c9a961; --accent-ink: #04150f;
-    --danger: #e2706a; --protein: #d891b4; --carbs: #d3b05f; --fat: #7fb0d8;
-    --water: #6fbcc4; --burn: #d9905f;
+    --danger: #e2706a;
     --shadow: 0 10px 30px rgba(0,20,12,0.5);
-    --sheen: radial-gradient(120% 90% at 80% -20%, rgba(78,199,155,0.12), transparent 62%);
   }
 
   /* ---- Sapphire Royale ---- */
@@ -64,10 +62,8 @@
     --border: #2b3b66; --border-soft: #202e52;
     --text: #e9eefb; --muted: #8b9ac2;
     --accent: #6fa6ff; --accent-2: #c3b0ff; --accent-ink: #050a18;
-    --danger: #ef7280; --protein: #e08fc4; --carbs: #e0bd6a; --fat: #7fb6f5;
-    --water: #63c2e8; --burn: #eb9563;
+    --danger: #ef7280;
     --shadow: 0 10px 30px rgba(2,8,28,0.55);
-    --sheen: radial-gradient(120% 90% at 82% -20%, rgba(111,166,255,0.13), transparent 62%);
   }
 
   /* ---- Bordeaux ---- */
@@ -77,10 +73,8 @@
     --border: #4b2831; --border-soft: #391e26;
     --text: #f6eaec; --muted: #ad8e95;
     --accent: #e0a08f; --accent-2: #d97b93; --accent-ink: #1a0a0d;
-    --danger: #ef6d72; --protein: #e58bb2; --carbs: #d9b063; --fat: #97a9de;
-    --water: #7fb8cc; --burn: #e0885c;
+    --danger: #ef6d72;
     --shadow: 0 10px 30px rgba(20,4,8,0.55);
-    --sheen: radial-gradient(120% 90% at 80% -20%, rgba(224,160,143,0.12), transparent 62%);
   }
 
   /* ---- Bronze Sand ---- */
@@ -90,10 +84,8 @@
     --border: #453728; --border-soft: #332a20;
     --text: #f5ece0; --muted: #a3927e;
     --accent: #cf8f54; --accent-2: #e8c48c; --accent-ink: #170e06;
-    --danger: #e06f62; --protein: #d98fa8; --carbs: #d8ae5e; --fat: #8da6cf;
-    --water: #76b0bd; --burn: #dd8b52;
+    --danger: #e06f62;
     --shadow: 0 10px 30px rgba(12,6,0,0.5);
-    --sheen: radial-gradient(120% 90% at 82% -20%, rgba(207,143,84,0.13), transparent 62%);
   }
 
   /* ---- Midnight (the original dark) ---- */
@@ -103,10 +95,8 @@
     --border: #2a3a61; --border-soft: #22304f;
     --text: #e8edf9; --muted: #93a2c4;
     --accent: #4ade80; --accent-2: #22d3ee; --accent-ink: #052012;
-    --danger: #f87171; --protein: #f472b6; --carbs: #fbbf24; --fat: #60a5fa;
-    --water: #38bdf8; --burn: #fb923c;
+    --danger: #f87171;
     --shadow: 0 8px 24px rgba(0,0,0,0.28);
-    --sheen: none;
   }
 
   /* ---- Champagne (light) ---- */
@@ -116,10 +106,8 @@
     --border: #ddd1bc; --border-soft: #eae1d1;
     --text: #2b2519; --muted: #766b5a;
     --accent: #9a7b1c; --accent-2: #bfa14a; --accent-ink: #fffdf8;
-    --danger: #c1443c; --protein: #b0487c; --carbs: #9a7b1c; --fat: #3f63ad;
-    --water: #2b7f9e; --burn: #b95f28;
+    --danger: #c1443c;
     --shadow: 0 8px 24px rgba(80,62,26,0.10);
-    --sheen: radial-gradient(120% 90% at 85% -20%, rgba(154,123,28,0.07), transparent 60%);
   }
 
   /* ---- Rosé (light) ---- */
@@ -129,10 +117,8 @@
     --border: #e6d0d3; --border-soft: #f0e0e2;
     --text: #2e2124; --muted: #81686d;
     --accent: #b1506b; --accent-2: #c98b73; --accent-ink: #fffafa;
-    --danger: #c4403f; --protein: #b1506b; --carbs: #9c7420; --fat: #4361a8;
-    --water: #2d7f9c; --burn: #b85f34;
+    --danger: #c4403f;
     --shadow: 0 8px 24px rgba(90,40,50,0.09);
-    --sheen: radial-gradient(120% 90% at 85% -20%, rgba(177,80,107,0.07), transparent 60%);
   }
 
   /* ---- Porcelain (the original light) ---- */
@@ -142,10 +128,8 @@
     --border: #d8dfec; --border-soft: #e4e9f2;
     --text: #131a2a; --muted: #617187;
     --accent: #16a34a; --accent-2: #0891b2; --accent-ink: #ffffff;
-    --danger: #dc2626; --protein: #db2777; --carbs: #b45309; --fat: #2563eb;
-    --water: #0284c7; --burn: #ea580c;
+    --danger: #dc2626;
     --shadow: 0 6px 20px rgba(15,23,42,0.08);
-    --sheen: none;
   }
 
   * { box-sizing: border-box; }
@@ -169,8 +153,7 @@
   /* ---------- Header ---------- */
   header.app-header {
     position: sticky; top: 0; z-index: 20;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(12px);
+    background: var(--bg);
     border-bottom: 1px solid var(--border-soft);
     padding: 12px 16px;
     padding-top: calc(12px + env(safe-area-inset-top));
@@ -181,16 +164,19 @@
   }
   .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
   .brand .logo {
-    width: 36px; height: 36px; border-radius: 11px; flex: none;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    display: grid; place-items: center; color: var(--accent-ink); font-weight: 800; font-size: 17px;
+    width: 34px; height: 34px; border-radius: 9px; flex: none;
+    background: var(--accent);
+    display: grid; place-items: center; color: var(--accent-ink);
+    font-family: var(--display); font-weight: 600; font-size: 17px;
   }
   .brand > div { min-width: 0; }
   .brand h1 { font-size: 19px; margin: 0; font-family: var(--display); font-weight: 600; letter-spacing: 0.2px; }
   .brand .streak {
-    color: var(--muted); font-size: 12px; display: block; margin-top: 1px;
+    color: var(--muted); font-size: 12px; margin-top: 2px;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: flex; align-items: center; gap: 4px;
   }
+  .brand .streak svg { width: 12px; height: 12px; flex: none; color: var(--accent); }
   .header-tools { display: flex; align-items: center; gap: 6px; }
 
   .datenav { display: flex; align-items: center; gap: 2px; background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 2px; position: relative; }
@@ -214,9 +200,9 @@
   }
   .icon-btn:hover { color: var(--text); background: var(--card-2); }
   .theme-dot {
-    width: 17px; height: 17px; border-radius: 50%; display: block;
-    background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.22);
+    width: 16px; height: 16px; border-radius: 50%; display: block;
+    background: linear-gradient(135deg, var(--accent) 50%, var(--accent-2) 50%);
+    box-shadow: inset 0 0 0 1px rgba(128,128,128,0.35);
   }
 
   /* ---------- Theme gallery ---------- */
@@ -240,7 +226,7 @@
   .theme-card .preview .bar { height: 4px; border-radius: 3px; left: 10px; right: 10px; bottom: 8px; opacity: 0.55; }
   .theme-card .tname { font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
   .theme-card .tname .tick { color: var(--accent); }
-  .theme-card .tmeta { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .theme-card .tmeta { font-size: 11px; color: var(--muted); }
 
   /* ---------- Layout ---------- */
   /* minmax(0,…) everywhere a grid holds cards: without it a wide child
@@ -254,13 +240,12 @@
     min-width: 0;
   }
   /* One tinted card carries the theme's accent; the rest stay quiet. */
-  #summaryCard { background-image: var(--sheen); background-repeat: no-repeat; }
   .card > h2 {
-    font-size: 12px; margin: 0 0 12px; color: var(--muted);
-    font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase;
-    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    font-size: 13px; margin: 0 0 14px; color: var(--muted);
+    font-weight: 500; letter-spacing: 0;
+    display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
   }
-  .card > h2 .h2-action { text-transform: none; letter-spacing: 0; font-weight: 600; font-size: 12px; }
+  .card > h2 .h2-action { font-weight: 400; font-size: 12px; }
 
   /* ---------- Summary ---------- */
   .summary { display: grid; grid-template-columns: 148px 1fr; gap: 18px; align-items: center; }
@@ -274,18 +259,18 @@
     font-size: 34px; font-weight: 600; letter-spacing: -0.5px; line-height: 1.05;
     font-family: var(--display); font-variant-numeric: lining-nums tabular-nums;
   }
-  .ring-center .sub { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; margin-top: 2px; }
+  .ring-center .sub { color: var(--muted); font-size: 12px; margin-top: 3px; }
   .ring-center .big.over { color: var(--danger); }
 
   .summary-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .stat { background: var(--card-2); border: 1px solid var(--border-soft); padding: 10px; border-radius: 11px; text-align: center; }
-  .stat .label { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .stat .label { color: var(--muted); font-size: 11.5px; }
   .stat .value { font-size: 19px; font-weight: 600; margin-top: 3px; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
   .stat .eq { color: var(--muted); font-size: 15px; font-weight: 400; }
 
   .macros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
   .macro { background: var(--card-2); border: 1px solid var(--border-soft); border-radius: 11px; padding: 10px 11px; }
-  .macro .name { font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; font-weight: 700; }
+  .macro .name { font-size: 11.5px; font-weight: 500; color: var(--muted); }
   .macro .val { font-size: 15px; font-weight: 700; margin-top: 3px; }
   .macro .val small { color: var(--muted); font-weight: 500; font-size: 12px; }
   .bar { height: 5px; background: var(--bg-2); border-radius: 3px; margin-top: 8px; overflow: hidden; }
@@ -309,18 +294,18 @@
   .chip .k { color: var(--muted); font-weight: 500; font-size: 12px; }
 
   /* ---------- Meals ---------- */
-  .meals { display: grid; gap: 10px; }
-  .meal { background: var(--card-2); border: 1px solid var(--border-soft); border-radius: 13px; padding: 12px; }
-  .meal-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .meal-title { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; }
-  .meal-title .emoji { font-size: 17px; }
+  .meals { display: grid; }
+  .meal { padding: 4px 0 14px; border-top: 1px solid var(--border-soft); }
+  .meal:first-child { border-top: none; padding-top: 0; }
+  .meal-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 10px 2px 2px; }
+  .meal-title { font-weight: 600; font-size: 15px; letter-spacing: -0.1px; }
   .meal-cal { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
-  .meal-items { margin-top: 10px; display: grid; gap: 6px; }
+  .meal-items { display: grid; }
   .item {
-    display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center;
-    padding: 9px 6px 9px 11px; background: var(--card); border: 1px solid var(--border-soft);
-    border-radius: 10px; font-size: 14px;
+    display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center;
+    padding: 10px 2px; font-size: 14px; border-top: 1px solid var(--border-soft);
   }
+  .meal-items .item:first-child, .exercises .item:first-child { border-top: none; }
   .item .name { min-width: 0; }
   .item .name .t { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
   .item .name small { color: var(--muted); font-size: 11px; }
@@ -334,10 +319,10 @@
   .item .row-actions button.del:hover { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); }
   .meal-empty { color: var(--muted); font-size: 13px; padding: 4px 2px; }
   .add-btn {
-    margin-top: 10px; width: 100%; padding: 9px; background: transparent; color: var(--accent);
-    border: 1px dashed var(--border); border-radius: 9px; cursor: pointer; font-size: 13px; font-weight: 600;
+    margin-top: 8px; padding: 6px 2px; background: none; color: var(--accent);
+    border: none; cursor: pointer; font-size: 13px; font-weight: 600; text-align: left;
   }
-  .add-btn:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); border-color: var(--accent); }
+  .add-btn:hover { text-decoration: underline; text-underline-offset: 3px; }
 
   /* ---------- Split cards ---------- */
   .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
@@ -352,7 +337,7 @@
     padding: 9px 14px; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600;
   }
   .btn:hover { background: var(--bg-2); }
-  .btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: var(--accent-ink); border-color: transparent; }
+  .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
   .btn.primary:hover { filter: brightness(1.07); }
   .btn.ghost { background: transparent; }
   .btn.danger { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 40%, transparent); }
@@ -364,14 +349,14 @@
     width: 22px; height: 28px; border-radius: 3px 3px 7px 7px; border: 2px solid var(--border);
     background: transparent; cursor: pointer; padding: 0; transition: background 0.2s, border-color 0.2s;
   }
-  .glass.full { background: var(--water); border-color: var(--water); }
+  .glass.full { background: var(--accent); border-color: var(--accent); }
   .exercises { display: grid; gap: 6px; margin-top: 10px; }
 
   /* ---------- Trends ---------- */
   .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
   @media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
   .kpi { background: var(--card-2); border: 1px solid var(--border-soft); border-radius: 11px; padding: 11px; }
-  .kpi .label { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .kpi .label { color: var(--muted); font-size: 11.5px; }
   .kpi .value { font-size: 21px; font-weight: 600; margin-top: 3px; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
   .kpi .value small { font-size: 12px; color: var(--muted); font-weight: 500; }
   /* Capped so the viewBox-relative type doesn't scale up to billboard size on wide screens. */
@@ -382,7 +367,7 @@
   .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 11.5px; color: var(--muted); }
   .legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; margin-right: 5px; vertical-align: middle; }
   .empty-state { text-align: center; color: var(--muted); padding: 26px 12px; font-size: 13.5px; line-height: 1.6; }
-  .empty-state .big { font-size: 30px; display: block; margin-bottom: 8px; }
+  .empty-state .es-ico { width: 26px; height: 26px; display: block; margin: 0 auto 10px; opacity: 0.6; }
 
   /* ---------- Settings rows ---------- */
   .set-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border-soft); }
@@ -398,8 +383,7 @@
   /* ---------- Bottom nav ---------- */
   nav.tabbar {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
-    background: color-mix(in srgb, var(--bg) 92%, transparent);
-    backdrop-filter: blur(12px);
+    background: var(--bg);
     border-top: 1px solid var(--border-soft);
     padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
     display: flex; justify-content: center; gap: 4px;
@@ -409,7 +393,7 @@
     color: var(--muted); padding: 7px 4px; border-radius: 11px;
     display: grid; gap: 3px; justify-items: center; font-size: 10.5px; font-weight: 600;
   }
-  nav.tabbar button .ico { font-size: 18px; line-height: 1; }
+  nav.tabbar button .ico { width: 21px; height: 21px; display: block; }
   nav.tabbar button[aria-selected="true"] { color: var(--accent); background: color-mix(in srgb, var(--accent) 11%, transparent); }
 
   /* ---------- Dialogs ---------- */
@@ -417,7 +401,7 @@
     padding: 0; border: none; background: transparent; max-width: 100%; max-height: 100%;
     color: var(--text);
   }
-  dialog::backdrop { background: rgba(5,10,20,0.62); backdrop-filter: blur(3px); }
+  dialog::backdrop { background: rgba(8,8,10,0.55); }
   .sheet {
     background: var(--card); border: 1px solid var(--border);
     border-radius: 18px; padding: 18px; width: min(520px, 100vw - 24px);
@@ -431,7 +415,7 @@
   .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
   .sheet-head h3 { margin: 0; font-size: 19px; font-family: var(--display); font-weight: 600; }
   .field { display: grid; gap: 6px; margin-bottom: 12px; }
-  .field label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; }
+  .field label { font-size: 12px; color: var(--muted); font-weight: 500; }
   .field input, .field select {
     background: var(--card-2); color: var(--text); border: 1px solid var(--border);
     border-radius: 10px; padding: 11px 12px; font-size: 15px; width: 100%; font-family: inherit;
@@ -487,10 +471,26 @@
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="var(--accent)"/>
-      <stop offset="100%" stop-color="var(--accent-2)"/>
-    </linearGradient>
+    <!-- One stroke weight, one cap style, 24px grid — a real icon set, not emoji. -->
+    <g id="i-base" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></g>
+    <symbol id="i-today" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 1.5"/>
+    </symbol>
+    <symbol id="i-trends" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 19V5"/><path d="M4 19h16"/><path d="M7.5 15.5l3.5-4 3 2.5 4.5-6"/>
+    </symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 7h14M5 12h14M5 17h14"/><circle cx="9" cy="7" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="10" cy="17" r="1.9"/>
+    </symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3s4.5 3.7 4.5 8a4.5 4.5 0 0 1-9 0c0-1.5.7-2.8 1.4-3.7C9.4 9 10 10 11 10c0-3 1-5.3 1-7z"/>
+    </symbol>
+    <symbol id="i-empty-meal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="7.5"/><path d="M12 8.5v7M8.5 12h7"/>
+    </symbol>
+    <symbol id="i-empty-weight" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 18V7"/><path d="M4 18h16"/><path d="M7 15l4-3 3 2 4-5"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -526,7 +526,7 @@
           <svg class="ring" width="148" height="148" viewBox="0 0 148 148" role="img" aria-labelledby="ringTitle">
             <title id="ringTitle">Calorie progress</title>
             <circle class="ring-bg" cx="74" cy="74" r="63"/>
-            <circle class="ring-fg" id="ringFg" cx="74" cy="74" r="63" stroke="url(#ringGrad)"
+            <circle class="ring-fg" id="ringFg" cx="74" cy="74" r="63" stroke="var(--accent)"
               stroke-dasharray="395.84" stroke-dashoffset="395.84"/>
           </svg>
           <div class="ring-center">
@@ -545,19 +545,19 @@
 
       <div class="macros">
         <div class="macro">
-          <div class="name" style="color: var(--protein)">Protein</div>
+          <div class="name">Protein</div>
           <div class="val"><span id="pVal">0</span><small> / <span id="pGoal">120</span> g</small></div>
-          <div class="bar"><span id="pBar" style="background: var(--protein); width: 0%"></span></div>
+          <div class="bar"><span id="pBar" style="background: var(--tone-1); width: 0%"></span></div>
         </div>
         <div class="macro">
-          <div class="name" style="color: var(--carbs)">Carbs</div>
+          <div class="name">Carbs</div>
           <div class="val"><span id="cVal">0</span><small> / <span id="cGoal">250</span> g</small></div>
-          <div class="bar"><span id="cBar" style="background: var(--carbs); width: 0%"></span></div>
+          <div class="bar"><span id="cBar" style="background: var(--tone-2); width: 0%"></span></div>
         </div>
         <div class="macro">
-          <div class="name" style="color: var(--fat)">Fat</div>
+          <div class="name">Fat</div>
           <div class="val"><span id="fVal">0</span><small> / <span id="fGoal">65</span> g</small></div>
-          <div class="bar"><span id="fBar" style="background: var(--fat); width: 0%"></span></div>
+          <div class="bar"><span id="fBar" style="background: var(--tone-3); width: 0%"></span></div>
         </div>
       </div>
     </div>
@@ -633,9 +633,9 @@
       <h2>Macro split <span class="h2-action" style="color: var(--muted)">average, last 7 days</span></h2>
       <div id="macroChartWrap"></div>
       <div class="legend">
-        <span><i style="background: var(--protein)"></i>Protein</span>
-        <span><i style="background: var(--carbs)"></i>Carbs</span>
-        <span><i style="background: var(--fat)"></i>Fat</span>
+        <span><i style="background: var(--tone-1)"></i>Protein</span>
+        <span><i style="background: var(--tone-2)"></i>Carbs</span>
+        <span><i style="background: var(--tone-3)"></i>Fat</span>
       </div>
     </div>
 
@@ -690,9 +690,9 @@
 </main>
 
 <nav class="tabbar" role="tablist" aria-label="Sections">
-  <button role="tab" data-view="Today" aria-selected="true"><span class="ico" aria-hidden="true">☀️</span>Today</button>
-  <button role="tab" data-view="Trends" aria-selected="false"><span class="ico" aria-hidden="true">📈</span>Trends</button>
-  <button role="tab" data-view="Settings" aria-selected="false"><span class="ico" aria-hidden="true">⚙️</span>Settings</button>
+  <button role="tab" data-view="Today" aria-selected="true"><svg class="ico" aria-hidden="true"><use href="#i-today"/></svg>Today</button>
+  <button role="tab" data-view="Trends" aria-selected="false"><svg class="ico" aria-hidden="true"><use href="#i-trends"/></svg>Trends</button>
+  <button role="tab" data-view="Settings" aria-selected="false"><svg class="ico" aria-hidden="true"><use href="#i-settings"/></svg>Settings</button>
 </nav>
 
 <!-- ============ Food dialog ============ -->
@@ -981,10 +981,10 @@ const EXERCISES = [
 ];
 
 const MEALS = [
-  { id: "breakfast", name: "Breakfast", emoji: "🍳" },
-  { id: "lunch",     name: "Lunch",     emoji: "🥗" },
-  { id: "dinner",    name: "Dinner",    emoji: "🍽️" },
-  { id: "snacks",    name: "Snacks",    emoji: "🍎" },
+  { id: "breakfast", name: "Breakfast" },
+  { id: "lunch",     name: "Lunch" },
+  { id: "dinner",    name: "Dinner" },
+  { id: "snacks",    name: "Snacks" },
 ];
 
 const DEFAULT_GOALS = { cal: 2000, p: 120, c: 250, f: 65, water: 8 };
@@ -1186,8 +1186,8 @@ function renderHeader() {
   $("#datePicker").max = today;
 
   const streak = computeStreak();
-  $("#streakLabel").textContent = streak > 0
-    ? `🔥 ${streak}-day streak`
+  $("#streakLabel").innerHTML = streak > 0
+    ? `<svg aria-hidden="true"><use href="#i-flame"/></svg>${streak}-day streak`
     : "Log a meal to start a streak";
 }
 
@@ -1211,7 +1211,7 @@ function renderSummary() {
   const ring = $("#ringFg");
   ring.setAttribute("stroke-dasharray", C.toFixed(2));
   ring.setAttribute("stroke-dashoffset", (C * (1 - ratio)).toFixed(2));
-  ring.setAttribute("stroke", left < 0 ? "var(--danger)" : "url(#ringGrad)");
+  ring.setAttribute("stroke", left < 0 ? "var(--danger)" : "var(--accent)");
 
   const setMacro = (val, goal, ids, color) => {
     $(ids[0]).textContent = fmt(val);
@@ -1219,9 +1219,9 @@ function renderSummary() {
     $(ids[2]).style.width = clamp(goal > 0 ? (val / goal) * 100 : 0, 0, 100) + "%";
     $(ids[2]).style.background = val > goal * 1.05 ? "var(--danger)" : color;
   };
-  setMacro(t.p, g.p, ["#pVal", "#pGoal", "#pBar"], "var(--protein)");
-  setMacro(t.c, g.c, ["#cVal", "#cGoal", "#cBar"], "var(--carbs)");
-  setMacro(t.f, g.f, ["#fVal", "#fGoal", "#fBar"], "var(--fat)");
+  setMacro(t.p, g.p, ["#pVal", "#pGoal", "#pBar"], "var(--tone-1)");
+  setMacro(t.c, g.c, ["#cVal", "#cGoal", "#cBar"], "var(--tone-2)");
+  setMacro(t.f, g.f, ["#fVal", "#fGoal", "#fBar"], "var(--tone-3)");
 }
 
 function renderQuickAdd() {
@@ -1278,7 +1278,7 @@ function renderMeals() {
     const head = document.createElement("div");
     head.className = "meal-head";
     head.innerHTML = `
-      <div class="meal-title"><span class="emoji" aria-hidden="true">${m.emoji}</span>${m.name}</div>
+      <div class="meal-title">${m.name}</div>
       <div class="meal-cal">${fmt(mealTotal(items))} kcal</div>`;
     el.appendChild(head);
 
@@ -1400,7 +1400,7 @@ function renderExercise() {
     line.className = "item";
     line.innerHTML = `
       <div class="name"><span class="t">${escapeHTML(e.name)}</span><small>${e.min} min</small></div>
-      <div class="kcal" style="color: var(--burn)">${fmt(e.kcal)}</div>
+      <div class="kcal" style="color: var(--accent)">${fmt(e.kcal)}</div>
       <div class="row-actions"><button class="del" aria-label="Remove ${escapeHTML(e.name)}">✕</button></div>`;
     line.querySelector(".del").addEventListener("click", () => {
       const [removed] = state.day.exercises.splice(idx, 1);
@@ -1527,15 +1527,15 @@ function calorieChart(days, goal, markLastAsToday) {
 
 function macroChart(withFood, g) {
   if (withFood.length === 0) {
-    return `<div class="empty-state"><span class="big">🥗</span>No meals logged in the last 7 days.<br/>Add some food and your macro split will appear here.</div>`;
+    return `<div class="empty-state"><svg class="es-ico" aria-hidden="true"><use href="#i-empty-meal"/></svg>No meals logged in the last 7 days.<br/>Add some food and your macro split will appear here.</div>`;
   }
   const avgP = withFood.reduce((s, d) => s + d.totals.p, 0) / withFood.length;
   const avgC = withFood.reduce((s, d) => s + d.totals.c, 0) / withFood.length;
   const avgF = withFood.reduce((s, d) => s + d.totals.f, 0) / withFood.length;
   const rows = [
-    { label: "Protein", val: avgP, goal: g.p, color: "var(--protein)" },
-    { label: "Carbs",   val: avgC, goal: g.c, color: "var(--carbs)" },
-    { label: "Fat",     val: avgF, goal: g.f, color: "var(--fat)" },
+    { label: "Protein", val: avgP, goal: g.p, color: "var(--tone-1)" },
+    { label: "Carbs",   val: avgC, goal: g.c, color: "var(--tone-2)" },
+    { label: "Fat",     val: avgF, goal: g.f, color: "var(--tone-3)" },
   ];
   // Each bar is scaled against its own goal, so the three rows are comparable as
   // "% of target" — a shared gram scale makes fat look tiny next to carbs.
@@ -1562,7 +1562,7 @@ function macroChart(withFood, g) {
 
 function weightChart(series) {
   if (series.length < 2) {
-    return `<div class="empty-state"><span class="big">⚖️</span>Log your weight on at least two days<br/>to see your trend line here.</div>`;
+    return `<div class="empty-state"><svg class="es-ico" aria-hidden="true"><use href="#i-empty-weight"/></svg>Log your weight on at least two days<br/>to see your trend line here.</div>`;
   }
   const W = 320, H = 150, padL = 34, padR = 8, padT = 12, padB = 24;
   const vals = series.map(s => fromKg(s.kg));
