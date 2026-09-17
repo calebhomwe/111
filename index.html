@@ -7,48 +7,145 @@
 <meta name="theme-color" content="#0b1220" />
 <title>FitTrack — Calories &amp; Meals</title>
 <style>
+  /* ============================================================
+     Themes. Every theme sets the same token contract, so the rest of
+     the stylesheet never names a colour directly. THEMES in the script
+     mirrors this list for the picker.
+     ============================================================ */
   :root {
-    color-scheme: dark;
-    --bg: #0b1220;
-    --bg-2: #101a2e;
-    --card: #16203a;
-    --card-2: #1d2a49;
-    --border: #2a3a61;
-    --border-soft: #22304f;
-    --text: #e8edf9;
-    --muted: #93a2c4;
-    --accent: #4ade80;
-    --accent-2: #22d3ee;
-    --accent-ink: #052012;
-    --danger: #f87171;
-    --protein: #f472b6;
-    --carbs: #fbbf24;
-    --fat: #60a5fa;
-    --water: #38bdf8;
-    --burn: #fb923c;
     --radius: 16px;
-    --shadow: 0 8px 24px rgba(0,0,0,0.28);
+    --display: "Didot", "Bodoni MT", "Hoefler Text", ui-serif, Georgia, "Times New Roman", serif;
+    --sheen: none;
   }
-  [data-theme="light"] {
+
+  /* ---- Obsidian & Gold (default) ---- */
+  :root, [data-theme="obsidian"] {
+    color-scheme: dark;
+    --bg: #09090b; --bg-2: #121216; --card: #17171d; --card-2: #201f27;
+    --border: #35333f; --border-soft: #272630;
+    --text: #f4efe6; --muted: #9c9488;
+    --accent: #d4af37; --accent-2: #f0dda4; --accent-ink: #181204;
+    --danger: #e2685f; --protein: #dd8fb4; --carbs: #d4af37; --fat: #8fa6d8;
+    --water: #78b4c9; --burn: #dd8f5c;
+    --shadow: 0 10px 30px rgba(0,0,0,0.45);
+    --sheen: radial-gradient(120% 90% at 85% -20%, rgba(212,175,55,0.10), transparent 60%);
+  }
+
+  /* ---- Platinum Noir ---- */
+  [data-theme="noir"] {
+    color-scheme: dark;
+    --bg: #0b0c0e; --bg-2: #131518; --card: #1a1c20; --card-2: #24272c;
+    --border: #3c414a; --border-soft: #2d3137;
+    --text: #eef1f5; --muted: #949ca7;
+    --accent: #cfd8e3; --accent-2: #8fa2b8; --accent-ink: #0b0c0e;
+    --danger: #e4736e; --protein: #c79bc9; --carbs: #cbb07a; --fat: #8fb0d6;
+    --water: #7fbcd2; --burn: #d59470;
+    --shadow: 0 10px 30px rgba(0,0,0,0.5);
+    --sheen: linear-gradient(160deg, rgba(207,216,227,0.07), transparent 45%);
+  }
+
+  /* ---- Emerald Club ---- */
+  [data-theme="emerald"] {
+    color-scheme: dark;
+    --bg: #06110d; --bg-2: #0b1a15; --card: #0f211b; --card-2: #163026;
+    --border: #27493b; --border-soft: #1c372c;
+    --text: #e9f3ed; --muted: #85a396;
+    --accent: #4ec79b; --accent-2: #c9a961; --accent-ink: #04150f;
+    --danger: #e2706a; --protein: #d891b4; --carbs: #d3b05f; --fat: #7fb0d8;
+    --water: #6fbcc4; --burn: #d9905f;
+    --shadow: 0 10px 30px rgba(0,20,12,0.5);
+    --sheen: radial-gradient(120% 90% at 80% -20%, rgba(78,199,155,0.12), transparent 62%);
+  }
+
+  /* ---- Sapphire Royale ---- */
+  [data-theme="sapphire"] {
+    color-scheme: dark;
+    --bg: #060a16; --bg-2: #0b1124; --card: #101832; --card-2: #182344;
+    --border: #2b3b66; --border-soft: #202e52;
+    --text: #e9eefb; --muted: #8b9ac2;
+    --accent: #6fa6ff; --accent-2: #c3b0ff; --accent-ink: #050a18;
+    --danger: #ef7280; --protein: #e08fc4; --carbs: #e0bd6a; --fat: #7fb6f5;
+    --water: #63c2e8; --burn: #eb9563;
+    --shadow: 0 10px 30px rgba(2,8,28,0.55);
+    --sheen: radial-gradient(120% 90% at 82% -20%, rgba(111,166,255,0.13), transparent 62%);
+  }
+
+  /* ---- Bordeaux ---- */
+  [data-theme="bordeaux"] {
+    color-scheme: dark;
+    --bg: #110709; --bg-2: #1b0c10; --card: #221016; --card-2: #2f171e;
+    --border: #4b2831; --border-soft: #391e26;
+    --text: #f6eaec; --muted: #ad8e95;
+    --accent: #e0a08f; --accent-2: #d97b93; --accent-ink: #1a0a0d;
+    --danger: #ef6d72; --protein: #e58bb2; --carbs: #d9b063; --fat: #97a9de;
+    --water: #7fb8cc; --burn: #e0885c;
+    --shadow: 0 10px 30px rgba(20,4,8,0.55);
+    --sheen: radial-gradient(120% 90% at 80% -20%, rgba(224,160,143,0.12), transparent 62%);
+  }
+
+  /* ---- Bronze Sand ---- */
+  [data-theme="bronze"] {
+    color-scheme: dark;
+    --bg: #0e0b08; --bg-2: #16110c; --card: #1d1712; --card-2: #2a221a;
+    --border: #453728; --border-soft: #332a20;
+    --text: #f5ece0; --muted: #a3927e;
+    --accent: #cf8f54; --accent-2: #e8c48c; --accent-ink: #170e06;
+    --danger: #e06f62; --protein: #d98fa8; --carbs: #d8ae5e; --fat: #8da6cf;
+    --water: #76b0bd; --burn: #dd8b52;
+    --shadow: 0 10px 30px rgba(12,6,0,0.5);
+    --sheen: radial-gradient(120% 90% at 82% -20%, rgba(207,143,84,0.13), transparent 62%);
+  }
+
+  /* ---- Midnight (the original dark) ---- */
+  [data-theme="midnight"] {
+    color-scheme: dark;
+    --bg: #0b1220; --bg-2: #101a2e; --card: #16203a; --card-2: #1d2a49;
+    --border: #2a3a61; --border-soft: #22304f;
+    --text: #e8edf9; --muted: #93a2c4;
+    --accent: #4ade80; --accent-2: #22d3ee; --accent-ink: #052012;
+    --danger: #f87171; --protein: #f472b6; --carbs: #fbbf24; --fat: #60a5fa;
+    --water: #38bdf8; --burn: #fb923c;
+    --shadow: 0 8px 24px rgba(0,0,0,0.28);
+    --sheen: none;
+  }
+
+  /* ---- Champagne (light) ---- */
+  [data-theme="champagne"] {
     color-scheme: light;
-    --bg: #f4f6fb;
-    --bg-2: #e7ecf6;
-    --card: #ffffff;
-    --card-2: #f1f4fa;
-    --border: #d8dfec;
-    --border-soft: #e4e9f2;
-    --text: #131a2a;
-    --muted: #64748b;
-    --accent: #16a34a;
-    --accent-2: #0891b2;
-    --accent-ink: #ffffff;
-    --danger: #dc2626;
-    --protein: #db2777;
-    --carbs: #b45309;
-    --fat: #2563eb;
-    --water: #0284c7;
-    --burn: #ea580c;
+    --bg: #f6f1e8; --bg-2: #ece4d6; --card: #fffdf8; --card-2: #f6f0e4;
+    --border: #ddd1bc; --border-soft: #eae1d1;
+    --text: #2b2519; --muted: #766b5a;
+    --accent: #9a7b1c; --accent-2: #bfa14a; --accent-ink: #fffdf8;
+    --danger: #c1443c; --protein: #b0487c; --carbs: #9a7b1c; --fat: #3f63ad;
+    --water: #2b7f9e; --burn: #b95f28;
+    --shadow: 0 8px 24px rgba(80,62,26,0.10);
+    --sheen: radial-gradient(120% 90% at 85% -20%, rgba(154,123,28,0.07), transparent 60%);
+  }
+
+  /* ---- Rosé (light) ---- */
+  [data-theme="rose"] {
+    color-scheme: light;
+    --bg: #faf3f3; --bg-2: #f2e5e6; --card: #fffafa; --card-2: #f8eeef;
+    --border: #e6d0d3; --border-soft: #f0e0e2;
+    --text: #2e2124; --muted: #81686d;
+    --accent: #b1506b; --accent-2: #c98b73; --accent-ink: #fffafa;
+    --danger: #c4403f; --protein: #b1506b; --carbs: #9c7420; --fat: #4361a8;
+    --water: #2d7f9c; --burn: #b85f34;
+    --shadow: 0 8px 24px rgba(90,40,50,0.09);
+    --sheen: radial-gradient(120% 90% at 85% -20%, rgba(177,80,107,0.07), transparent 60%);
+  }
+
+  /* ---- Porcelain (the original light) ---- */
+  [data-theme="porcelain"] {
+    color-scheme: light;
+    --bg: #f4f6fb; --bg-2: #e7ecf6; --card: #ffffff; --card-2: #f1f4fa;
+    --border: #d8dfec; --border-soft: #e4e9f2;
+    --text: #131a2a; --muted: #617187;
+    --accent: #16a34a; --accent-2: #0891b2; --accent-ink: #ffffff;
+    --danger: #dc2626; --protein: #db2777; --carbs: #b45309; --fat: #2563eb;
+    --water: #0284c7; --burn: #ea580c;
     --shadow: 0 6px 20px rgba(15,23,42,0.08);
+    --sheen: none;
   }
 
   * { box-sizing: border-box; }
@@ -89,7 +186,7 @@
     display: grid; place-items: center; color: var(--accent-ink); font-weight: 800; font-size: 17px;
   }
   .brand > div { min-width: 0; }
-  .brand h1 { font-size: 17px; margin: 0; letter-spacing: -0.2px; }
+  .brand h1 { font-size: 19px; margin: 0; font-family: var(--display); font-weight: 600; letter-spacing: 0.2px; }
   .brand .streak {
     color: var(--muted); font-size: 12px; display: block; margin-top: 1px;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -116,6 +213,34 @@
     display: grid; place-items: center;
   }
   .icon-btn:hover { color: var(--text); background: var(--card-2); }
+  .theme-dot {
+    width: 17px; height: 17px; border-radius: 50%; display: block;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.22);
+  }
+
+  /* ---------- Theme gallery ---------- */
+  .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; }
+  .theme-card {
+    display: grid; gap: 9px; padding: 10px; cursor: pointer; text-align: left;
+    background: var(--card-2); border: 1px solid var(--border-soft); border-radius: 12px;
+    color: inherit; font: inherit;
+  }
+  .theme-card:hover { border-color: var(--accent); }
+  .theme-card[aria-checked="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+  .theme-card .preview {
+    height: 46px; border-radius: 8px; position: relative; overflow: hidden;
+    border: 1px solid rgba(128,128,128,0.22);
+  }
+  .theme-card .preview i {
+    position: absolute; border-radius: 999px; display: block;
+  }
+  .theme-card .preview .a { width: 22px; height: 22px; left: 10px; top: 12px; }
+  .theme-card .preview .b { width: 13px; height: 13px; left: 37px; top: 21px; }
+  .theme-card .preview .bar { height: 4px; border-radius: 3px; left: 10px; right: 10px; bottom: 8px; opacity: 0.55; }
+  .theme-card .tname { font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+  .theme-card .tname .tick { color: var(--accent); }
+  .theme-card .tmeta { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
 
   /* ---------- Layout ---------- */
   /* minmax(0,…) everywhere a grid holds cards: without it a wide child
@@ -128,6 +253,8 @@
     border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow);
     min-width: 0;
   }
+  /* One tinted card carries the theme's accent; the rest stay quiet. */
+  #summaryCard { background-image: var(--sheen); background-repeat: no-repeat; }
   .card > h2 {
     font-size: 12px; margin: 0 0 12px; color: var(--muted);
     font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase;
@@ -143,14 +270,17 @@
   .ring-bg { fill: none; stroke: var(--bg-2); stroke-width: 13; }
   .ring-fg { fill: none; stroke-width: 13; stroke-linecap: round; transition: stroke-dashoffset 0.55s cubic-bezier(.4,0,.2,1), stroke 0.3s; }
   .ring-center { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; pointer-events: none; }
-  .ring-center .big { font-size: 30px; font-weight: 800; letter-spacing: -1px; line-height: 1.05; }
+  .ring-center .big {
+    font-size: 34px; font-weight: 600; letter-spacing: -0.5px; line-height: 1.05;
+    font-family: var(--display); font-variant-numeric: lining-nums tabular-nums;
+  }
   .ring-center .sub { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; margin-top: 2px; }
   .ring-center .big.over { color: var(--danger); }
 
   .summary-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .stat { background: var(--card-2); border: 1px solid var(--border-soft); padding: 10px; border-radius: 11px; text-align: center; }
   .stat .label { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; }
-  .stat .value { font-size: 17px; font-weight: 700; margin-top: 3px; letter-spacing: -0.3px; }
+  .stat .value { font-size: 19px; font-weight: 600; margin-top: 3px; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
   .stat .eq { color: var(--muted); font-size: 15px; font-weight: 400; }
 
   .macros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
@@ -213,7 +343,7 @@
   .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
   @media (max-width: 620px) { .split { grid-template-columns: minmax(0, 1fr); } }
   .counter { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .counter .big { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+  .counter .big { font-size: 28px; font-weight: 600; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
   .counter .big small { font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
   .btns { display: flex; gap: 6px; }
 
@@ -242,7 +372,7 @@
   @media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
   .kpi { background: var(--card-2); border: 1px solid var(--border-soft); border-radius: 11px; padding: 11px; }
   .kpi .label { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; }
-  .kpi .value { font-size: 19px; font-weight: 700; margin-top: 3px; letter-spacing: -0.4px; }
+  .kpi .value { font-size: 21px; font-weight: 600; margin-top: 3px; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
   .kpi .value small { font-size: 12px; color: var(--muted); font-weight: 500; }
   /* Capped so the viewBox-relative type doesn't scale up to billboard size on wide screens. */
   .chart { width: 100%; max-width: 480px; margin-inline: auto; height: auto; display: block; overflow: visible; }
@@ -299,7 +429,7 @@
     .sheet { width: 100vw; border-radius: 18px 18px 0 0; border-bottom: none; max-height: 90dvh; }
   }
   .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
-  .sheet-head h3 { margin: 0; font-size: 17px; }
+  .sheet-head h3 { margin: 0; font-size: 19px; font-family: var(--display); font-weight: 600; }
   .field { display: grid; gap: 6px; margin-bottom: 12px; }
   .field label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; }
   .field input, .field select {
@@ -334,7 +464,7 @@
   .qty-preview { background: var(--card-2); border: 1px solid var(--border-soft); border-radius: 11px; padding: 12px; margin-bottom: 12px; }
   .qty-preview .qp-name { font-weight: 700; font-size: 15px; }
   .qty-preview .qp-macros { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
-  .qty-preview .qp-kcal { font-size: 22px; font-weight: 800; color: var(--accent); margin-top: 6px; letter-spacing: -0.5px; }
+  .qty-preview .qp-kcal { font-size: 24px; font-weight: 600; color: var(--accent); margin-top: 6px; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
   .qty-steps { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
 
   /* ---------- Toast ---------- */
@@ -380,7 +510,7 @@
         <input type="date" id="datePicker" aria-label="Jump to a date" tabindex="-1" />
         <button id="nextDay" aria-label="Next day">›</button>
       </div>
-      <button class="icon-btn" id="themeBtn" aria-label="Toggle colour theme" title="Toggle theme"></button>
+      <button class="icon-btn" id="themeBtn" aria-label="Change theme" title="Change theme"><span class="theme-dot" aria-hidden="true"></span></button>
     </div>
   </div>
 </header>
@@ -389,7 +519,7 @@
   <!-- ============ TODAY ============ -->
   <section class="view" id="viewToday" role="tabpanel" aria-label="Today">
 
-    <div class="card">
+    <div class="card" id="summaryCard">
       <h2>Daily summary</h2>
       <div class="summary">
         <div class="ring-wrap">
@@ -536,10 +666,11 @@
         <label for="unitSel">Weight unit</label>
         <select id="unitSel"><option value="kg">kg</option><option value="lb">lb</option></select>
       </div>
-      <div class="set-row">
-        <label for="themeSel">Theme</label>
-        <select id="themeSel"><option value="dark">Dark</option><option value="light">Light</option></select>
-      </div>
+    </div>
+
+    <div class="card">
+      <h2>Theme <span class="h2-action" id="themeName" style="color: var(--muted)"></span></h2>
+      <div class="theme-grid" id="themeGridSettings" role="radiogroup" aria-label="Colour theme"></div>
     </div>
 
     <div class="card">
@@ -651,6 +782,17 @@
       <button class="btn ghost" data-close>Cancel</button>
       <button class="btn primary" id="exAdd">Add exercise</button>
     </div>
+  </div>
+</dialog>
+
+<!-- ============ Theme dialog ============ -->
+<dialog id="themeDialog" aria-labelledby="themeDialogTitle">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h3 id="themeDialogTitle">Theme</h3>
+      <button class="icon-btn" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="theme-grid" id="themeGridDialog" role="radiogroup" aria-label="Colour theme"></div>
   </div>
 </dialog>
 
@@ -846,7 +988,21 @@ const MEALS = [
 ];
 
 const DEFAULT_GOALS = { cal: 2000, p: 120, c: 250, f: 65, water: 8 };
-const DEFAULT_PREFS = { theme: "dark", unit: "kg" };
+/* Mirrors the [data-theme] blocks in the stylesheet; swatch is [bg, accent, accent-2]. */
+const THEMES = [
+  { id: "obsidian",  name: "Obsidian & Gold", scheme: "dark",  swatch: ["#09090b", "#d4af37", "#f0dda4"] },
+  { id: "noir",      name: "Platinum Noir",   scheme: "dark",  swatch: ["#0b0c0e", "#cfd8e3", "#8fa2b8"] },
+  { id: "emerald",   name: "Emerald Club",    scheme: "dark",  swatch: ["#06110d", "#4ec79b", "#c9a961"] },
+  { id: "sapphire",  name: "Sapphire Royale", scheme: "dark",  swatch: ["#060a16", "#6fa6ff", "#c3b0ff"] },
+  { id: "bordeaux",  name: "Bordeaux",        scheme: "dark",  swatch: ["#110709", "#e0a08f", "#d97b93"] },
+  { id: "bronze",    name: "Bronze Sand",     scheme: "dark",  swatch: ["#0e0b08", "#cf8f54", "#e8c48c"] },
+  { id: "midnight",  name: "Midnight",        scheme: "dark",  swatch: ["#0b1220", "#4ade80", "#22d3ee"] },
+  { id: "champagne", name: "Champagne",       scheme: "light", swatch: ["#f6f1e8", "#9a7b1c", "#bfa14a"] },
+  { id: "rose",      name: "Rosé",            scheme: "light", swatch: ["#faf3f3", "#b1506b", "#c98b73"] },
+  { id: "porcelain", name: "Porcelain",       scheme: "light", swatch: ["#f4f6fb", "#16a34a", "#0891b2"] },
+];
+const THEME_IDS = THEMES.map(t => t.id);
+const DEFAULT_PREFS = { theme: "obsidian", unit: "kg" };
 const KG_PER_LB = 0.45359237;
 
 /* ============================================================
@@ -863,6 +1019,19 @@ function readJSON(key, fallback) {
 function writeJSON(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); }
   catch { toast("Couldn't save — storage is full or blocked."); }
+}
+
+/* v2 stored "dark"/"light"; map those onto the palettes that look identical. */
+function normalizeTheme(id) {
+  if (id === "dark") return "midnight";
+  if (id === "light") return "porcelain";
+  return THEME_IDS.includes(id) ? id : DEFAULT_PREFS.theme;
+}
+function loadPrefs() {
+  const p = { ...DEFAULT_PREFS, ...readJSON(KEY.prefs, {}) };
+  p.theme = normalizeTheme(p.theme);
+  if (p.unit !== "lb") p.unit = "kg";
+  return p;
 }
 
 function emptyDay() {
@@ -909,7 +1078,7 @@ function shiftISO(iso, days) {
 const state = {
   date: todayISO(),
   goals: { ...DEFAULT_GOALS, ...readJSON(KEY.goals, {}) },
-  prefs: { ...DEFAULT_PREFS, ...readJSON(KEY.prefs, {}) },
+  prefs: loadPrefs(),
   day: null,
   view: "Today",
   pendingMeal: null,
@@ -1435,7 +1604,8 @@ function renderSettings() {
   $("#goalCal").value = g.cal; $("#goalP").value = g.p;
   $("#goalC").value = g.c; $("#goalF").value = g.f; $("#goalW").value = g.water;
   $("#unitSel").value = state.prefs.unit;
-  $("#themeSel").value = state.prefs.theme;
+  $("#themeName").textContent = THEMES.find(t => t.id === state.prefs.theme)?.name ?? "";
+  renderThemeGrid($("#themeGridSettings"));
 
   const macroKcal = g.p * 4 + g.c * 4 + g.f * 9;
   const diff = macroKcal - g.cal;
@@ -1454,7 +1624,7 @@ function renderSettings() {
 
 function render() {
   document.documentElement.setAttribute("data-theme", state.prefs.theme);
-  $("#themeBtn").textContent = state.prefs.theme === "dark" ? "☀" : "☾";
+  if (themeDialog.open) renderThemeGrid($("#themeGridDialog"));
   renderHeader();
   if (state.view === "Today") {
     renderSummary(); renderQuickAdd(); renderMeals();
@@ -1495,10 +1665,40 @@ $("#datePicker").addEventListener("change", (e) => {
   if (e.target.value) goToDate(e.target.value);
 });
 
-$("#themeBtn").addEventListener("click", () => {
-  state.prefs.theme = state.prefs.theme === "dark" ? "light" : "dark";
+const themeDialog = $("#themeDialog");
+
+function setTheme(id) {
+  state.prefs.theme = normalizeTheme(id);
   writeJSON(KEY.prefs, state.prefs);
   render();
+}
+
+function renderThemeGrid(container) {
+  container.innerHTML = "";
+  for (const t of THEMES) {
+    const [bg, a1, a2] = t.swatch;
+    const current = t.id === state.prefs.theme;
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "theme-card";
+    card.setAttribute("role", "radio");
+    card.setAttribute("aria-checked", String(current));
+    card.innerHTML = `
+      <span class="preview" style="background:${bg}">
+        <i class="a" style="background:${a1}"></i>
+        <i class="b" style="background:${a2}"></i>
+        <i class="bar" style="background:${a1}"></i>
+      </span>
+      <span class="tname">${escapeHTML(t.name)}${current ? ' <span class="tick" aria-hidden="true">✓</span>' : ""}</span>
+      <span class="tmeta">${t.scheme}</span>`;
+    card.addEventListener("click", () => setTheme(t.id));
+    container.appendChild(card);
+  }
+}
+
+$("#themeBtn").addEventListener("click", () => {
+  renderThemeGrid($("#themeGridDialog"));
+  openDialog(themeDialog);
 });
 
 /* ============================================================
@@ -1831,11 +2031,6 @@ $("#unitSel").addEventListener("change", (e) => {
   writeJSON(KEY.prefs, state.prefs);
   render();
 });
-$("#themeSel").addEventListener("change", (e) => {
-  state.prefs.theme = e.target.value;
-  writeJSON(KEY.prefs, state.prefs);
-  render();
-});
 
 /* ---------- Data management ---------- */
 $("#resetDayBtn").addEventListener("click", () => {
@@ -1887,7 +2082,7 @@ $("#importFile").addEventListener("change", async (e) => {
       writeJSON(k, v); n++;
     }
     state.goals = { ...DEFAULT_GOALS, ...readJSON(KEY.goals, {}) };
-    state.prefs = { ...DEFAULT_PREFS, ...readJSON(KEY.prefs, {}) };
+    state.prefs = loadPrefs();
     state.day = loadDay(state.date);
     render();
     toast(`Imported ${n} record${n === 1 ? "" : "s"}`);
