@@ -1085,14 +1085,42 @@ function loadPrefs() {
 function emptyDay() {
   return { meals: { breakfast: [], lunch: [], dinner: [], snacks: [] }, water: 0, exercises: [], weight: null };
 }
+const finite = (v, fallback = 0) => {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : fallback;
+};
+
+/* Stored days are attacker-supplyable — the JSON importer writes any ft_ key
+   verbatim — so every field is coerced to its declared type on the way in.
+   Without this a string qty or min reached innerHTML and executed. */
+function normalizeItem(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const qty = finite(raw.qty, 1);
+  return {
+    name: String(raw.name ?? "Unnamed food"),
+    kcal: finite(raw.kcal), p: finite(raw.p), c: finite(raw.c), f: finite(raw.f),
+    qty: qty > 0 ? qty : 1,
+  };
+}
+function normalizeExercise(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  return {
+    name: String(raw.name ?? "Activity"),
+    min: Math.max(0, finite(raw.min)),
+    kcal: Math.max(0, finite(raw.kcal)),
+  };
+}
+
 function loadDay(date) {
   const d = readJSON(KEY.day(date), null);
   if (!d) return emptyDay();
   const base = emptyDay();
-  for (const m of MEALS) if (Array.isArray(d.meals?.[m.id])) base.meals[m.id] = d.meals[m.id];
-  base.water = Number(d.water) || 0;
-  base.exercises = Array.isArray(d.exercises) ? d.exercises : [];
-  base.weight = typeof d.weight === "number" ? d.weight : null;
+  for (const m of MEALS) {
+    if (Array.isArray(d.meals?.[m.id])) base.meals[m.id] = d.meals[m.id].map(normalizeItem).filter(Boolean);
+  }
+  base.water = Math.max(0, finite(d.water));
+  base.exercises = Array.isArray(d.exercises) ? d.exercises.map(normalizeExercise).filter(Boolean) : [];
+  base.weight = Number.isFinite(Number(d.weight)) && d.weight !== null ? Number(d.weight) : null;
   return base;
 }
 function saveDay(date, data) {
@@ -1361,7 +1389,7 @@ function renderMeals() {
       items.forEach((it, idx) => {
         const line = document.createElement("div");
         line.className = "item";
-        const qtyLabel = it.qty !== 1 ? ` × ${it.qty}` : "";
+        const qtyLabel = it.qty !== 1 ? ` × ${escapeHTML(it.qty)}` : "";
         line.innerHTML = `
           <div class="name">
             <span class="t">${escapeHTML(it.name)}${qtyLabel}</span>
@@ -1456,7 +1484,7 @@ function renderExercise() {
     const line = document.createElement("div");
     line.className = "item";
     line.innerHTML = `
-      <div class="name"><span class="t">${escapeHTML(e.name)}</span><small>${e.min} min</small></div>
+      <div class="name"><span class="t">${escapeHTML(e.name)}</span><small>${escapeHTML(e.min)} min</small></div>
       <div class="kcal" style="color: var(--accent)">${fmt(e.kcal)}</div>
       <div class="row-actions"><button class="del" aria-label="Remove ${escapeHTML(e.name)}">✕</button></div>`;
     line.querySelector(".del").addEventListener("click", () => {
@@ -2124,6 +2152,34 @@ $("#wipeBtn").addEventListener("click", () => {
   toast("All data deleted");
 });
 
+async function exportNative(json) {
+  const Filesystem = globalThis.Capacitor?.Plugins?.Filesystem;
+  const Share = globalThis.Capacitor?.Plugins?.Share;
+  const name = `fittrack-${todayISO()}.json`;
+  if (!Filesystem || !Share) {
+    toast("Export isn't available in this build.");
+    return;
+  }
+  try {
+    const written = await Filesystem.writeFile({
+      path: name,
+      data: json,
+      directory: "CACHE",
+      encoding: "utf8",
+    });
+    await Share.share({
+      title: "FitTrack export",
+      url: written.uri,
+      dialogTitle: "Export your FitTrack data",
+    });
+    toast("Exported");
+  } catch (err) {
+    // Dismissing the share sheet rejects; that is not a failure worth shouting about.
+    if (/cancel/i.test(err?.message || "")) return;
+    toast("Couldn't export: " + (err?.message || err));
+  }
+}
+
 $("#exportBtn").addEventListener("click", () => {
   const all = {};
   for (let i = 0; i < localStorage.length; i++) {
@@ -2133,10 +2189,10 @@ $("#exportBtn").addEventListener("click", () => {
   const json = JSON.stringify({ app: "fittrack", version: 2, data: all }, null, 2);
 
   if (nativePlatform() !== "web") {
-    // Blob downloads are inert inside a native WebView; the clipboard is not.
-    navigator.clipboard.writeText(json)
-      .then(() => toast("Copied your data to the clipboard"))
-      .catch(() => toast("Couldn't export here — use the browser version."));
+    // Blob downloads are inert inside a native WebView. The clipboard would
+    // work but puts the whole health record on a pasteboard every other app
+    // can read, so this writes a file and hands it to the share sheet.
+    exportNative(json);
     return;
   }
 
