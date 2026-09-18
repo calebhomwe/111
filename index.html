@@ -1222,6 +1222,17 @@ function computeStreak() {
 /* ============================================================
    Rendering — Today
    ============================================================ */
+/* Undo stays open for ~5s and the date can change inside that window (arrow
+   keys, the picker), so an undo is applied to the day it came from rather than
+   whatever happens to be on screen when it fires. */
+function undoOn(date, mutate) {
+  const day = (date === state.date) ? state.day : loadDay(date);
+  mutate(day);
+  saveDay(date, day);
+  if (date === state.date) state.day = day;
+  render();
+}
+
 function persist() { saveDay(state.date, state.day); }
 
 function renderHeader() {
@@ -1304,12 +1315,11 @@ function quickAdd(index) {
   bumpRecent(item);
   persist(); render();
   const mealName = MEALS.find(m => m.id === mealId).name.toLowerCase();
-  toast(`${r.name.split(",")[0]} → ${mealName}`, () => {
-    const arr = state.day.meals[mealId];
-    const idx = arr.lastIndexOf(item);
-    if (idx > -1) arr.splice(idx, 1);
-    persist(); render();
-  });
+  const onDate = state.date;
+  toast(`${r.name.split(",")[0]} → ${mealName}`, () => undoOn(onDate, (day) => {
+    const idx = day.meals[mealId].lastIndexOf(item);
+    if (idx > -1) day.meals[mealId].splice(idx, 1);
+  }));
 }
 
 function renderMeals() {
@@ -1382,19 +1392,19 @@ function renderMeals() {
 function copyMeal(mealId, items) {
   state.day.meals[mealId].push(...items.map(it => ({ ...it })));
   persist(); render();
-  toast(`Copied ${items.length} item${items.length === 1 ? "" : "s"}`, () => {
-    state.day.meals[mealId].splice(-items.length, items.length);
-    persist(); render();
-  });
+  const onDate = state.date;
+  toast(`Copied ${items.length} item${items.length === 1 ? "" : "s"}`, () => undoOn(onDate, (day) => {
+    day.meals[mealId].splice(-items.length, items.length);
+  }));
 }
 
 function removeItem(mealId, idx) {
   const [removed] = state.day.meals[mealId].splice(idx, 1);
   persist(); render();
-  toast(`Removed ${removed.name.split(",")[0]}`, () => {
-    state.day.meals[mealId].splice(idx, 0, removed);
-    persist(); render();
-  });
+  const onDate = state.date;
+  toast(`Removed ${removed.name.split(",")[0]}`, () => undoOn(onDate, (day) => {
+    day.meals[mealId].splice(idx, 0, removed);
+  }));
 }
 
 function editQty(mealId, idx) {
@@ -1452,10 +1462,10 @@ function renderExercise() {
     line.querySelector(".del").addEventListener("click", () => {
       const [removed] = state.day.exercises.splice(idx, 1);
       persist(); render();
-      toast(`Removed ${removed.name}`, () => {
-        state.day.exercises.splice(idx, 0, removed);
-        persist(); render();
-      });
+      const onDate = state.date;
+      toast(`Removed ${removed.name}`, () => undoOn(onDate, (day) => {
+        day.exercises.splice(idx, 0, removed);
+      }));
     });
     list.appendChild(line);
   });
@@ -1509,8 +1519,12 @@ function renderTrends() {
 
   // A day still in progress would drag every average down, so averages run over
   // finished days only — today still gets a bar on the chart, marked "so far".
-  const forAvg = (viewingToday ? days.slice(0, -1) : days).filter(d => d.totals.kcal > 0);
   const logged = days.filter(d => d.totals.kcal > 0);
+  const completed = (viewingToday ? days.slice(0, -1) : days).filter(d => d.totals.kcal > 0);
+  // If today is the only day with food, averaging it is better than showing
+  // an empty state next to a chart that plainly has a bar in it.
+  const forAvg = completed.length > 0 ? completed : logged;
+  const partialOnly = completed.length === 0 && logged.length > 0;
 
   if (forAvg.length === 0) {
     $("#kAvg").textContent = "—";
@@ -1526,8 +1540,9 @@ function renderTrends() {
     $("#kProtein").innerHTML = `${fmt(avgP)}<small> g</small>`;
   }
   $("#kDays").innerHTML = `${logged.length}<small> / 7</small>`;
-  $("#avgNote").textContent = viewingToday && forAvg.length > 0
-    ? "Averages cover completed days — today is still in progress."
+  $("#avgNote").textContent =
+    partialOnly ? "Only today is logged so far, so the averages are today's figures."
+    : viewingToday && forAvg.length > 0 ? "Averages cover completed days — today is still in progress."
     : "";
 
   $("#calChartWrap").innerHTML = calorieChart(days, g.cal, viewingToday);
@@ -1921,9 +1936,12 @@ function commitPortion() {
     item.qty = qty;
     persist(); render();
     foodDialog.close();
-    toast(`${f.name.split(",")[0]} → ${qty} serving${qty === 1 ? "" : "s"}`, () => {
-      item.qty = before; persist(); render();
-    });
+    const onDate = state.date;
+    const editing = state.editing;
+    toast(`${f.name.split(",")[0]} → ${qty} serving${qty === 1 ? "" : "s"}`, () => undoOn(onDate, (day) => {
+      const target = day.meals[editing.mealId][editing.idx];
+      if (target) target.qty = before;
+    }));
     return;
   }
 
@@ -1983,6 +2001,7 @@ function recalcEx() {
 $("#exType").addEventListener("change", recalcEx);
 $("#exMin").addEventListener("input", recalcEx);
 $("#addExerciseBtn").addEventListener("click", () => {
+  $("#exType").querySelector('option[data-measured="1"]')?.remove();
   $("#exType").selectedIndex = 0;
   $("#exMin").value = 30;
   recalcEx();
@@ -2024,7 +2043,8 @@ function calcTargets() {
   const sex = $("#mSex").value;
   const age = parseInt($("#mAge").value, 10) || 30;
   const h = parseFloat($("#mHeight").value) || 175;
-  const w = toKg(parseFloat($("#mWeight").value) || 75);
+  const rawWeight = parseFloat($("#mWeight").value);
+  const w = Number.isFinite(rawWeight) && rawWeight > 0 ? toKg(rawWeight) : 75;
   const act = parseFloat($("#mActivity").value) || 1.375;
   const adj = parseFloat($("#mGoal").value) || 0;
   const bmr = 10 * w + 6.25 * h - 5 * age + (sex === "male" ? 5 : -161);
@@ -2086,7 +2106,11 @@ $("#resetDayBtn").addEventListener("click", () => {
   const backup = state.day;
   state.day = emptyDay();
   persist(); render();
-  toast("Day cleared", () => { state.day = backup; persist(); render(); });
+  const onDate = state.date;
+  toast("Day cleared", () => undoOn(onDate, (day) => {
+    day.meals = backup.meals; day.water = backup.water;
+    day.exercises = backup.exercises; day.weight = backup.weight;
+  }));
 });
 
 $("#wipeBtn").addEventListener("click", () => {
@@ -2106,13 +2130,27 @@ $("#exportBtn").addEventListener("click", () => {
     const k = localStorage.key(i);
     if (k && k.startsWith("ft_")) all[k] = readJSON(k, null);
   }
-  const blob = new Blob([JSON.stringify({ app: "fittrack", version: 2, data: all }, null, 2)], { type: "application/json" });
+  const json = JSON.stringify({ app: "fittrack", version: 2, data: all }, null, 2);
+
+  if (nativePlatform() !== "web") {
+    // Blob downloads are inert inside a native WebView; the clipboard is not.
+    navigator.clipboard.writeText(json)
+      .then(() => toast("Copied your data to the clipboard"))
+      .catch(() => toast("Couldn't export here — use the browser version."));
+    return;
+  }
+
+  const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
   a.download = `fittrack-${todayISO()}.json`;
+  a.rel = "noopener";
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(url);
+  a.remove();
+  // Revoking in the same tick can cancel the download in some browsers.
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
   toast("Exported");
 });
 
@@ -2243,12 +2281,25 @@ function finishHeartRateSession(session) {
   const avg = session.samples.reduce((a, b) => a + b, 0) / session.samples.length;
   // Keytel et al. — an estimate, so it lands in the dialog for the user to adjust.
   const kg = state.day.weight ?? 70;
-  const kcalMin = (0.6309 * avg - 55.0969 + 0.1988 * kg + 0.2017 * 30) / 4.184;
-  const kcal = Math.max(0, Math.round(kcalMin * mins));
-  $("#exType").selectedIndex = 0;
+  const kcalMin = Math.max(0, (0.6309 * avg - 55.0969 + 0.1988 * kg + 0.2017 * 30) / 4.184);
+
+  // Its own option, so recalcEx rescales from the measured rate when the user
+  // edits the minutes instead of silently reverting to a generic activity.
+  const sel = $("#exType");
+  let opt = sel.querySelector('option[data-measured="1"]');
+  if (!opt) {
+    opt = document.createElement("option");
+    opt.dataset.measured = "1";
+    sel.insertBefore(opt, sel.firstChild);
+  }
+  opt.value = kcalMin.toFixed(3);
+  opt.dataset.name = session.name;
+  opt.textContent = `${session.name} — ${Math.round(avg)} bpm average`;
+  sel.selectedIndex = Array.prototype.indexOf.call(sel.options, opt);
+
   $("#exMin").value = mins;
-  $("#exKcal").value = kcal;
-  $("#exHint").textContent = `From ${session.name}: ${mins} min at ${Math.round(avg)} bpm average. Adjust if you know better.`;
+  recalcEx();
+  $("#exHint").textContent = `Measured over ${mins} min at ${Math.round(avg)} bpm average — an estimate, so adjust it if you know better.`;
   openDialog(exDialog);
 }
 
@@ -2310,6 +2361,26 @@ const HEALTH_PERMS = ["READ_WEIGHT", "READ_ACTIVE_CALORIES", "READ_WORKOUTS"];
 const isoAt = (iso, endOfDay) =>
   new Date(iso + (endOfDay ? "T23:59:59.999" : "T00:00:00.000")).toISOString();
 
+/* The plugin returns three different timestamp shapes depending on platform
+   and call, so every one is normalised onto the app's local day key:
+     iOS queryAggregated -> epoch milliseconds (a Number, not a string)
+     iOS queryRecords    -> ISO 8601 in UTC
+     Android             -> zone-less LocalDateTime, or a UTC Instant
+   Slicing the first ten characters would throw on the Number and would bucket
+   the UTC ones onto the wrong day for anyone not on UTC. */
+function healthDateKey(raw) {
+  if (raw == null) return null;
+  if (typeof raw === "number") return Number.isFinite(raw) ? toISO(new Date(raw)) : null;
+  const str = String(raw).trim();
+  const zoned = /(?:Z|[+-]\d{2}:?\d{2})$/.test(str);
+  if (!zoned) {
+    const m = /^(\d{4}-\d{2}-\d{2})/.exec(str);
+    if (m) return m[1];                       // already local wall-clock
+  }
+  const d = new Date(str);
+  return Number.isNaN(d.getTime()) ? null : toISO(d);
+}
+
 async function syncNativeHealth(days = 30) {
   const Health = nativeHealth();
   if (!Health) return;
@@ -2341,9 +2412,9 @@ async function syncNativeHealth(days = 30) {
     const touched = new Set();
 
     for (const rec of weights?.records ?? []) {
-      const date = (rec.startDate || rec.date || "").slice(0, 10);
+      const date = healthDateKey(rec.startDate ?? rec.date);
       const kg = Number(rec.value ?? rec.weight);
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(kg)) continue;
+      if (!date || !Number.isFinite(kg)) continue;
       const day = loadDay(date);
       day.weight = kg;
       saveDay(date, day);
@@ -2351,9 +2422,9 @@ async function syncNativeHealth(days = 30) {
     }
 
     for (const b of energy?.aggregatedData ?? []) {
-      const date = (b.startDate || b.date || "").slice(0, 10);
+      const date = healthDateKey(b.startDate ?? b.date);
       const kcal = Math.round(Number(b.value));
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(kcal) || kcal <= 0) continue;
+      if (!date || !Number.isFinite(kcal) || kcal <= 0) continue;
       const day = loadDay(date);
       const name = `${healthStoreName()} activity`;
       const existing = day.exercises.find(x => x.name === name);
@@ -2406,8 +2477,27 @@ function parseAppleHealth(xml) {
   return byDate;
 }
 
+/* Minimal RFC 4180: honours quoted fields and doubled quotes inside them. */
+function splitCSVLine(line) {
+  const out = [];
+  let field = "", inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (line[i + 1] === '"') { field += '"'; i++; }
+        else inQuotes = false;
+      } else field += c;
+    } else if (c === '"') inQuotes = true;
+    else if (c === ",") { out.push(field); field = ""; }
+    else field += c;
+  }
+  out.push(field);
+  return out;
+}
+
 function parseCSV(text) {
-  const rows = text.trim().split(/\r?\n/).map(r => r.split(","));
+  const rows = text.trim().split(/\r?\n/).map(splitCSVLine);
   if (rows.length < 2) return {};
   const head = rows[0].map(h => h.trim().toLowerCase());
   const di = head.findIndex(h => /date|day/.test(h));
