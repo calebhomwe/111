@@ -1,0 +1,6 @@
+{
+  "appId": "com.fittrack.app",
+  "appName": "FitTrack",
+  "webDir": "www",
+  "server": { "androidScheme": "https" }
+}

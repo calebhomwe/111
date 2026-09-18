@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HealthData locale="en_GB">
+ <Record type="HKQuantityTypeIdentifierBodyMass" sourceName="Withings" unit="kg" startDate="2026-09-14 07:12:00 +0100" endDate="2026-09-14 07:12:00 +0100" value="77.4"/>
+ <Record type="HKQuantityTypeIdentifierBodyMass" sourceName="Withings" unit="kg" startDate="2026-09-15 07:04:00 +0100" endDate="2026-09-15 07:04:00 +0100" value="77.2"/>
+ <Record type="HKQuantityTypeIdentifierActiveEnergyBurned" sourceName="Apple Watch" unit="kcal" startDate="2026-09-15 09:00:00 +0100" endDate="2026-09-15 09:30:00 +0100" value="212"/>
+ <Record type="HKQuantityTypeIdentifierActiveEnergyBurned" sourceName="Apple Watch" unit="kcal" startDate="2026-09-15 18:00:00 +0100" endDate="2026-09-15 18:40:00 +0100" value="305"/>
+ <Record type="HKQuantityTypeIdentifierBodyMass" sourceName="Withings" unit="kg" startDate="2026-09-16 07:01:00 +0100" endDate="2026-09-16 07:01:00 +0100" value="77.0"/>
+</HealthData>
