@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="description" content="FitTrack — a private, offline calorie, macro, water and exercise tracker." />
 <meta name="theme-color" content="#0b1220" />
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22FitTrack%22%2C%22short_name%22%3A%22FitTrack%22%2C%22description%22%3A%22Calorie%2C%20macro%2C%20water%20and%20body-weight%20tracker.%20Everything%20stays%20on%20your%20device.%22%2C%22start_url%22%3A%22.%22%2C%22scope%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%2309090b%22%2C%22theme_color%22%3A%22%2309090b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2522http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2522%2520viewBox%253D%25220%25200%2520512%2520512%2522%253E%253Crect%2520width%253D%2522512%2522%2520height%253D%2522512%2522%2520rx%253D%252296%2522%2520fill%253D%2522%2523d4af37%2522%252F%253E%253Ctext%2520x%253D%2522256%2522%2520y%253D%2522352%2522%2520font-family%253D%2522Georgia%252Cserif%2522%2520font-size%253D%2522300%2522%2520text-anchor%253D%2522middle%2522%2520fill%253D%2522%252309090b%2522%253EF%253C%252Ftext%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%2296%22%20fill%3D%22%23d4af37%22%2F%3E%3Ctext%20x%3D%22256%22%20y%3D%22352%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%22300%22%20text-anchor%3D%22middle%22%20fill%3D%22%2309090b%22%3EF%3C%2Ftext%3E%3C%2Fsvg%3E" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Crect%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%2296%22%20fill%3D%22%23d4af37%22%2F%3E%3Ctext%20x%3D%22256%22%20y%3D%22352%22%20font-family%3D%22Georgia%2Cserif%22%20font-size%3D%22300%22%20text-anchor%3D%22middle%22%20fill%3D%22%2309090b%22%3EF%3C%2Ftext%3E%3C%2Fsvg%3E" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="FitTrack" />
+<meta name="mobile-web-app-capable" content="yes" />
 <title>FitTrack — Calories &amp; Meals</title>
 <style>
   /* Embedded, not linked: a webfont CDN would leak every user's IP, and the
@@ -209,7 +216,9 @@
   #datePicker { position: absolute; left: 50%; bottom: 2px; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; }
   .datenav button {
     background: none; border: none; color: var(--muted); cursor: pointer;
-    padding: 6px 9px; border-radius: 8px; font-size: 15px; line-height: 1;
+    border-radius: 8px; font-size: 15px; line-height: 1;
+    min-width: 40px; min-height: 40px;
+    display: grid; place-items: center; padding: 0;
   }
   .datenav button:hover:not(:disabled) { background: var(--card-2); color: var(--text); }
   .datenav button:disabled { opacity: 0.3; cursor: default; }
@@ -297,11 +306,11 @@
   .stat .eq { color: var(--muted); font-size: 15px; font-weight: 400; }
 
   .macros { display: grid; gap: 14px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-soft); }
-  .macro { background: none; border: none; padding: 0; }
+  .macro { background: none; border: none; padding: 0; display: grid; grid-template-columns: 1fr auto; column-gap: 12px; align-items: baseline; }
   .macro .name { font-size: 14px; font-weight: 500; color: var(--text); }
-  .macro .val { font-size: 13px; color: var(--muted); float: right; margin-top: -17px; }
+  .macro .val { font-size: 13px; color: var(--muted); text-align: right; }
   .macro .val small { color: var(--muted); font-weight: 400; }
-  .bar { height: 2px; background: var(--border-soft); margin-top: 9px; overflow: hidden; }
+  .bar { height: 2px; background: var(--border-soft); margin-top: 9px; overflow: hidden; grid-column: 1 / -1; }
   .bar > span { display: block; height: 100%; transition: width var(--t-slow) var(--ease); }
 
   /* ---------- Quick add ---------- */
@@ -341,7 +350,11 @@
   .item .row-actions { display: flex; gap: 2px; }
   .item .row-actions button {
     background: transparent; border: none; cursor: pointer; color: var(--muted);
-    font-size: 13px; padding: 5px 7px; border-radius: 7px; line-height: 1;
+    font-size: 13px; border-radius: 7px; line-height: 1;
+    /* WCAG 2.5.8 wants 24px; Apple and Android ask for 44. The visible mark
+       stays small — only the hit area grows. */
+    min-width: 44px; min-height: 44px;
+    display: grid; place-items: center; padding: 0;
   }
   .item .row-actions button:hover { background: var(--bg-2); color: var(--text); }
   .item .row-actions button.del:hover { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); }
@@ -374,8 +387,9 @@
 
   .glasses { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
   .glass {
-    width: 22px; height: 28px; border-radius: 3px 3px 7px 7px; border: 2px solid var(--border);
-    background: transparent; cursor: pointer; padding: 0; transition: background 0.2s, border-color 0.2s;
+    width: 26px; height: 32px; border-radius: 3px 3px 7px 7px; border: 2px solid var(--border);
+    background: transparent; cursor: pointer; padding: 0;
+    transition: background var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
   }
   .glass.full { background: var(--accent); border-color: var(--accent); }
   .exercises { display: grid; gap: 6px; margin-top: 10px; }
@@ -718,7 +732,7 @@
         <button class="btn sm" id="connectScale">Smart scale</button>
         <button class="btn sm" id="importHealthBtn">Import health export</button>
       </div>
-      <input type="file" id="healthFile" accept=".xml,.csv,text/csv,text/xml" class="visually-hidden" />
+      <input type="file" id="healthFile" accept=".xml,.csv,text/csv,text/xml" class="visually-hidden" tabindex="-1" aria-hidden="true" />
     </div>
 
     <div class="card">
@@ -730,7 +744,7 @@
         <button class="btn sm danger" id="resetDayBtn">Clear this day</button>
         <button class="btn sm danger" id="wipeBtn">Delete everything</button>
       </div>
-      <input type="file" id="importFile" accept="application/json" class="visually-hidden" />
+      <input type="file" id="importFile" accept="application/json" class="visually-hidden" tabindex="-1" aria-hidden="true" />
     </div>
 
     <p class="footer-tip">Everything is stored locally in your browser — nothing is uploaded anywhere.<br/>Calorie and macro values are estimates for typical servings.</p>
