@@ -76,6 +76,43 @@ export default async function run() {
     check("macro chart is not empty while the calorie chart has a bar", trends.empty, false);
     check("averages fall back to today", trends.avg, "900kcal");
 
+    // Keytel's male and female equations differ substantially; using the male
+    // one for everyone overstated a woman's burn by roughly 40%.
+    const keytel = await page.evaluate(() => {
+      const round = (n) => Math.round(n * 1000) / 1000;
+      state.prefs.sex = "male"; state.prefs.age = 30;
+      const male = round(heartRateKcalPerMin(150, 70));
+      state.prefs.sex = "female";
+      const female = round(heartRateKcalPerMin(150, 70));
+      state.prefs.sex = null; state.prefs.age = null;
+      const unknown = round(heartRateKcalPerMin(150, 70));
+      return { male, female, unknown, floorsAtZero: heartRateKcalPerMin(0, 70) };
+    });
+    check("male equation matches Keytel", keytel.male, 14.222);
+    check("female equation matches Keytel", keytel.female, 9.574);
+    check("unknown sex falls back to the male equation", keytel.unknown, keytel.male);
+    check("a nonsense heart rate cannot go negative", keytel.floorsAtZero, 0);
+
+    // Age must come from the calculator rather than a hardcoded 30.
+    check("stored age changes the estimate",
+      await page.evaluate(() => {
+        state.prefs.sex = "male"; state.prefs.age = 30;
+        const at30 = heartRateKcalPerMin(150, 70);
+        state.prefs.age = 55;
+        const at55 = heartRateKcalPerMin(150, 70);
+        state.prefs.sex = null; state.prefs.age = null;
+        return at55 > at30;
+      }), true);
+
+    check("the calculator persists sex and age",
+      await page.evaluate(() => {
+        state.prefs.sex = null; state.prefs.age = null;
+        $("#mSex").value = "female"; $("#mAge").value = "41";
+        $("#calcApply").click();
+        const stored = JSON.parse(localStorage.getItem("ft_prefs"));
+        return { sex: stored.sex, age: stored.age };
+      }), { sex: "female", age: 41 });
+
     check("no console errors", [...page.errors], []);
     await page.close();
   });
