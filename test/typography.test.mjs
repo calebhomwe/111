@@ -15,22 +15,42 @@ export default async function run() {
     await page.reload();
     await page.waitForTimeout(400);
 
-    const rows = await page.evaluate(async () => {
+    // Sampling only .hero-num once hid three rules that declared the pairing
+    // weight and then a literal 600 later in the same block, so every element
+    // that renders in the display face is checked.
+    const DISPLAY_SELECTORS = [".hero-num", ".kpi .value", ".counter .big", ".sheet-head h3"];
+
+    const rows = await page.evaluate(async (selectors) => {
       const out = [];
       for (const f of FONTS) {
         setFont(f.id);
         await document.fonts.ready;
         const cs = getComputedStyle(document.querySelector(".hero-num"));
+        const expectedWeight = getComputedStyle(document.documentElement)
+          .getPropertyValue("--display-weight").trim();
+        const offenders = [];
+        for (const sel of selectors) {
+          for (const el of document.querySelectorAll(sel)) {
+            const s = getComputedStyle(el);
+            if (s.fontWeight !== expectedWeight) offenders.push(`${sel}:${s.fontWeight}!=${expectedWeight}`);
+            const fam = s.fontFamily.split(",")[0].replace(/["']/g, "").trim();
+            if (fam !== cs.fontFamily.split(",")[0].replace(/["']/g, "").trim()) offenders.push(`${sel}:${fam}`);
+          }
+        }
         out.push({
           id: f.id,
           applied: document.documentElement.getAttribute("data-font"),
           display: cs.fontFamily.split(",")[0].replace(/["']/g, "").trim(),
           weight: cs.fontWeight,
           tracking: cs.letterSpacing,
+          offenders,
         });
       }
       return out;
-    });
+    }, DISPLAY_SELECTORS);
+
+    check("every display element follows the pairing's weight and face",
+      rows.flatMap(r => r.offenders.map(o => `${r.id} ${o}`)), []);
 
     check("all six pairings are registered", rows.length, 6);
     check("every pairing applies its attribute",

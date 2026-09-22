@@ -58,7 +58,8 @@
   /* ============================================================
      Type pairings. Each sets the same three variables, so nothing
      downstream names a family. FONTS in the script mirrors this list.
-     Sans stacks end in the OS defaults so "System" costs no bytes.
+     Every face is inlined in this document, so the pairings do not differ in
+     download size — System and Neutral simply render without a webfont.
      ============================================================ */
   :root, [data-font="editorial"] {
     --ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -427,7 +428,7 @@
   .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
   @media (max-width: 620px) { .split { grid-template-columns: minmax(0, 1fr); } }
   .counter { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .counter .big { font-weight: var(--display-weight); font-size: 28px; font-weight: 600; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
+  .counter .big { font-weight: var(--display-weight); font-size: 28px; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
   .counter .big small { font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
   .btns { display: flex; gap: 6px; }
 
@@ -473,7 +474,7 @@
   @media (max-width: 560px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
   .kpi { background: var(--card-2); border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 12px; }
   .kpi .label { color: var(--muted); font-size: 11.5px; }
-  .kpi .value { font-weight: var(--display-weight); font-size: 21px; font-weight: 600; margin-top: 3px; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
+  .kpi .value { font-weight: var(--display-weight); font-size: 21px; margin-top: 3px; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
   .kpi .value small { font-size: 12px; color: var(--muted); font-weight: 500; }
   /* Capped so the viewBox-relative type doesn't scale up to billboard size on wide screens. */
   .chart { width: 100%; max-width: 480px; margin-inline: auto; height: auto; display: block; overflow: visible; }
@@ -564,7 +565,7 @@
   .qty-preview { background: var(--card-2); border: 1px solid var(--border-soft); border-radius: 11px; padding: 12px; margin-bottom: 12px; }
   .qty-preview .qp-name { font-weight: 700; font-size: 15px; }
   .qty-preview .qp-macros { color: var(--muted); font-size: 12.5px; margin-top: 4px; }
-  .qty-preview .qp-kcal { font-weight: var(--display-weight); font-size: 24px; font-weight: 600; color: var(--accent); margin-top: 6px; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
+  .qty-preview .qp-kcal { font-weight: var(--display-weight); font-size: 24px; color: var(--accent); margin-top: 6px; font-family: var(--display); font-variant-numeric: lining-nums tabular-nums; }
   .qty-steps { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
 
   /* ---------- Toast ---------- */
