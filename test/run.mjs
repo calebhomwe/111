@@ -4,8 +4,9 @@ import health from "./health.test.mjs";
 import regressions from "./regressions.test.mjs";
 import security from "./security.test.mjs";
 import accessibility from "./accessibility.test.mjs";
+import typography from "./typography.test.mjs";
 
-const suites = { app, health, regressions, security, accessibility };
+const suites = { app, health, regressions, security, accessibility, typography };
 const only = process.argv[2];
 let failed = 0;
 
