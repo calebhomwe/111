@@ -1,0 +1,5274 @@
+[
+ {
+  "id": "s1",
+  "title": "えきの ねこ",
+  "titleEn": "The Station Cat",
+  "lv": "kana",
+  "img": "A tiny rural Japanese train station at golden evening light, a wooden platform with a small bench and potted flowers, a fluffy orange-and-white cat bounding joyfully toward a young schoolgirl with a backpack who has just stepped off a two-car local train, the girl kneeling with arms open and a big smile, rice fields and distant green hills behind, long warm shadows and a pink-orange sky, a feeling of a happy homecoming. Painted in a consistent warm, hand-painted Studio-Ghibli-inspired watercolor style: soft edges, gentle textured paper, rich but soft colors, cozy nostalgic atmosphere. No text, letters, signs with writing, or captions anywhere in the image.",
+  "sents": [
+   {
+    "en": "There is a cat at a small station.",
+    "tok": [
+     {
+      "s": "ちいさな",
+      "g": "small"
+     },
+     {
+      "s": "えき",
+      "g": "station"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "ねこ",
+      "g": "cat"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "います",
+      "g": "is (there)"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "The cat's name is Tama.",
+    "tok": [
+     {
+      "s": "ねこ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "なまえ",
+      "g": "name"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "タマ",
+      "g": "Tama"
+     },
+     {
+      "s": "です",
+      "g": "is"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Every day, Tama waits for the train in front of the station.",
+    "tok": [
+     {
+      "s": "タマ",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "まいにち",
+      "g": "every day"
+     },
+     {
+      "s": "えき",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "まえ",
+      "g": "front"
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "でんしゃ",
+      "g": "train"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "まちます",
+      "g": "waits"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "In the evening, a train comes.",
+    "tok": [
+     {
+      "s": "ゆうがた",
+      "g": "evening"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "でんしゃ",
+      "p": 1
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "きます",
+      "g": "comes"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "A girl gets off the train.",
+    "tok": [
+     {
+      "s": "おんなのこ",
+      "g": "girl"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "でんしゃ",
+      "p": 1
+     },
+     {
+      "s": "から",
+      "p": 1
+     },
+     {
+      "s": "おります",
+      "g": "gets off"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "\"Tama, I'm home!\"",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "タマ",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "ただいま",
+      "g": "I'm home"
+     },
+     {
+      "s": "！"
+     },
+     {
+      "s": "」"
+     }
+    ]
+   },
+   {
+    "en": "Tama runs over to the girl.",
+    "tok": [
+     {
+      "s": "タマ",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "おんなのこ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "ところ",
+      "g": "place (where someone is)"
+     },
+     {
+      "s": "へ",
+      "p": 1
+     },
+     {
+      "s": "はしっていきます",
+      "g": "runs over"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Tama wasn't waiting for the train, but for this girl.",
+    "tok": [
+     {
+      "s": "タマ",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "でんしゃ",
+      "p": 1
+     },
+     {
+      "s": "では",
+      "p": 1
+     },
+     {
+      "s": "なくて",
+      "g": "not ... but"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "この",
+      "g": "this"
+     },
+     {
+      "s": "おんなのこ",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "まっていました",
+      "g": "was waiting for"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   }
+  ],
+  "qs": [
+   {
+    "q": "ねこの なまえは なんですか。",
+    "qen": "What is the cat's name?",
+    "opts": [
+     "ハナ",
+     "タマ",
+     "ユイ",
+     "ミケ"
+    ],
+    "a": 1
+   },
+   {
+    "q": "でんしゃは いつ きますか。",
+    "qen": "When does the train come?",
+    "opts": [
+     "あさ",
+     "ひる",
+     "よる",
+     "ゆうがた"
+    ],
+    "a": 3
+   },
+   {
+    "q": "タマは だれを まって いましたか。",
+    "qen": "Who was Tama waiting for?",
+    "opts": [
+     "おんなのこ",
+     "えきの ひと",
+     "ほかの ねこ",
+     "おじいさん"
+    ],
+    "a": 0
+   }
+  ]
+ },
+ {
+  "id": "s2",
+  "title": "あめの ひの カフェ",
+  "titleEn": "The Rainy-Day Café",
+  "lv": "kana",
+  "img": "A cozy little wooden café on a rainy afternoon, seen from inside: a young woman at a window table with a steaming cup of coffee and a slice of strawberry shortcake, rain streaking the glass, and outside on the wet cobbled street a young man in a damp coat looking up at the grey sky without an umbrella, warm amber lamplight inside contrasting with soft blue-grey rain outside, potted plants on the sill, a quiet, tender mood. Painted in a consistent warm, hand-painted Studio-Ghibli-inspired watercolor style: soft edges, gentle textured paper, rich but soft colors, cozy nostalgic atmosphere. No text, letters, signs with writing, or captions anywhere in the image.",
+  "sents": [
+   {
+    "en": "Today it is raining.",
+    "tok": [
+     {
+      "s": "きょう",
+      "g": "today"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "あめ",
+      "g": "rain"
+     },
+     {
+      "s": "です",
+      "g": "is"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I go into a small café.",
+    "tok": [
+     {
+      "s": "わたし",
+      "g": "I"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "ちいさな",
+      "g": "small"
+     },
+     {
+      "s": "カフェ",
+      "g": "café"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "はいります",
+      "g": "go into"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I order coffee and cake.",
+    "tok": [
+     {
+      "s": "コーヒー",
+      "g": "coffee"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "ケーキ",
+      "g": "cake"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "たのみます",
+      "g": "order"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Outside the window, there is a man with no umbrella.",
+    "tok": [
+     {
+      "s": "まど",
+      "g": "window"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "そと",
+      "g": "outside"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "かさ",
+      "g": "umbrella"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "もっていない",
+      "g": "not carrying"
+     },
+     {
+      "s": "おとこのひと",
+      "g": "man"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "います",
+      "g": "there is"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "There are two umbrellas in my bag.",
+    "tok": [
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "かばん",
+      "g": "bag"
+     },
+     {
+      "s": "には",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "かさ",
+      "p": 1
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "ふたつ",
+      "g": "two (things)"
+     },
+     {
+      "s": "あります",
+      "g": "there are"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I go outside and say, \"Here, take this.\"",
+    "tok": [
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "そと",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "でて",
+      "g": "go out and"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "「"
+     },
+     {
+      "s": "これ",
+      "g": "this"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "どうぞ",
+      "g": "please (take it)"
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "いいます",
+      "g": "say"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "The man smiles and says, \"Thank you.\"",
+    "tok": [
+     {
+      "s": "おとこのひと",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "「"
+     },
+     {
+      "s": "ありがとう",
+      "g": "thank you"
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "わらいました",
+      "g": "smiled (and said)"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "On the next rainy day, that man came to the café carrying the umbrella and a cake.",
+    "tok": [
+     {
+      "s": "つぎ",
+      "g": "next"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "あめ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "ひ",
+      "g": "day"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "その",
+      "g": "that"
+     },
+     {
+      "s": "ひと",
+      "g": "person"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "かさ",
+      "p": 1
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "ケーキ",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "もって",
+      "g": "holding"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "カフェ",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "きました",
+      "g": "came"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   }
+  ],
+  "qs": [
+   {
+    "q": "わたしは カフェで なにを たのみましたか。",
+    "qen": "What did I order at the café?",
+    "opts": [
+     "おちゃと パン",
+     "コーヒーと ケーキ",
+     "ジュースと ケーキ",
+     "コーヒーと パン"
+    ],
+    "a": 1
+   },
+   {
+    "q": "わたしの かばんには、かさが いくつ ありましたか。",
+    "qen": "How many umbrellas were in my bag?",
+    "opts": [
+     "ひとつ",
+     "みっつ",
+     "ふたつ",
+     "ありません"
+    ],
+    "a": 2
+   },
+   {
+    "q": "つぎの あめの ひ、おとこのひとは なにを もって きましたか。",
+    "qen": "What did the man bring on the next rainy day?",
+    "opts": [
+     "はなと てがみ",
+     "コーヒー",
+     "あたらしい かさ",
+     "かさと ケーキ"
+    ],
+    "a": 3
+   }
+  ]
+ },
+ {
+  "id": "s3",
+  "title": "おばあちゃんと おにぎり",
+  "titleEn": "Onigiri with Grandma",
+  "lv": "kana",
+  "img": "A sunlit traditional Japanese kitchen with wooden beams and a steaming rice cooker, a gentle smiling grandmother in an apron and a small child standing on a stool side by side shaping rice balls with their hands; on a plate, neat triangular onigiri wrapped in nori beside one lumpy, round, lopsided onigiri, a small bowl of red umeboshi plums, morning light through a paper shoji window, warm, loving, homely mood. Painted in a consistent warm, hand-painted Studio-Ghibli-inspired watercolor style: soft edges, gentle textured paper, rich but soft colors, cozy nostalgic atmosphere. No text, letters, signs with writing, or captions anywhere in the image.",
+  "sents": [
+   {
+    "en": "Today I made onigiri with Grandma.",
+    "tok": [
+     {
+      "s": "きょう",
+      "g": "today"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "おばあちゃん",
+      "g": "grandma"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "おにぎり",
+      "g": "rice ball"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "つくりました",
+      "g": "made"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Grandma's onigiri were neat triangles.",
+    "tok": [
+     {
+      "s": "おばあちゃん",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "おにぎり",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "きれいな",
+      "g": "neat, pretty"
+     },
+     {
+      "s": "さんかく",
+      "g": "triangle"
+     },
+     {
+      "s": "でした",
+      "g": "were"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "My onigiri were round and a little oddly shaped.",
+    "tok": [
+     {
+      "s": "わたし",
+      "g": "I, my"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "おにぎり",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "まるくて",
+      "g": "round and"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "ちょっと",
+      "g": "a little"
+     },
+     {
+      "s": "へんな",
+      "g": "strange"
+     },
+     {
+      "s": "かたち",
+      "g": "shape"
+     },
+     {
+      "s": "でした",
+      "g": "were"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "We put pickled plums inside.",
+    "tok": [
+     {
+      "s": "なか",
+      "g": "inside"
+     },
+     {
+      "s": "には",
+      "p": 1
+     },
+     {
+      "s": "うめぼし",
+      "g": "pickled plum"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "いれました",
+      "g": "put in"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Grandma ate my onigiri.",
+    "tok": [
+     {
+      "s": "おばあちゃん",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "おにぎり",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "たべました",
+      "g": "ate"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "\"Delicious! This is the most delicious one!\"",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "おいしい",
+      "g": "delicious"
+     },
+     {
+      "s": "！"
+     },
+     {
+      "s": "いちばん",
+      "g": "the most"
+     },
+     {
+      "s": "おいしい",
+      "p": 1
+     },
+     {
+      "s": "よ",
+      "p": 1
+     },
+     {
+      "s": "！"
+     },
+     {
+      "s": "」"
+     }
+    ]
+   },
+   {
+    "en": "I was very happy.",
+    "tok": [
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "とても",
+      "g": "very"
+     },
+     {
+      "s": "うれしかったです",
+      "g": "was happy"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Tomorrow, I will make onigiri for Grandma.",
+    "tok": [
+     {
+      "s": "あした",
+      "g": "tomorrow"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "おばあちゃん",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "おにぎり",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "つくります",
+      "g": "will make"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   }
+  ],
+  "qs": [
+   {
+    "q": "おばあちゃんの おにぎりは どんな かたちでしたか。",
+    "qen": "What shape were Grandma's onigiri?",
+    "opts": [
+     "さんかく",
+     "まる",
+     "しかく",
+     "ほし"
+    ],
+    "a": 0
+   },
+   {
+    "q": "おにぎりの なかに なにを いれましたか。",
+    "qen": "What did they put inside the onigiri?",
+    "opts": [
+     "さかな",
+     "たまご",
+     "うめぼし",
+     "なにも いれませんでした"
+    ],
+    "a": 2
+   },
+   {
+    "q": "あした、だれが おにぎりを つくりますか。",
+    "qen": "Who will make onigiri tomorrow?",
+    "opts": [
+     "おばあちゃん",
+     "おかあさん",
+     "ともだち",
+     "わたし"
+    ],
+    "a": 3
+   }
+  ]
+ },
+ {
+  "id": "s4",
+  "title": "新しい 学校",
+  "titleEn": "The New School",
+  "lv": "N5",
+  "img": "A bright Tokyo classroom at lunchtime in spring, cherry blossom petals drifting past large windows with a view of city rooftops, two schoolgirls in navy sailor uniforms sitting at pushed-together desks laughing with delight as they compare their open bento boxes, each containing an identical cat-shaped onigiri with nori ears and whiskers, soft dappled sunlight, fresh and joyful first-day-of-friendship mood. Painted in a consistent warm, hand-painted Studio-Ghibli-inspired watercolor style: soft edges, gentle textured paper, rich but soft colors, cozy nostalgic atmosphere. No text, letters, signs with writing, or captions anywhere in the image.",
+  "sents": [
+   {
+    "en": "Today is my first day at a new school in Tokyo.",
+    "tok": [
+     {
+      "s": "今日",
+      "r": "きょう",
+      "g": "today"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "東京",
+      "r": "とうきょう",
+      "g": "Tokyo"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "新しい",
+      "r": "あたらしい",
+      "g": "new"
+     },
+     {
+      "s": "学校",
+      "r": "がっこう",
+      "g": "school"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "一日目",
+      "r": "いちにちめ",
+      "g": "first day"
+     },
+     {
+      "s": "です",
+      "g": "is"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "My heart had been pounding since the morning.",
+    "tok": [
+     {
+      "s": "朝",
+      "r": "あさ",
+      "g": "morning"
+     },
+     {
+      "s": "から",
+      "p": 1
+     },
+     {
+      "s": "ドキドキしていました",
+      "g": "was nervous (heart pounding)"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "In the classroom there were lots of people I didn't know.",
+    "tok": [
+     {
+      "s": "きょうしつ",
+      "g": "classroom"
+     },
+     {
+      "s": "には",
+      "p": 1
+     },
+     {
+      "s": "しらない",
+      "g": "don't know"
+     },
+     {
+      "s": "人",
+      "r": "ひと",
+      "g": "people"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "たくさん",
+      "g": "a lot"
+     },
+     {
+      "s": "いました",
+      "g": "there were"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "The girl next to me said, \"Good morning.\"",
+    "tok": [
+     {
+      "s": "となり",
+      "g": "next to (me)"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "女の子",
+      "r": "おんなのこ",
+      "g": "girl"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "「"
+     },
+     {
+      "s": "おはよう",
+      "g": "good morning"
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "言いました",
+      "r": "いいました",
+      "g": "said"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Her name is Yui.",
+    "tok": [
+     {
+      "s": "名前",
+      "r": "なまえ",
+      "g": "name"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "ユイ",
+      "g": "Yui"
+     },
+     {
+      "s": "さん",
+      "g": "Ms."
+     },
+     {
+      "s": "です",
+      "p": 1
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "At lunch break, the two of us ate our bento.",
+    "tok": [
+     {
+      "s": "昼休み",
+      "r": "ひるやすみ",
+      "g": "lunch break"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "二人",
+      "r": "ふたり",
+      "g": "two people"
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "おべんとう",
+      "g": "boxed lunch"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "食べました",
+      "r": "たべました",
+      "g": "ate"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "In Yui's bento there was a cat-shaped onigiri.",
+    "tok": [
+     {
+      "s": "ユイさん",
+      "g": "Yui"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "おべんとう",
+      "p": 1
+     },
+     {
+      "s": "には",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "ねこ",
+      "g": "cat"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "かたち",
+      "g": "shape"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "おにぎり",
+      "g": "rice ball"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "入っていました",
+      "r": "はいっていました",
+      "g": "was inside"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "And in my bento, too, there was a cat onigiri!",
+    "tok": [
+     {
+      "s": "そして",
+      "g": "and"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "わたし",
+      "g": "I, my"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "おべんとう",
+      "p": 1
+     },
+     {
+      "s": "にも",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "ねこ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "おにぎり",
+      "p": 1
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "入っていました",
+      "r": "はいっていました",
+      "g": "was inside"
+     },
+     {
+      "s": "！"
+     }
+    ]
+   },
+   {
+    "en": "\"They're the same!\"",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "おなじ",
+      "g": "same"
+     },
+     {
+      "s": "だ",
+      "g": "is"
+     },
+     {
+      "s": "ね",
+      "p": 1
+     },
+     {
+      "s": "！"
+     },
+     {
+      "s": "」"
+     }
+    ]
+   },
+   {
+    "en": "The two of us laughed a lot.",
+    "tok": [
+     {
+      "s": "二人",
+      "r": "ふたり",
+      "g": "the two of us"
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "たくさん",
+      "g": "a lot"
+     },
+     {
+      "s": "わらいました",
+      "g": "laughed"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "We quickly became friends.",
+    "tok": [
+     {
+      "s": "わたしたち",
+      "g": "we"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "すぐ",
+      "g": "right away"
+     },
+     {
+      "s": "友だち",
+      "r": "ともだち",
+      "g": "friend"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "なりました",
+      "g": "became"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I'm looking forward to going to school tomorrow, too.",
+    "tok": [
+     {
+      "s": "あした",
+      "g": "tomorrow"
+     },
+     {
+      "s": "も",
+      "p": 1
+     },
+     {
+      "s": "学校",
+      "r": "がっこう",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "行く",
+      "r": "いく",
+      "g": "go"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "たのしみ",
+      "g": "looking forward to"
+     },
+     {
+      "s": "です",
+      "p": 1
+     },
+     {
+      "s": "。"
+     }
+    ]
+   }
+  ],
+  "qs": [
+   {
+    "q": "「わたし」の 新しい 学校は どこに ありますか。",
+    "qen": "Where is the narrator's new school?",
+    "opts": [
+     "京都",
+     "大阪",
+     "東京",
+     "北海道"
+    ],
+    "a": 2
+   },
+   {
+    "q": "となりの 女の子の 名前は 何ですか。",
+    "qen": "What is the name of the girl in the next seat?",
+    "opts": [
+     "ユイさん",
+     "ハナさん",
+     "タマさん",
+     "ミキさん"
+    ],
+    "a": 0
+   },
+   {
+    "q": "二人の おべんとうには 何が 入っていましたか。",
+    "qen": "What was in both of their bentos?",
+    "opts": [
+     "さかなの おにぎり",
+     "ねこの かたちの おにぎり",
+     "サンドイッチ",
+     "ケーキ"
+    ],
+    "a": 1
+   }
+  ]
+ },
+ {
+  "id": "s5",
+  "title": "あおい かさ",
+  "titleEn": "The Blue Umbrella",
+  "lv": "N5",
+  "img": "A small Japanese train station office window at dusk just after the rain, the wet platform glistening with reflections of warm station lights, a kind uniformed station attendant smiling beside a little girl in a yellow raincoat and red boots who proudly holds out a bright blue umbrella to a grateful young office worker in a suit, puddles shimmering, clouds parting to show a soft peach sky, gentle heartwarming mood. Painted in a consistent warm, hand-painted Studio-Ghibli-inspired watercolor style: soft edges, gentle textured paper, rich but soft colors, cozy nostalgic atmosphere. No text, letters, signs with writing, or captions anywhere in the image.",
+  "sents": [
+   {
+    "en": "On Monday morning, it was raining.",
+    "tok": [
+     {
+      "s": "月曜日",
+      "r": "げつようび",
+      "g": "Monday"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "朝",
+      "r": "あさ",
+      "g": "morning"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "雨",
+      "r": "あめ",
+      "g": "rain"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "ふっていました",
+      "g": "was falling"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I got on the train holding a blue umbrella.",
+    "tok": [
+     {
+      "s": "わたし",
+      "g": "I"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "あおい",
+      "g": "blue"
+     },
+     {
+      "s": "かさ",
+      "g": "umbrella"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "もって",
+      "g": "holding"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "電車",
+      "r": "でんしゃ",
+      "g": "train"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "のりました",
+      "g": "got on"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "That umbrella was a present from my father.",
+    "tok": [
+     {
+      "s": "その",
+      "g": "that"
+     },
+     {
+      "s": "かさ",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "父",
+      "r": "ちち",
+      "g": "my father"
+     },
+     {
+      "s": "から",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "プレゼント",
+      "g": "present"
+     },
+     {
+      "s": "でした",
+      "g": "was"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I got off the train at the station where my company is.",
+    "tok": [
+     {
+      "s": "会社",
+      "r": "かいしゃ",
+      "g": "company"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "ある",
+      "g": "is (located)"
+     },
+     {
+      "s": "駅",
+      "r": "えき",
+      "g": "station"
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "電車",
+      "r": "でんしゃ",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "おりました",
+      "g": "got off"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "But I left my umbrella on the train!",
+    "tok": [
+     {
+      "s": "でも",
+      "g": "but"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "電車",
+      "r": "でんしゃ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "中",
+      "r": "なか",
+      "g": "inside"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "かさ",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "わすれてしまいました",
+      "g": "accidentally left behind"
+     },
+     {
+      "s": "！"
+     }
+    ]
+   },
+   {
+    "en": "All day long, I kept thinking about the umbrella.",
+    "tok": [
+     {
+      "s": "一日中",
+      "r": "いちにちじゅう",
+      "g": "all day"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "かさ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "こと",
+      "g": "matter, thing"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "かんがえていました",
+      "g": "was thinking about"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "At five o'clock, I asked a station worker.",
+    "tok": [
+     {
+      "s": "五時",
+      "r": "ごじ",
+      "g": "five o'clock"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "駅",
+      "r": "えき",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "人",
+      "r": "ひと",
+      "g": "person, staff"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "聞きました",
+      "r": "ききました",
+      "g": "asked"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "\"A blue umbrella, right? We have it.\"",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "あおい",
+      "p": 1
+     },
+     {
+      "s": "かさ",
+      "p": 1
+     },
+     {
+      "s": "です",
+      "p": 1
+     },
+     {
+      "s": "ね",
+      "p": 1
+     },
+     {
+      "s": "。"
+     },
+     {
+      "s": "あります",
+      "g": "there is"
+     },
+     {
+      "s": "よ",
+      "p": 1
+     },
+     {
+      "s": "」"
+     }
+    ]
+   },
+   {
+    "en": "The station worker came with a little girl.",
+    "tok": [
+     {
+      "s": "駅",
+      "r": "えき",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "人",
+      "r": "ひと",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "小さい",
+      "r": "ちいさい",
+      "g": "little"
+     },
+     {
+      "s": "女の子",
+      "r": "おんなのこ",
+      "g": "girl"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "いっしょに",
+      "g": "together"
+     },
+     {
+      "s": "来ました",
+      "r": "きました",
+      "g": "came"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "The girl had found the umbrella and kindly brought it to the station.",
+    "tok": [
+     {
+      "s": "女の子",
+      "r": "おんなのこ",
+      "p": 1
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "かさ",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "見つけて",
+      "r": "みつけて",
+      "g": "found and"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "駅",
+      "r": "えき",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "とどけてくれました",
+      "g": "kindly delivered"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I said \"Thank you\" to the girl.",
+    "tok": [
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "女の子",
+      "r": "おんなのこ",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "「"
+     },
+     {
+      "s": "ありがとう",
+      "g": "thank you"
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "言いました",
+      "r": "いいました",
+      "g": "said"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Outside, the rain had already stopped.",
+    "tok": [
+     {
+      "s": "外",
+      "r": "そと",
+      "g": "outside"
+     },
+     {
+      "s": "では",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "もう",
+      "g": "already"
+     },
+     {
+      "s": "雨",
+      "r": "あめ",
+      "p": 1
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "やんでいました",
+      "g": "had stopped"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   }
+  ],
+  "qs": [
+   {
+    "q": "あおい かさは だれからの プレゼントでしたか。",
+    "qen": "Who was the blue umbrella a present from?",
+    "opts": [
+     "母",
+     "友だち",
+     "会社の 人",
+     "父"
+    ],
+    "a": 3
+   },
+   {
+    "q": "「わたし」は どこに かさを わすれましたか。",
+    "qen": "Where did the narrator leave the umbrella?",
+    "opts": [
+     "電車の 中",
+     "会社",
+     "駅の 外",
+     "レストラン"
+    ],
+    "a": 0
+   },
+   {
+    "q": "だれが かさを 見つけましたか。",
+    "qen": "Who found the umbrella?",
+    "opts": [
+     "駅の 人",
+     "小さい 女の子",
+     "父",
+     "会社の 人"
+    ],
+    "a": 1
+   }
+  ]
+ },
+ {
+  "id": "s6",
+  "title": "なつまつりの 金魚",
+  "titleEn": "The Summer Festival Goldfish",
+  "lv": "N5",
+  "img": "A lively Japanese summer festival at night, rows of glowing paper lanterns strung above a street of food stalls, two young girls in colorful yukata (one with a morning-glory pattern, one with goldfish pattern) looking up in wonder at huge fireworks blooming in the dark blue sky, one girl holding up a clear plastic bag with a single little red goldfish that seems to gaze at the fireworks too, sparkling reflections of the fireworks in the water of the bag, festive, magical, nostalgic mood. Painted in a consistent warm, hand-painted Studio-Ghibli-inspired watercolor style: soft edges, gentle textured paper, rich but soft colors, cozy nostalgic atmosphere. No text, letters, signs with writing, or captions anywhere in the image.",
+  "sents": [
+   {
+    "en": "On a Saturday in August, I went to the summer festival with a friend.",
+    "tok": [
+     {
+      "s": "八月",
+      "r": "はちがつ",
+      "g": "August"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "土曜日",
+      "r": "どようび",
+      "g": "Saturday"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "友だち",
+      "r": "ともだち",
+      "g": "friend"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "なつまつり",
+      "g": "summer festival"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "行きました",
+      "r": "いきました",
+      "g": "went"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I wore a yukata.",
+    "tok": [
+     {
+      "s": "わたし",
+      "g": "I"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "ゆかた",
+      "g": "yukata (summer kimono)"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "着ました",
+      "r": "きました",
+      "g": "wore"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Lots of little stalls were lined up along the street.",
+    "tok": [
+     {
+      "s": "みち",
+      "g": "street"
+     },
+     {
+      "s": "には",
+      "p": 1
+     },
+     {
+      "s": "小さい",
+      "r": "ちいさい",
+      "g": "little"
+     },
+     {
+      "s": "みせ",
+      "g": "stall, shop"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "たくさん",
+      "g": "many"
+     },
+     {
+      "s": "ならんでいました",
+      "g": "were lined up"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "We ate takoyaki and shaved ice.",
+    "tok": [
+     {
+      "s": "わたしたち",
+      "g": "we"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "たこやき",
+      "g": "octopus balls"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "かきごおり",
+      "g": "shaved ice"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "食べました",
+      "r": "たべました",
+      "g": "ate"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "After that, we did goldfish scooping.",
+    "tok": [
+     {
+      "s": "それから",
+      "g": "after that"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "金魚すくい",
+      "r": "きんぎょすくい",
+      "g": "goldfish scooping"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "しました",
+      "g": "did"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I couldn't scoop even one.",
+    "tok": [
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "一ぴき",
+      "r": "いっぴき",
+      "g": "one (small animal)"
+     },
+     {
+      "s": "も",
+      "p": 1
+     },
+     {
+      "s": "すくえませんでした",
+      "g": "couldn't scoop"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "But my friend scooped three.",
+    "tok": [
+     {
+      "s": "でも",
+      "g": "but"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "友だち",
+      "r": "ともだち",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "三びき",
+      "r": "さんびき",
+      "g": "three (small animals)"
+     },
+     {
+      "s": "すくいました",
+      "g": "scooped"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "My friend gave me one.",
+    "tok": [
+     {
+      "s": "友だち",
+      "r": "ともだち",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "一ぴき",
+      "r": "いっぴき",
+      "p": 1
+     },
+     {
+      "s": "くれました",
+      "g": "gave (me)"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "At nine at night, big fireworks went up.",
+    "tok": [
+     {
+      "s": "夜",
+      "r": "よる",
+      "g": "night"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "九時",
+      "r": "くじ",
+      "g": "nine o'clock"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "大きな",
+      "r": "おおきな",
+      "g": "big"
+     },
+     {
+      "s": "花火",
+      "r": "はなび",
+      "g": "fireworks"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "上がりました",
+      "r": "あがりました",
+      "g": "went up"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "The goldfish seemed to be watching the fireworks too.",
+    "tok": [
+     {
+      "s": "金魚",
+      "r": "きんぎょ",
+      "g": "goldfish"
+     },
+     {
+      "s": "も",
+      "p": 1
+     },
+     {
+      "s": "花火",
+      "r": "はなび",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "見ている",
+      "r": "みている",
+      "g": "watching"
+     },
+     {
+      "s": "みたいでした",
+      "g": "seemed"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Now that goldfish lives at my house.",
+    "tok": [
+     {
+      "s": "今",
+      "r": "いま",
+      "g": "now"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "その",
+      "g": "that"
+     },
+     {
+      "s": "金魚",
+      "r": "きんぎょ",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "うち",
+      "g": "home"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "います",
+      "g": "is, lives"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Its name is \"Hanabi\" (Fireworks).",
+    "tok": [
+     {
+      "s": "名前",
+      "r": "なまえ",
+      "g": "name"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "「"
+     },
+     {
+      "s": "ハナビ",
+      "g": "Hanabi (\"Fireworks\")"
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "です",
+      "g": "is"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   }
+  ],
+  "qs": [
+   {
+    "q": "なつまつりは いつでしたか。",
+    "qen": "When was the summer festival?",
+    "opts": [
+     "七月の 日曜日",
+     "八月の 土曜日",
+     "八月の 日曜日",
+     "九月の 土曜日"
+    ],
+    "a": 1
+   },
+   {
+    "q": "友だちは 金魚を 何びき すくいましたか。",
+    "qen": "How many goldfish did the friend scoop?",
+    "opts": [
+     "一ぴき",
+     "二ひき",
+     "三びき",
+     "四ひき"
+    ],
+    "a": 2
+   },
+   {
+    "q": "金魚の 名前は 何ですか。",
+    "qen": "What is the goldfish's name?",
+    "opts": [
+     "ハナビ",
+     "タマ",
+     "キンちゃん",
+     "ユイ"
+    ],
+    "a": 0
+   }
+  ]
+ },
+ {
+  "id": "s7",
+  "title": "まよなかの コンビニ",
+  "titleEn": "The Midnight Convenience Store",
+  "lv": "N5",
+  "img": "A glowing Japanese convenience store at midnight on a cold winter street, bright white-and-warm light spilling from the big glass front onto a quiet snowy sidewalk; inside at the counter, a tired young clerk in a striped uniform receives a steaming meat bun from a kind elderly man in a flat cap and scarf who smiles warmly, a steamer case of buns glowing on the counter, soft steam rising, deep indigo night sky outside, tender and heartwarming mood. Painted in a consistent warm, hand-painted Studio-Ghibli-inspired watercolor style: soft edges, gentle textured paper, rich but soft colors, cozy nostalgic atmosphere. No text, letters, signs with writing, or captions anywhere in the image.",
+  "sents": [
+   {
+    "en": "I work part-time at a convenience store.",
+    "tok": [
+     {
+      "s": "わたし",
+      "g": "I"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "コンビニ",
+      "g": "convenience store"
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "アルバイト",
+      "g": "part-time job"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "しています",
+      "g": "am doing"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I work from ten at night until six in the morning.",
+    "tok": [
+     {
+      "s": "夜",
+      "r": "よる",
+      "g": "night"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "十時",
+      "r": "じゅうじ",
+      "g": "ten o'clock"
+     },
+     {
+      "s": "から",
+      "p": 1
+     },
+     {
+      "s": "朝",
+      "r": "あさ",
+      "g": "morning"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "六時",
+      "r": "ろくじ",
+      "g": "six o'clock"
+     },
+     {
+      "s": "まで",
+      "p": 1
+     },
+     {
+      "s": "はたらきます",
+      "g": "work"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "At twelve midnight, an old man comes.",
+    "tok": [
+     {
+      "s": "夜中",
+      "r": "よなか",
+      "g": "middle of the night"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "十二時",
+      "r": "じゅうにじ",
+      "g": "twelve o'clock"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "おじいさん",
+      "g": "old man"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "来ます",
+      "r": "きます",
+      "g": "comes"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "He always buys milk and one meat bun.",
+    "tok": [
+     {
+      "s": "おじいさん",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "いつも",
+      "g": "always"
+     },
+     {
+      "s": "ぎゅうにゅう",
+      "g": "milk"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "にくまん",
+      "g": "meat bun"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "一つ",
+      "r": "ひとつ",
+      "g": "one (thing)"
+     },
+     {
+      "s": "買います",
+      "r": "かいます",
+      "g": "buys"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "But today he bought two meat buns.",
+    "tok": [
+     {
+      "s": "でも",
+      "g": "but"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "今日",
+      "r": "きょう",
+      "g": "today"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "にくまん",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "二つ",
+      "r": "ふたつ",
+      "g": "two (things)"
+     },
+     {
+      "s": "買いました",
+      "r": "かいました",
+      "g": "bought"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I said, \"Two today, huh.\"",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "今日",
+      "r": "きょう",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "二つ",
+      "r": "ふたつ",
+      "p": 1
+     },
+     {
+      "s": "です",
+      "p": 1
+     },
+     {
+      "s": "ね",
+      "p": 1
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "言いました",
+      "r": "いいました",
+      "g": "said"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Then the old man gave me one meat bun.",
+    "tok": [
+     {
+      "s": "すると",
+      "g": "then"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "おじいさん",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "にくまん",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "一つ",
+      "r": "ひとつ",
+      "p": 1
+     },
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "くれました",
+      "g": "gave (me)"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "\"Thanks as always. Good luck with your night work.\"",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "いつも",
+      "p": 1
+     },
+     {
+      "s": "ありがとう",
+      "g": "thank you"
+     },
+     {
+      "s": "。"
+     },
+     {
+      "s": "夜",
+      "r": "よる",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "しごと",
+      "g": "work"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "がんばって",
+      "g": "do your best"
+     },
+     {
+      "s": "ね",
+      "p": 1
+     },
+     {
+      "s": "」"
+     }
+    ]
+   },
+   {
+    "en": "The meat bun was very warm.",
+    "tok": [
+     {
+      "s": "にくまん",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "とても",
+      "g": "very"
+     },
+     {
+      "s": "あたたかかったです",
+      "g": "was warm"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "It was a cold night outside, but my heart became warm too.",
+    "tok": [
+     {
+      "s": "外",
+      "r": "そと",
+      "g": "outside"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "さむい",
+      "g": "cold"
+     },
+     {
+      "s": "夜",
+      "r": "よる",
+      "p": 1
+     },
+     {
+      "s": "でした",
+      "g": "was"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "こころ",
+      "g": "heart"
+     },
+     {
+      "s": "も",
+      "p": 1
+     },
+     {
+      "s": "あたたかく",
+      "g": "warm"
+     },
+     {
+      "s": "なりました",
+      "g": "became"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   }
+  ],
+  "qs": [
+   {
+    "q": "おじいさんは 何時に 来ますか。",
+    "qen": "What time does the old man come?",
+    "opts": [
+     "十時",
+     "六時",
+     "九時",
+     "十二時"
+    ],
+    "a": 3
+   },
+   {
+    "q": "おじいさんは いつも 何を 買いますか。",
+    "qen": "What does the old man always buy?",
+    "opts": [
+     "ぎゅうにゅうと にくまん",
+     "おちゃと パン",
+     "コーヒーと おにぎり",
+     "ぎゅうにゅうと パン"
+    ],
+    "a": 0
+   },
+   {
+    "q": "どうして 今日は にくまんを 二つ 買いましたか。",
+    "qen": "Why did he buy two meat buns today?",
+    "opts": [
+     "おなかが すいていたから",
+     "一つを「わたし」に あげるから",
+     "おくさんが 食べるから",
+     "安かったから"
+    ],
+    "a": 1
+   }
+  ]
+ },
+ {
+  "id": "s8",
+  "title": "京都で 道に まよって",
+  "titleEn": "Lost in Kyoto",
+  "lv": "N4",
+  "img": "A tiny hidden temple garden in Kyoto in late autumn, blazing red and orange maple leaves over a moss-covered stone path and a small weathered wooden temple hall, a lone young traveler with a backpack sitting quietly on the veranda gazing at the garden, fallen leaves on the mossy ground, soft slanting late-afternoon light filtering through the leaves, peaceful, secret, serene mood. Painted in a consistent warm, hand-painted Studio-Ghibli-inspired watercolor style: soft edges, gentle textured paper, rich but soft colors, cozy nostalgic atmosphere. No text, letters, signs with writing, or captions anywhere in the image.",
+  "sents": [
+   {
+    "en": "In autumn, I went on a trip to Kyoto by myself.",
+    "tok": [
+     {
+      "s": "秋",
+      "r": "あき",
+      "g": "autumn"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "一人",
+      "r": "ひとり",
+      "g": "alone"
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "京都",
+      "r": "きょうと",
+      "g": "Kyoto"
+     },
+     {
+      "s": "へ",
+      "p": 1
+     },
+     {
+      "s": "旅行",
+      "r": "りょこう",
+      "g": "trip"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "行きました",
+      "r": "いきました",
+      "g": "went"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I was planning to go see a famous temple listed in my guidebook.",
+    "tok": [
+     {
+      "s": "ガイドブック",
+      "g": "guidebook"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "のっている",
+      "g": "is listed"
+     },
+     {
+      "s": "有名な",
+      "r": "ゆうめいな",
+      "g": "famous"
+     },
+     {
+      "s": "お寺",
+      "r": "おてら",
+      "g": "temple"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "見に",
+      "r": "みに",
+      "g": "to see"
+     },
+     {
+      "s": "行く",
+      "r": "いく",
+      "g": "go"
+     },
+     {
+      "s": "つもりでした",
+      "g": "was planning to"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "But while walking along narrow streets, I ended up getting lost.",
+    "tok": [
+     {
+      "s": "でも",
+      "g": "but"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "細い",
+      "r": "ほそい",
+      "g": "narrow"
+     },
+     {
+      "s": "道",
+      "r": "みち",
+      "g": "street"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "歩いている",
+      "r": "あるいている",
+      "g": "walking"
+     },
+     {
+      "s": "うちに",
+      "g": "while"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "道",
+      "r": "みち",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "まよってしまいました",
+      "g": "ended up getting lost"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Even looking at the map, I couldn't tell where I was.",
+    "tok": [
+     {
+      "s": "地図",
+      "r": "ちず",
+      "g": "map"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "見ても",
+      "r": "みても",
+      "g": "even if (I) look"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "どこ",
+      "g": "where"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "いる",
+      "g": "am"
+     },
+     {
+      "s": "のか",
+      "p": 1
+     },
+     {
+      "s": "わかりませんでした",
+      "g": "didn't know"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Just then, an old woman from a small sweet shop called out to me.",
+    "tok": [
+     {
+      "s": "その時",
+      "r": "そのとき",
+      "g": "at that moment"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "小さな",
+      "r": "ちいさな",
+      "g": "small"
+     },
+     {
+      "s": "おかし屋",
+      "r": "おかしや",
+      "g": "sweet shop"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "おばあさん",
+      "g": "old woman"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "声",
+      "r": "こえ",
+      "g": "voice"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "かけてくれました",
+      "g": "kindly called out (to me)"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "\"Where do you want to go?\"",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "どこ",
+      "p": 1
+     },
+     {
+      "s": "へ",
+      "p": 1
+     },
+     {
+      "s": "行きたい",
+      "r": "いきたい",
+      "g": "want to go"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "？"
+     },
+     {
+      "s": "」"
+     }
+    ]
+   },
+   {
+    "en": "When I said the temple's name, she laughed and said, \"There are a lot of people there today.\"",
+    "tok": [
+     {
+      "s": "お寺",
+      "r": "おてら",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "名前",
+      "r": "なまえ",
+      "g": "name"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "言う",
+      "r": "いう",
+      "g": "say"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "おばあさん",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "笑って",
+      "r": "わらって",
+      "g": "laughed and"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "「"
+     },
+     {
+      "s": "今日",
+      "r": "きょう",
+      "g": "today"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "人",
+      "r": "ひと",
+      "g": "people"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "多い",
+      "r": "おおい",
+      "g": "are many"
+     },
+     {
+      "s": "よ",
+      "p": 1
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "言いました",
+      "r": "いいました",
+      "g": "said"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "And then she told me about a small temple behind her shop.",
+    "tok": [
+     {
+      "s": "そして",
+      "g": "and then"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "店",
+      "r": "みせ",
+      "g": "shop"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "うら",
+      "g": "back, behind"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "ある",
+      "g": "is (located)"
+     },
+     {
+      "s": "小さな",
+      "r": "ちいさな",
+      "g": "small"
+     },
+     {
+      "s": "お寺",
+      "r": "おてら",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "教えてくれました",
+      "r": "おしえてくれました",
+      "g": "kindly told (me) about"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "There was no one there.",
+    "tok": [
+     {
+      "s": "そこ",
+      "g": "there"
+     },
+     {
+      "s": "には",
+      "p": 1
+     },
+     {
+      "s": "だれも",
+      "g": "no one"
+     },
+     {
+      "s": "いませんでした",
+      "g": "was not"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "The maple leaves in the garden were bright red, and it was very quiet.",
+    "tok": [
+     {
+      "s": "庭",
+      "r": "にわ",
+      "g": "garden"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "もみじ",
+      "g": "maple leaves"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "まっかで",
+      "g": "bright red and"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "とても",
+      "g": "very"
+     },
+     {
+      "s": "静かでした",
+      "r": "しずかでした",
+      "g": "was quiet"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I sat there for a long time.",
+    "tok": [
+     {
+      "s": "わたし",
+      "g": "I"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "長い間",
+      "r": "ながいあいだ",
+      "g": "for a long time"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "そこ",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "すわっていました",
+      "g": "was sitting"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "On the way back, I bought sweets at the old woman's shop.",
+    "tok": [
+     {
+      "s": "帰り",
+      "r": "かえり",
+      "g": "on the way back"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "おばあさん",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "店",
+      "r": "みせ",
+      "p": 1
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "おかし",
+      "g": "sweets"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "買いました",
+      "r": "かいました",
+      "g": "bought"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I couldn't go to the famous temple, but that became my best memory.",
+    "tok": [
+     {
+      "s": "有名な",
+      "r": "ゆうめいな",
+      "p": 1
+     },
+     {
+      "s": "お寺",
+      "r": "おてら",
+      "p": 1
+     },
+     {
+      "s": "には",
+      "p": 1
+     },
+     {
+      "s": "行けませんでした",
+      "r": "いけませんでした",
+      "g": "couldn't go"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "それ",
+      "g": "that"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "いちばん",
+      "g": "the best"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "思い出",
+      "r": "おもいで",
+      "g": "memory"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "なりました",
+      "g": "became"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   }
+  ],
+  "qs": [
+   {
+    "q": "「わたし」は はじめ、どこへ 行く つもりでしたか。",
+    "qen": "Where was the narrator originally planning to go?",
+    "opts": [
+     "おかし屋",
+     "有名な お寺",
+     "京都の 駅",
+     "小さな お寺"
+    ],
+    "a": 1
+   },
+   {
+    "q": "道に まよった 時、だれが 声を かけて くれましたか。",
+    "qen": "Who called out to the narrator when they got lost?",
+    "opts": [
+     "お寺の 人",
+     "ほかの 旅行者",
+     "おかし屋の おばあさん",
+     "駅の 人"
+    ],
+    "a": 2
+   },
+   {
+    "q": "小さな お寺は どんな ところでしたか。",
+    "qen": "What was the small temple like?",
+    "opts": [
+     "人が 多くて にぎやかだった",
+     "雨で 暗かった",
+     "店が たくさん あった",
+     "だれも いなくて 静かだった"
+    ],
+    "a": 3
+   }
+  ]
+ },
+ {
+  "id": "s9",
+  "title": "富士山の 日の出",
+  "titleEn": "Sunrise on Mt. Fuji",
+  "lv": "N4",
+  "img": "The summit of Mt. Fuji at dawn, a father and his teenage child in hiking jackets and headlamps standing on dark volcanic rock above an endless sea of clouds glowing pink, orange and gold, the brilliant sun just breaking through a gap in the clouds, the father holding out a faded old photograph toward the child, other climbers silhouetted in the distance raising their arms, crisp cold air and a sense of awe and quiet emotion. Painted in a consistent warm, hand-painted Studio-Ghibli-inspired watercolor style: soft edges, gentle textured paper, rich but soft colors, cozy nostalgic atmosphere. No text, letters, signs with writing, or captions anywhere in the image.",
+  "sents": [
+   {
+    "en": "During summer vacation, I climbed Mt. Fuji with my father.",
+    "tok": [
+     {
+      "s": "夏休み",
+      "r": "なつやすみ",
+      "g": "summer vacation"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "父",
+      "r": "ちち",
+      "g": "my father"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "富士山",
+      "r": "ふじさん",
+      "g": "Mt. Fuji"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "登りました",
+      "r": "のぼりました",
+      "g": "climbed"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "We left the mountain hut at two in the middle of the night and walked slowly along the dark path.",
+    "tok": [
+     {
+      "s": "夜中",
+      "r": "よなか",
+      "g": "middle of the night"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "二時",
+      "r": "にじ",
+      "g": "two o'clock"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "山小屋",
+      "r": "やまごや",
+      "g": "mountain hut"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "出て",
+      "r": "でて",
+      "g": "left and"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "暗い",
+      "r": "くらい",
+      "g": "dark"
+     },
+     {
+      "s": "道",
+      "r": "みち",
+      "g": "path"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "ゆっくり",
+      "g": "slowly"
+     },
+     {
+      "s": "歩きました",
+      "r": "あるきました",
+      "g": "walked"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "The air was thin, and I got very tired.",
+    "tok": [
+     {
+      "s": "空気",
+      "r": "くうき",
+      "g": "air"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "うすくて",
+      "g": "thin and"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "とても",
+      "g": "very"
+     },
+     {
+      "s": "疲れました",
+      "r": "つかれました",
+      "g": "got tired"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "\"Almost there,\" my father said again and again.",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "もう少し",
+      "r": "もうすこし",
+      "g": "a little more"
+     },
+     {
+      "s": "だ",
+      "g": "is"
+     },
+     {
+      "s": "よ",
+      "p": 1
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "父",
+      "r": "ちち",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "何度も",
+      "r": "なんども",
+      "g": "many times"
+     },
+     {
+      "s": "言いました",
+      "r": "いいました",
+      "g": "said"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Around four-thirty in the morning, we finally reached the summit.",
+    "tok": [
+     {
+      "s": "朝",
+      "r": "あさ",
+      "g": "morning"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "四時半",
+      "r": "よじはん",
+      "g": "four thirty"
+     },
+     {
+      "s": "ごろ",
+      "g": "around"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "やっと",
+      "g": "finally"
+     },
+     {
+      "s": "頂上",
+      "r": "ちょうじょう",
+      "g": "summit"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "着きました",
+      "r": "つきました",
+      "g": "arrived"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "But the eastern sky was covered with thick clouds.",
+    "tok": [
+     {
+      "s": "でも",
+      "g": "but"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "東",
+      "r": "ひがし",
+      "g": "east"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "空",
+      "r": "そら",
+      "g": "sky"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "厚い",
+      "r": "あつい",
+      "g": "thick"
+     },
+     {
+      "s": "雲",
+      "r": "くも",
+      "g": "clouds"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "おおわれていました",
+      "g": "was covered"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "I was disappointed and looked down.",
+    "tok": [
+     {
+      "s": "わたし",
+      "g": "I"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "がっかりして",
+      "g": "was disappointed and"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "下",
+      "r": "した",
+      "g": "down"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "向きました",
+      "r": "むきました",
+      "g": "faced, looked"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Just then, the people around us cried out, \"Ah!\"",
+    "tok": [
+     {
+      "s": "すると",
+      "g": "just then"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "まわり",
+      "g": "surroundings"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "人たち",
+      "r": "ひとたち",
+      "g": "people"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "「"
+     },
+     {
+      "s": "あっ",
+      "g": "ah!"
+     },
+     {
+      "s": "！"
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "声",
+      "r": "こえ",
+      "g": "voice"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "上げました",
+      "r": "あげました",
+      "g": "raised"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "A golden sun had come out from a gap in the clouds.",
+    "tok": [
+     {
+      "s": "雲",
+      "r": "くも",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "間",
+      "r": "あいだ",
+      "g": "gap"
+     },
+     {
+      "s": "から",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "金色",
+      "r": "きんいろ",
+      "g": "gold color"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "太陽",
+      "r": "たいよう",
+      "g": "sun"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "出てきた",
+      "r": "でてきた",
+      "g": "came out"
+     },
+     {
+      "s": "のです",
+      "g": "(it was that)"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "The sea of clouds was shining pink and orange.",
+    "tok": [
+     {
+      "s": "雲",
+      "r": "くも",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "海",
+      "r": "うみ",
+      "g": "sea"
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "ピンク",
+      "g": "pink"
+     },
+     {
+      "s": "や",
+      "p": 1
+     },
+     {
+      "s": "オレンジ",
+      "g": "orange"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "光っていました",
+      "r": "ひかっていました",
+      "g": "was shining"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "My father took an old photo out of his pocket.",
+    "tok": [
+     {
+      "s": "父",
+      "r": "ちち",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "ポケット",
+      "g": "pocket"
+     },
+     {
+      "s": "から",
+      "p": 1
+     },
+     {
+      "s": "古い",
+      "r": "ふるい",
+      "g": "old"
+     },
+     {
+      "s": "写真",
+      "r": "しゃしん",
+      "g": "photo"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "出しました",
+      "r": "だしました",
+      "g": "took out"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "It was a photo of my father and mother, taken here thirty years ago.",
+    "tok": [
+     {
+      "s": "それ",
+      "g": "that"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "三十年前",
+      "r": "さんじゅうねんまえ",
+      "g": "thirty years ago"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "ここ",
+      "g": "here"
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "とった",
+      "g": "took"
+     },
+     {
+      "s": "父",
+      "r": "ちち",
+      "p": 1
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "母",
+      "r": "はは",
+      "g": "my mother"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "写真",
+      "r": "しゃしん",
+      "p": 1
+     },
+     {
+      "s": "でした",
+      "g": "was"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "\"I proposed to your mom right here,\" my father said with a laugh.",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "ここ",
+      "p": 1
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "お母さん",
+      "r": "おかあさん",
+      "g": "(your) mom"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "プロポーズした",
+      "g": "proposed"
+     },
+     {
+      "s": "んだ",
+      "g": "(you see)"
+     },
+     {
+      "s": "よ",
+      "p": 1
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "父",
+      "r": "ちち",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "笑いました",
+      "r": "わらいました",
+      "g": "laughed"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "This time, I was the one who took a photo of my father.",
+    "tok": [
+     {
+      "s": "今度",
+      "r": "こんど",
+      "g": "this time"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "父",
+      "r": "ちち",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "写真",
+      "r": "しゃしん",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "とりました",
+      "g": "took"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   }
+  ],
+  "qs": [
+   {
+    "q": "二人は 何時ごろ 頂上に 着きましたか。",
+    "qen": "Around what time did the two reach the summit?",
+    "opts": [
+     "夜中の 二時",
+     "朝の 四時半",
+     "朝の 六時",
+     "夜の 十時"
+    ],
+    "a": 1
+   },
+   {
+    "q": "頂上に 着いた 時、東の 空は どうでしたか。",
+    "qen": "When they reached the summit, what was the eastern sky like?",
+    "opts": [
+     "厚い 雲で おおわれていた",
+     "もう 明るかった",
+     "雨が ふっていた",
+     "星が たくさん 見えた"
+    ],
+    "a": 0
+   },
+   {
+    "q": "父の 古い 写真は どんな 写真でしたか。",
+    "qen": "What was father's old photo?",
+    "opts": [
+     "「わたし」が 小さい 時の 写真",
+     "山小屋の 写真",
+     "おじいさんと おばあさんの 写真",
+     "ここで とった 父と 母の 写真"
+    ],
+    "a": 3
+   }
+  ]
+ },
+ {
+  "id": "s10",
+  "title": "二十歳の わたしへ",
+  "titleEn": "To Me at Twenty",
+  "lv": "N4",
+  "img": "A small desk by a window at night in a cozy Japanese apartment, a young woman of twenty sitting under a warm desk lamp drawing a cute cat in a new sketchbook with a pencil, beside her an old rust-spotted tin time-capsule box and an unfolded childhood letter covered in large clumsy handwriting shapes and a crayon cat doodle, a mug of tea steaming, city lights and a crescent moon outside, quiet, hopeful, nostalgic mood. Painted in a consistent warm, hand-painted Studio-Ghibli-inspired watercolor style: soft edges, gentle textured paper, rich but soft colors, cozy nostalgic atmosphere. No text, letters, signs with writing, or captions anywhere in the image.",
+  "sents": [
+   {
+    "en": "When I was ten, I wrote \"A Letter to Myself Ten Years From Now\" at school.",
+    "tok": [
+     {
+      "s": "十歳",
+      "r": "じゅっさい",
+      "g": "ten years old"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "時",
+      "r": "とき",
+      "g": "when"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "学校",
+      "r": "がっこう",
+      "g": "school"
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "「"
+     },
+     {
+      "s": "十年後",
+      "r": "じゅうねんご",
+      "g": "ten years later"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "自分",
+      "r": "じぶん",
+      "g": "oneself"
+     },
+     {
+      "s": "への",
+      "p": 1
+     },
+     {
+      "s": "手紙",
+      "r": "てがみ",
+      "g": "letter"
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "書きました",
+      "r": "かきました",
+      "g": "wrote"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "We put the letters in a time capsule and buried it in the schoolyard.",
+    "tok": [
+     {
+      "s": "手紙",
+      "r": "てがみ",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "タイムカプセル",
+      "g": "time capsule"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "入れて",
+      "r": "いれて",
+      "g": "put in and"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "校庭",
+      "r": "こうてい",
+      "g": "schoolyard"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "うめました",
+      "g": "buried"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "And this year, now twenty, we gathered at the school.",
+    "tok": [
+     {
+      "s": "そして",
+      "g": "and"
+     },
+     {
+      "s": "今年",
+      "r": "ことし",
+      "g": "this year"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "二十歳",
+      "r": "はたち",
+      "g": "twenty years old"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "なった",
+      "g": "became"
+     },
+     {
+      "s": "わたしたち",
+      "g": "we"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "学校",
+      "r": "がっこう",
+      "p": 1
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "集まりました",
+      "r": "あつまりました",
+      "g": "gathered"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "The box that came out of the ground was a little rusty.",
+    "tok": [
+     {
+      "s": "土",
+      "r": "つち",
+      "g": "soil, ground"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "中",
+      "r": "なか",
+      "g": "inside"
+     },
+     {
+      "s": "から",
+      "p": 1
+     },
+     {
+      "s": "出てきた",
+      "r": "でてきた",
+      "g": "came out"
+     },
+     {
+      "s": "箱",
+      "r": "はこ",
+      "g": "box"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "少し",
+      "r": "すこし",
+      "g": "a little"
+     },
+     {
+      "s": "さびていました",
+      "g": "was rusty"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "The handwriting in my letter was big and clumsy.",
+    "tok": [
+     {
+      "s": "わたし",
+      "g": "I, my"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "手紙",
+      "r": "てがみ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "字",
+      "r": "じ",
+      "g": "handwriting"
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "大きくて",
+      "r": "おおきくて",
+      "g": "big and"
+     },
+     {
+      "s": "下手でした",
+      "r": "へたでした",
+      "g": "was clumsy"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "\"Dear me at twenty. Are you still drawing pictures?\"",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "二十歳",
+      "r": "はたち",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "へ",
+      "p": 1
+     },
+     {
+      "s": "。"
+     },
+     {
+      "s": "今",
+      "r": "いま",
+      "g": "now"
+     },
+     {
+      "s": "も",
+      "p": 1
+     },
+     {
+      "s": "絵",
+      "r": "え",
+      "g": "pictures"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "かいていますか",
+      "g": "are you drawing?"
+     },
+     {
+      "s": "」"
+     }
+    ]
+   },
+   {
+    "en": "I couldn't answer.",
+    "tok": [
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "答えられませんでした",
+      "r": "こたえられませんでした",
+      "g": "couldn't answer"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "That's because after starting university, I got busy and quit drawing.",
+    "tok": [
+     {
+      "s": "大学",
+      "r": "だいがく",
+      "g": "university"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "入ってから",
+      "r": "はいってから",
+      "g": "after entering"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "いそがしくて",
+      "g": "being busy"
+     },
+     {
+      "s": "絵",
+      "r": "え",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "やめてしまった",
+      "g": "ended up quitting"
+     },
+     {
+      "s": "から",
+      "g": "because"
+     },
+     {
+      "s": "です",
+      "p": 1
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "At the end of the letter, there was a clumsy drawing of a cat.",
+    "tok": [
+     {
+      "s": "手紙",
+      "r": "てがみ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "最後",
+      "r": "さいご",
+      "g": "end"
+     },
+     {
+      "s": "には",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "下手な",
+      "r": "へたな",
+      "g": "poorly drawn"
+     },
+     {
+      "s": "ねこ",
+      "g": "cat"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "絵",
+      "r": "え",
+      "p": 1
+     },
+     {
+      "s": "が",
+      "p": 1
+     },
+     {
+      "s": "ありました",
+      "g": "there was"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "Under it was written, \"Someday I want to make a cat book!\"",
+    "tok": [
+     {
+      "s": "その",
+      "g": "that"
+     },
+     {
+      "s": "下",
+      "r": "した",
+      "g": "below"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "「"
+     },
+     {
+      "s": "いつか",
+      "g": "someday"
+     },
+     {
+      "s": "ねこ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "本",
+      "r": "ほん",
+      "g": "book"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "作りたい",
+      "r": "つくりたい",
+      "g": "want to make"
+     },
+     {
+      "s": "！"
+     },
+     {
+      "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "書いてありました",
+      "r": "かいてありました",
+      "g": "was written"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "On the way home, I bought a small notebook and a pencil at a shop in the station.",
+    "tok": [
+     {
+      "s": "帰り",
+      "r": "かえり",
+      "g": "on the way home"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "駅",
+      "r": "えき",
+      "g": "station"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "店",
+      "r": "みせ",
+      "g": "shop"
+     },
+     {
+      "s": "で",
+      "p": 1
+     },
+     {
+      "s": "小さな",
+      "r": "ちいさな",
+      "g": "small"
+     },
+     {
+      "s": "ノート",
+      "g": "notebook"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "えんぴつ",
+      "g": "pencil"
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "買いました",
+      "r": "かいました",
+      "g": "bought"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "That night, I drew a cat for the first time in ten years.",
+    "tok": [
+     {
+      "s": "その夜",
+      "r": "そのよる",
+      "g": "that night"
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "十年",
+      "r": "じゅうねん",
+      "g": "ten years"
+     },
+     {
+      "s": "ぶり",
+      "g": "for the first time in"
+     },
+     {
+      "s": "に",
+      "p": 1
+     },
+     {
+      "s": "ねこ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "絵",
+      "r": "え",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "かきました",
+      "g": "drew"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "And then I began writing a new letter to myself at thirty.",
+    "tok": [
+     {
+      "s": "そして",
+      "p": 1
+     },
+     {
+      "s": "、"
+     },
+     {
+      "s": "三十歳",
+      "r": "さんじゅっさい",
+      "g": "thirty years old"
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "自分",
+      "r": "じぶん",
+      "p": 1
+     },
+     {
+      "s": "へ",
+      "p": 1
+     },
+     {
+      "s": "新しい",
+      "r": "あたらしい",
+      "g": "new"
+     },
+     {
+      "s": "手紙",
+      "r": "てがみ",
+      "p": 1
+     },
+     {
+      "s": "を",
+      "p": 1
+     },
+     {
+      "s": "書きはじめました",
+      "r": "かきはじめました",
+      "g": "began to write"
+     },
+     {
+      "s": "。"
+     }
+    ]
+   },
+   {
+    "en": "\"Dear me at thirty. Is the cat book finished?\"",
+    "tok": [
+     {
+      "s": "「"
+     },
+     {
+      "s": "三十歳",
+      "r": "さんじゅっさい",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "わたし",
+      "p": 1
+     },
+     {
+      "s": "へ",
+      "p": 1
+     },
+     {
+      "s": "。"
+     },
+     {
+      "s": "ねこ",
+      "p": 1
+     },
+     {
+      "s": "の",
+      "p": 1
+     },
+     {
+      "s": "本",
+      "r": "ほん",
+      "p": 1
+     },
+     {
+      "s": "は",
+      "p": 1
+     },
+     {
+      "s": "できましたか",
+      "g": "is it finished?"
+     },
+     {
+      "s": "」"
+     }
+    ]
+   }
+  ],
+  "qs": [
+   {
+    "q": "手紙は どこに うめましたか。",
+    "qen": "Where was the letter buried?",
+    "opts": [
+     "家の 庭",
+     "公園",
+     "校庭",
+     "駅の 前"
+    ],
+    "a": 2
+   },
+   {
+    "q": "「わたし」は どうして 絵を やめて しまいましたか。",
+    "qen": "Why did the narrator quit drawing?",
+    "opts": [
+     "大学に 入って いそがしかったから",
+     "絵が きらいに なったから",
+     "えんぴつが なかったから",
+     "先生に 言われたから"
+    ],
+    "a": 0
+   },
+   {
+    "q": "十歳の 「わたし」は いつか 何を 作りたかったですか。",
+    "qen": "What did the ten-year-old narrator want to make someday?",
+    "opts": [
+     "タイムカプセル",
+     "ねこの 本",
+     "新しい 学校",
+     "大きな 箱"
+    ],
+    "a": 1
+   }
+  ]
+ }
+]
