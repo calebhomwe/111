@@ -118,6 +118,10 @@ NOTES = {
     's5': 'All station notice boards, timetables and signs are blank.',
     's6': 'The food stalls have plain solid-colour awnings only: no hanging paper signs, menus, flags or banners anywhere.',
     's7': 'Shop signs are blank plain boards.',
+    's13': 'No signs, seat numbers or display screens with writing.',
+    's15': 'The police box signboard and the station signs are completely blank.',
+    's17': 'The noren curtain, menu boards and wall tags are plain with no writing.',
+    's18': 'The letter paper shows only faint wavy grey lines, no readable words or letters.',
     's10': 'The old childhood letter shows only a crayon cat drawing and wavy coloured crayon lines, no words or letters.',
 }
 
