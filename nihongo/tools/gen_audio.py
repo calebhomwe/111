@@ -96,6 +96,7 @@ def speakable(text):
     t = re.sub(r'(^|\s)[AB][:：]\s*', r'\1', text)
     t = re.sub(r'\s*\([A-Za-z ]+\)', '', t)
     t = re.sub(r'\s*(→|\+)\s*', '、', t)
+    t = re.sub(r'^[〜～~]+|[〜～~]+$', '', t.strip())  # counter/suffix entries like 〜えん
     return t.strip()
 
 # ─── Content collection ────────────────────────────────────────────────────
@@ -259,12 +260,29 @@ def generate(key, item, ledger, first_variant='fewshot'):
         vo = voiced(pcm)
         ok_dur = (dur <= 0.35 * kl + 1.0 + (0.6 if kind == 'kana' else 0) and vo >= max(0.08, 0.04 * kl)
                   and audioop.max(pcm, 2) >= 2500)
+        if ok_dur and kind != 'kana' and not re.search(r'[、。？！?!\s　,]', text):
+            gp = gaps(pcm)  # a single word/phrase should not contain long pauses
+            ok_dur = gp < 2 + text.count('っ') + text.count('ッ')
         log.append({'model': model, 'variant': variant, 'tr': tr, 'dur': round(dur, 2), 'voiced': round(vo, 2), 'ok_tr': ok_tr, 'ok_dur': ok_dur, 'cost': cost})
         if ok_tr and ok_dur:
             return pcm, {'text': text, 'ok': True, 'tries': log}
     return None, {'text': text, 'ok': False, 'tries': log}
 
 # ─── Audio encoding / packing ──────────────────────────────────────────────
+def gaps(pcm):
+    """Number of internal pauses >= 150 ms inside the speech (catches syllable-by-syllable spelling)."""
+    fr = RATE // 100 * 2
+    lo = [audioop.rms(pcm[i:i + fr], 2) > 300 for i in range(0, len(pcm) - fr + 1, fr)]
+    if True not in lo: return 0
+    a, b = lo.index(True), len(lo) - lo[::-1].index(True)
+    n = run = 0
+    for x in lo[a:b]:
+        if not x: run += 1
+        else:
+            if run >= 15: n += 1
+            run = 0
+    return n
+
 def voiced(pcm):
     """Seconds of 10 ms frames that are clearly above the noise floor."""
     fr = RATE // 100 * 2
