@@ -1,6 +1,6 @@
 // ─── Progress, achievements, dictionary, settings, boot ───────────────────
 const ACHIEVEMENTS = [
-  { id: 'first', g: '初', t: 'First step', d: 'Finish your first lesson', test: () => Object.keys(S.lessons).length >= 1 },
+  { id: 'first', g: '初', t: 'First step', d: 'Finish your first lesson', test: () => Object.values(S.lessons).some(l => !l.placed) },
   { id: 'hira', g: 'あ', t: 'Hiragana complete', d: 'Learn all 46 basic hiragana', test: () => HIRA.every(c => S.cards['h:' + c]) },
   { id: 'kata', g: 'ア', t: 'Katakana complete', d: 'Learn all 46 basic katakana', test: () => KATA.every(c => S.cards['k:' + c]) },
   { id: 'v100', g: '百', t: '100 words', d: 'Have 100 words in your reviews', test: () => Object.keys(S.cards).filter(k => k[0] === 'v').length >= 100 },
@@ -18,7 +18,12 @@ const ACHIEVEMENTS = [
   { id: 'blitz', g: '速', t: 'Speed reader', d: 'Score 300 in Kana Blitz', test: () => (S.blitzBest || 0) >= 300 },
 ];
 function checkAchievements() {
-  for (const a of ACHIEVEMENTS) if (!S.ach[a.id]) { let ok = false; try { ok = a.test(); } catch (e) {} if (ok) { S.ach[a.id] = now(); save(); toast(`Achievement: ${a.t}`); } }
+  const got = [];
+  for (const a of ACHIEVEMENTS) if (!S.ach[a.id]) { let ok = false; try { ok = a.test(); } catch (e) {} if (ok) { S.ach[a.id] = now(); got.push(a); } }
+  if (!got.length) return; save();
+  if (got.length > 1) toast(`${got.length} achievements unlocked`);
+  else if (window.Fun?.celebrate) Fun.celebrate({ eyebrow: 'Achievement', title: got[0].t, glyph: got[0].g, text: got[0].d });
+  else toast(`Achievement: ${got[0].t}`);
 }
 
 VIEWS.stats = () => {
@@ -70,7 +75,7 @@ VIEWS.dict = (p) => {
     if (kanji.length) out.append(h('div.row', kanji.map(k => h('button.chip', { style: { fontSize: '.95rem', padding: '6px 12px', cursor: 'pointer', border: 0 }, onclick: () => openKanji(k.k) }, h('b.jp', { style: { fontSize: '1.3rem' } }, k.k), ' ' + shortM(k.m)))));
     gram.forEach(g => out.append(h('button.res', { style: { textAlign: 'left' }, onclick: () => App.go('grammar', { id: g.id }) }, h('span.w', { style: { fontSize: '1rem' } }, g.t), h('div', h('b', 'Grammar'), h('div.muted.small', g.sum)), h('span.chip', `N${g.lv}`))));
     words.forEach(v => { const key = 'v:' + v.id; const c = S.cards[key];
-      out.append(h('div.res', h('span.w', { html: ruby(v.w, v.r) }), h('div', { style: { minWidth: 0 } }, h('b', v.m), h('div.muted.small', `${v.r}${S.settings.romaji ? ' · ' + kanaToRomaji(v.r) : ''} · ${POS_NAME[v.pos] || v.pos} · N${v.lv}`), v.ex ? h('div.small.jp', { style: { marginTop: '2px' } }, v.ex) : null),
+      out.append(h('div.res', h('span.w', { html: ruby(v.w, v.r) }), h('div', { style: { minWidth: 0 } }, h('b', v.m), h('div.muted.small', `${v.r}${showRomaji() ? ' · ' + kanaToRomaji(v.r) : ''} · ${POS_NAME[v.pos] || v.pos} · N${v.lv}`), v.ex ? h('div.small.jp', { style: { marginTop: '2px' } }, v.ex) : null),
         h('div.row', { style: { gap: '6px', flexWrap: 'nowrap' } }, speakBtn(v.r), c ? h('span.chip.' + cardStage(c), cardStage(c)) : h('button.btn.sm', { onclick: e => { addCardsFromKeys([key]); e.currentTarget.replaceWith(h('span.chip.learning', 'added')); App.renderNav(); } }, icon('plus'), 'Review')))); });
     if (!words.length && !kanji.length && !gram.length) out.append(h('div.empty', Sensei.available ? h('div.stack', { style: { justifyItems: 'center' } }, h('p', `No match for “${inp.value}” in the built-in list.`), h('button.btn', { onclick: () => { App.go('sensei', { tab: 'ask' }); setTimeout(() => { const t = $('#askQ'); if (t) { t.value = `How do I say "${inp.value}" in Japanese?`; } }, 50); } }, icon('sparkle'), 'Ask Sensei')) : `No match for “${inp.value}”.`));
   };
@@ -102,13 +107,15 @@ VIEWS.settings = () => {
   return h('div', h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '設定'), h('h1', 'Settings')),
     h('section.card.pad-lg',
       row('Daily goal', 'XP to earn each day. The ring on Today fills as you go.', h('select#goal', { onchange: e => { set('goal', +e.target.value); } }, [[20, 'Casual · 20'], [50, 'Regular · 50'], [100, 'Serious · 100'], [200, 'Intense · 200']].map(([v, l]) => h('option', { value: v, selected: st.goal === v ? true : null }, l)))),
-      row('Show romaji', 'Romaji under words while you are still reading slowly.', toggle('romaji', 'romaji')),
+      row('New items per day', 'A soft limit. Today warns you when you pass it, because every new card adds future reviews.', h('select#newPerDay', { onchange: e => set('newPerDay', +e.target.value) }, [[10, '10 · gentle'], [15, '15 · steady'], [25, '25 · fast'], [40, '40 · intense']].map(([v, l]) => h('option', { value: v, selected: st.newPerDay === v ? true : null }, l)))),
+      row('Show romaji', 'Romaji under words while you are still reading slowly. It turns itself off once your hiragana is solid.', toggle('romaji', 'romaji')),
       row('Furigana', 'Readings above kanji. “Auto” hides them once you know a word well.', h('select#furi', { onchange: e => set('furigana', e.target.value) }, [['auto', 'Auto'], ['always', 'Always'], ['never', 'Never']].map(([v, l]) => h('option', { value: v, selected: st.furigana === v ? true : null }, l)))),
       row('Sound effects', null, toggle('sound', 'sound')),
       row('Japanese voice', Voice.ok ? `${Voice.voices.length} Japanese voice${Voice.voices.length === 1 ? '' : 's'} on this device` : 'This browser has no speech voices', voiceSel),
       row('Speaking speed', 'Browser voice speed, used where no recording exists.', rate),
       row('Recording speed', Clips.index ? `${Object.keys(Clips.index.clips).length.toLocaleString()} native recordings available. Right-click (long-press) any speaker for slow playback.` : 'Native recordings load with the page.', h('select#clipRate', { onchange: e => { set('clipRate', +e.target.value); Voice.say('ありがとうございます'); } }, [[0.8, 'Slower'], [0.9, 'Slightly slower'], [1, 'Natural'], [1.1, 'Faster']].map(([v, l]) => h('option', { value: v, selected: (st.clipRate || 1) === v ? true : null }, l)))),
       row('Theme', null, h('select#theme', { onchange: e => { set('theme', e.target.value); applyTheme(); } }, [['system', 'Match system'], ['light', 'Light'], ['dark', 'Dark']].map(([v, l]) => h('option', { value: v, selected: st.theme === v ? true : null }, l))))),
+    window.Fun?.settingsSection?.() || null,
     h('section.card.pad-lg.stack', h('h3', 'Your data'), h('p.muted', Cloud.ref ? 'Progress is saved to your Claude account, so it follows you to any device where you open Michi. A copy is also kept in this browser.' : 'Progress is saved in this browser. Export a backup to move it to another device.'),
       h('div.row', exportBtn, h('button.btn.sm', { onclick: () => importInp.click() }, 'Import backup'), importInp, reset)),
     h('section.card.pad-lg.row.between', h('div', h('h3', 'Placement test'), h('p.muted.small', S.placement?.level && !S.placement.skipped ? `Last placed: ${S.placement.level.toUpperCase()} · ${new Date(S.placement.at).toLocaleDateString()}` : 'Find your level and skip what you already know.')), h('button.btn.sm', { onclick: () => App.go('placement') }, 'Take the test')),
@@ -119,7 +126,7 @@ function applyTheme() { const t = S.settings.theme; if (t === 'light' || t === '
 
 // ─── Boot ──────────────────────────────────────────────────────────────────
 function boot() {
-  applyTheme(); Voice.init(); Clips.load();
+  applyTheme(); Voice.init(); Clips.load(); window.Fun?.init?.();
   const start = (hot = {}) => {
     const r = (location.hash || '').slice(1);
     const fresh = !S.placement && !Object.keys(S.cards).length && !S.xp;

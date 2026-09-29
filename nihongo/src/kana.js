@@ -65,8 +65,11 @@ for (const [, cells] of YOON_ROWS) for (const c of cells) { KANA_ROMAJI[c[0]] = 
 // Kana lessons: one per row, split hiragana and katakana, plus yoon.
 const KANA_LESSONS = [];
 for (const script of ['h', 'k']) {
-  for (const [id, label, cells] of KANA_ROWS) {
+  KANA_ROWS.forEach(([id, label, cells], i) => {
     KANA_LESSONS.push({ id: `${script}-${id}`, script, label, chars: cells.filter(Boolean).map(c => script === 'h' ? c[0] : c[1]) });
-  }
-  KANA_LESSONS.push({ id: `${script}-yoon`, script, label: 'Combos (yōon)', chars: YOON_ROWS.flatMap(([, cells]) => cells.map(c => script === 'h' ? c[0] : c[1])) });
+    // every three rows: a mixed review weighted to look-alikes
+    if (i % 3 === 2 && i < 10) { const rows = KANA_ROWS.slice(i - 2, i + 1); KANA_LESSONS.push({ id: `${script}-mix${i}`, script, label: `Review: ${rows.map(r => r[0].toUpperCase()).join(' · ')} rows`, chars: rows.flatMap(r => r[2].filter(Boolean).map(c => script === 'h' ? c[0] : c[1])).filter((_, j) => j % 3 !== 1), review: true }); }
+  });
+  const yo = YOON_ROWS.flatMap(([, cells]) => cells.map(c => script === 'h' ? c[0] : c[1]));
+  for (let i = 0; i < 3; i++) KANA_LESSONS.push({ id: `${script}-yoon${i ? i + 1 : ''}`, script, label: `Combos (yōon) ${i + 1}`, chars: yo.slice(Math.round(i * yo.length / 3), Math.round((i + 1) * yo.length / 3)) });
 }

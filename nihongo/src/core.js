@@ -108,14 +108,16 @@ function updateSyncBadge() {
 // ─── Daily stats, XP, streak ──────────────────────────────────────────────
 function today() { const k = dayKey(); return S.days[k] || (S.days[k] = { xp: 0, rev: 0, new: 0, ok: 0 }); }
 function addXP(n, reason) {
-  S.xp += n; today().xp += n; save();
+  n = Math.round(n * (window.Fun?.mult?.() || 1));
+  S.xp += n; today().xp += n; save(); window.Fun?.event?.('xp', { n });
   const pill = $('#xpPill'); if (pill) { pill.textContent = `${S.xp.toLocaleString()} XP`; pill.classList.remove('bump'); void pill.offsetWidth; pill.classList.add('bump'); }
   checkAchievements();
 }
 function streak() {
   let n = 0, t = now();
-  if (!(S.days[dayKey(t)]?.xp > 0)) t -= DAY; // today not done yet: count from yesterday
-  while (S.days[dayKey(t)]?.xp > 0) { n++; t -= DAY; }
+  const kept = k => S.days[k]?.xp > 0 || S.days[k]?.frozen; // a streak freeze covers a missed day
+  if (!kept(dayKey(t))) t -= DAY; // today not done yet: count from yesterday
+  while (kept(dayKey(t))) { n++; t -= DAY; }
   return n;
 }
 const LEVEL_XP = l => Math.round(60 * Math.pow(l, 1.6));
@@ -158,6 +160,8 @@ function cardStage(c) { if (!c) return 'new'; if (c.st === 1 || c.s < 3) return 
 function dueCards(t = now()) { return Object.entries(S.cards).filter(([, c]) => c.due <= t).sort((a, b) => a[1].due - b[1].due).map(([k]) => k); }
 function fmtIvl(ms) { const d = ms / DAY; if (d < 1 / 24) return `${Math.max(1, Math.round(ms / MIN))}m`; if (d < 1) return `${Math.round(d * 24)}h`; if (d < 30) return `${Math.round(d)}d`; if (d < 365) return `${Math.round(d / 30)}mo`; return `${(d / 365).toFixed(1)}y`; }
 
+// Romaji is scaffolding: it switches itself off once every hiragana card is reasonably stable.
+const showRomaji = () => S.settings.romaji && !(S.settings.romajiAuto !== false && typeof HIRA !== 'undefined' && HIRA.every(c => S.cards['h:' + c]?.s >= 4));
 // ─── Speech ────────────────────────────────────────────────────────────────
 const Voice = {
   voices: [], ja: null,
@@ -281,6 +285,20 @@ function icon(name, cls = '') {
   const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('aria-hidden', 'true'); s.setAttribute('class', 'ic ' + cls);
   s.innerHTML = ICONS[name] || ''; return s;
+}
+// Dialog helper: focuses the dialog, traps Tab inside it, closes on Escape/backdrop, restores focus.
+function openModal(inner, onClose) {
+  const prev = document.activeElement;
+  const back = h('div.modal-back', inner);
+  const close = () => { document.removeEventListener('keydown', key, true); back.remove(); onClose && onClose(); prev?.focus?.({ preventScroll: true }); };
+  const key = e => {
+    if (e.key === 'Escape') { e.stopPropagation(); close(); }
+    else if (e.key === 'Tab') { const f = [...inner.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter(x => !x.disabled && x.offsetParent); if (!f.length) return; const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } }
+  };
+  back.addEventListener('click', e => { if (e.target === back) close(); });
+  document.addEventListener('keydown', key, true); document.body.append(back);
+  inner.setAttribute('aria-modal', 'true'); setTimeout(() => (inner.querySelector('.icon-btn, button') || inner).focus(), 30);
+  return close;
 }
 function petals(n = 28) {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;

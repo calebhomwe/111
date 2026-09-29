@@ -155,6 +155,25 @@ def collect():
             add(text, kana, 'story:' + s['id'])
             if kana != text: aliases.setdefault(kana, text)
 
+    # Optional packs (speech styles, placement test): every {jp, fu} object anywhere in them is spoken text.
+    def walk(o, group):
+        if isinstance(o, dict):
+            if isinstance(o.get('jp'), str) and o.get('jp'):
+                add(o['jp'], o.get('fu'), group)
+                if o.get('fu') and o['fu'] != o['jp']: aliases.setdefault(o['fu'], o['jp'])
+            for v in o.values(): walk(v, group)
+        elif isinstance(o, list):
+            for v in o: walk(v, group)
+    for name in ('register', 'placement'):
+        f = DATA / (name + '.json')
+        if f.exists():
+            d = json.loads(f.read_text(encoding='utf8'))
+            for key, part in (d.items() if isinstance(d, dict) else [('all', d)]):
+                walk(part, f'{name}:{key}')
+    # Sensei's scene openers
+    for line in re.findall(r"open: '([^']+)'", (SRC / 'views-ai.js').read_text(encoding='utf8')):
+        add(line, None, 'sensei')
+
     for n in list(range(0, 101)) + list(range(200, 1000, 100)) + list(range(1000, 10000, 1000)) + [10000]:
         r = num_reading(n)
         add(r, r, 'numbers')

@@ -122,7 +122,7 @@ Reply ONLY with a JSON object: {"jp": "your reply in natural Japanese (kanji all
   const imeBtn = h('button.btn.sm', { type: 'button', title: 'Toggle romaji→kana conversion', onclick: () => { ime = !ime; if (window.wanakana) { try { ime ? wanakana.bind(input, { IMEMode: true }) : wanakana.unbind(input); } catch (e) {} } imeBtn.textContent = ime ? 'あ' : 'A'; input.focus(); } }, 'あ');
   const sendBtn = h('button.btn.primary', { type: 'submit' }, 'Send');
   const send = async (text) => {
-    turns.push({ role: 'user', content: text });
+    turns.push({ role: 'user', content: text }); window.Fun?.event?.('sensei', {});
     add('me', h('div.msg.me', h('div.jp', text)));
     const typing = h('div.msg.ai', h('span.typing', h('i'), h('i'), h('i'))); add('ai', typing);
     sendBtn.disabled = true; ctl = new AbortController();

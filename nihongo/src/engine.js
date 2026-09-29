@@ -24,9 +24,9 @@ function kanaToRomaji(s) {
 }
 // Normalise alternative spellings so "si", "tu", "hu", "zya" all count.
 function normRomaji(s) {
-  return s.toLowerCase().replace(/[\s'’\-]/g, '')
+  return s.toLowerCase().replace(/n['’]|nn(?=[aiueoy])/g, 'N').replace(/[\s'’\-]/g, '')
     .replace(/sy([aueo])/g, 'sh$1').replace(/si/g, 'shi').replace(/ty([aueo])/g, 'ch$1').replace(/cy([aueo])/g, 'ch$1').replace(/ti/g, 'chi').replace(/tu/g, 'tsu')
-    .replace(/hu/g, 'fu').replace(/z?jy([aueo])/g, 'j$1').replace(/zy([aueo])/g, 'j$1').replace(/zi/g, 'ji').replace(/di/g, 'ji').replace(/du/g, 'zu').replace(/nn/g, 'n')
+    .replace(/hu/g, 'fu').replace(/z?jy([aueo])/g, 'j$1').replace(/zy([aueo])/g, 'j$1').replace(/zi/g, 'ji').replace(/di/g, 'ji').replace(/du/g, 'zu').replace(/nn(?=[^aiueoyN]|$)/g, 'n')
     .replace(/shhi/g, 'shi').replace(/chhi/g, 'chi');
 }
 function kanaAnswerMatches(input, kana) {
@@ -34,12 +34,16 @@ function kanaAnswerMatches(input, kana) {
   if (/[぀-ヿ]/.test(i)) return toHira(i.replace(/\s/g, '')) === toHira(kana);
   const r = normRomaji(kanaToRomaji(kana)); const n = normRomaji(i);
   if (n === r) return true;
+  // particles は/へ are pronounced wa/e (こんにちは → konnichiwa, では → dewa)
+  const alt = r.replace(/ha$/, 'wa').replace(/(de|ni|to)ha/g, '$1wa').replace(/he$/, 'e');
+  if (n === alt) return true;
   if (kana === 'を' && n === 'o') return true; if (kana === 'ヲ' && n === 'o') return true;
   return false;
 }
 // Live IME on an input: wanakana when available; otherwise leave romaji (still accepted).
 function bindIME(input) { if (window.wanakana) { try { wanakana.bind(input, { IMEMode: true }); input.dataset.ime = '1'; } catch (e) {} } }
 
+function editDistance(a, b) { const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j; for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); return d[a.length][b.length]; }
 // ─── Item registry ─────────────────────────────────────────────────────────
 function item(key) {
   const [t, id] = [key[0], key.slice(2)];
@@ -100,8 +104,9 @@ function kanaDistractors(ch, script, n = 3) {
   return out;
 }
 function vocabDistractors(v, n = 3) {
-  const same = VOCAB.filter(x => x.id !== v.id && x.m !== v.m && x.w !== v.w && (x.cat === v.cat || x.pos === v.pos));
-  const pool = same.length >= n ? same : VOCAB.filter(x => x.id !== v.id);
+  const okX = x => x.id !== v.id && x.m !== v.m && x.w !== v.w && x.r !== v.r;
+  const same = VOCAB.filter(x => okX(x) && x.cat === v.cat), pos = VOCAB.filter(x => okX(x) && x.pos === v.pos);
+  const pool = same.length >= n ? same : same.concat(shuffle(pos)).length >= n ? same.concat(pos) : VOCAB.filter(okX);
   const out = [], seenM = new Set([v.m]);
   for (const x of shuffle(pool)) { if (out.length >= n) break; if (seenM.has(x.m)) continue; seenM.add(x.m); out.push(x); }
   return out;
@@ -117,7 +122,7 @@ const shortM = m => m.split(/;\s*/).slice(0, 2).join('; ');
 function makeQuestion(key, forceMode) {
   const it = item(key); if (!it) return null;
   const c = S.cards[key]; const stage = cardStage(c);
-  const typing = stage === 'young' || stage === 'mature' || stage === 'mastered';
+  const typing = !!c && c.st === 2 && c.s >= 7;
   if (it.type === 'kana') {
     const modes = typing ? ['k2r-type', 'k2r-type', 'a2k', 'r2k'] : ['k2r', 'k2r', 'a2k', 'r2k'];
     const mode = forceMode || pick(modes);
@@ -134,11 +139,11 @@ function makeQuestion(key, forceMode) {
     const ds = vocabDistractors(it);
     const showFuri = S.settings.furigana === 'always' || (S.settings.furigana === 'auto' && (!c || c.st !== 2 || c.s < 7));
     const wordHTML = showFuri ? ruby(it.w, it.r) : esc(it.w);
-    if (mode === 'v2m') return { key, mode, kind: 'mc', q: 'What does this mean?', bigHTML: wordHTML, bigClass: 'word', sub: S.settings.romaji && !hasKanji(it.w) ? kanaToRomaji(it.r) : '', opts: shuffle([it, ...ds].map(x => ({ label: shortM(x.m), correct: x.id === it.id }))), answer: `${it.w} (${it.r}) — ${it.m}`, say: it.r };
+    if (mode === 'v2m') return { key, mode, kind: 'mc', q: 'What does this mean?', bigHTML: wordHTML, bigClass: 'word', sub: showRomaji() && !hasKanji(it.w) ? kanaToRomaji(it.r) : '', opts: shuffle([it, ...ds].map(x => ({ label: shortM(x.m), correct: x.id === it.id }))), answer: `${it.w} (${it.r}) — ${it.m}`, say: it.r };
     if (mode === 'a2m') return { key, mode, kind: 'mc', q: 'Listen. What does it mean?', audio: it.r, opts: shuffle([it, ...ds].map(x => ({ label: shortM(x.m), correct: x.id === it.id }))), answer: `${it.w} (${it.r}) — ${it.m}`, say: it.r };
     if (mode === 'm2v') return { key, mode, kind: 'mc', q: 'Which word means…', big: shortM(it.m), bigClass: 'en', opts: shuffle([it, ...ds].map(x => ({ labelHTML: ruby(x.w, x.r), big: true, correct: x.id === it.id }))), answer: `${it.w} (${it.r})`, say: it.r };
-    if (mode === 'v2r-type') return { key, mode, kind: 'type', q: 'Type the reading', bigHTML: esc(it.w), bigClass: 'word', hint: shortM(it.m), answer: it.r, check: s => kanaAnswerMatches(s, it.r), say: it.r, ime: true };
-    return { key, mode: 'm2v-type', kind: 'type', q: 'Say it in Japanese (type the reading)', big: shortM(it.m), bigClass: 'en', hint: CAT_NAME[it.cat] || '', answer: `${it.r}${it.w !== it.r ? ' · ' + it.w : ''}`, check: s => kanaAnswerMatches(s, it.r) || s.trim() === it.w, say: it.r, ime: true };
+    if (mode === 'v2r-type') return { key, mode, kind: 'type', q: 'Type the reading', bigHTML: esc(it.w), bigClass: 'word', hint: shortM(it.m), answer: it.r, kana: it.r, check: s => kanaAnswerMatches(s, it.r), say: it.r, ime: true };
+    return { key, mode: 'm2v-type', kind: 'type', q: 'Say it in Japanese (type the reading)', big: shortM(it.m), bigClass: 'en', hint: CAT_NAME[it.cat] || '', answer: `${it.r}${it.w !== it.r ? ' · ' + it.w : ''}`, kana: it.r, check: s => kanaAnswerMatches(s, it.r) || s.trim() === it.w, say: it.r, ime: true };
   }
   if (it.type === 'kanji') {
     const modes = typing ? ['j2m', 'jex', 'm2j', 'jex-type'] : ['j2m', 'j2m', 'jex', 'm2j'];
@@ -148,8 +153,10 @@ function makeQuestion(key, forceMode) {
     if ((mode === 'jex' || mode === 'jex-type') && !ex) mode = 'j2m';
     if (mode === 'j2m') return { key, mode, kind: 'mc', q: 'What does this kanji mean?', big: it.k, bigClass: 'kanji', opts: shuffle([it, ...ds].map(x => ({ label: shortM(x.m), correct: x.k === it.k }))), answer: `${it.k} — ${it.m}`, say: (it.ex?.[0] || [])[1] };
     if (mode === 'm2j') return { key, mode, kind: 'mc', q: 'Which kanji means…', big: shortM(it.m), bigClass: 'en', opts: shuffle([it, ...ds].map(x => ({ label: x.k, big: true, correct: x.k === it.k }))), answer: it.k, say: (it.ex?.[0] || [])[1] };
-    if (mode === 'jex-type') return { key, mode, kind: 'type', q: 'Type the reading of this word', big: ex[0], bigClass: 'word', hint: ex[2], answer: ex[1], check: s => kanaAnswerMatches(s, ex[1]), say: ex[1], ime: true };
-    const others = shuffle(KANJI.flatMap(k => k.ex || []).filter(e => e[1] !== ex[1] && e[1].length >= ex[1].length - 2 && e[1].length <= ex[1].length + 2)).slice(0, 3);
+    if (mode === 'jex-type') return { key, mode, kind: 'type', q: 'Type the reading of this word', big: ex[0], bigClass: 'word', hint: ex[2], answer: ex[1], kana: ex[1], check: s => kanaAnswerMatches(s, ex[1]), say: ex[1], ime: true };
+    const allEx = KANJI.flatMap(k => k.ex || []).filter(e => e[1] !== ex[1] && e[0] !== ex[0]);
+    const share = shuffle(allEx.filter(e => [...ex[0]].some(c => hasKanji(c) && e[0].includes(c)) && Math.abs(e[1].length - ex[1].length) <= 1));
+    const others = [...new Map(share.concat(shuffle(allEx.filter(e => Math.abs(e[1].length - ex[1].length) <= 1))).map(e => [e[1], e])).values()].slice(0, 3);
     return { key, mode: 'jex', kind: 'mc', q: 'How is this word read?', big: ex[0], bigClass: 'word', hint: ex[2], opts: shuffle([ex, ...others].map(e => ({ label: e[1], big: true, correct: e[1] === ex[1] }))), answer: `${ex[0]} (${ex[1]}) — ${ex[2]}`, say: ex[1] };
   }
 }

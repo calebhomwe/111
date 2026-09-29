@@ -10,12 +10,17 @@ VIEWS.read = () => {
       return h('section.stack', h('div.level-sep', h('h2', label)), h('div.grid.g3', list.map(storyCard)));
     }));
 };
+function storyKnown(s) {
+  const toks = s.sents.flatMap(x => x.tok).filter(t => t.g && !t.p); if (!toks.length) return null;
+  const known = toks.filter(t => { const r = toHira(t.r || t.s); const v = VOCAB.find(v => v.w === t.s || v.r === r || (hasKanji(v.w) && v.w.length > 1 && t.s.startsWith(v.w.slice(0, -1)))); return v && S.cards['v:' + v.id]; }).length;
+  return Math.round(known / toks.length * 100);
+}
 function storyCard(s) {
-  const st = S.stories[s.id];
+  const st = S.stories[s.id]; const kn = Object.keys(S.cards).some(k => k[0] === 'v') ? storyKnown(s) : null;
   return h('button.story-card', { onclick: () => App.go('story', { id: s.id }) },
     h('div.art', storyArt(s, { w: 480, h: 190 })),
     h('div.meta', h('div.row.between', h('span.chip' + (st ? '.young' : ''), st ? `Read · ${st.score != null ? st.score + '/' + (s.qs || []).length : ''}` : s.lv === 'kana' ? 'Kana' : s.lv), s.ai ? h('span.chip.seal', 'Sensei') : null),
-      h('b', s.title), h('span.muted.small', s.titleEn), h('span.muted.small', `${(s.sents || []).length} sentences`)));
+      h('b', s.title), h('span.muted.small', s.titleEn), h('span.muted.small', `${(s.sents || []).length} sentences${kn != null ? ` · you know ${kn}% of the words` : ''}`)));
 }
 VIEWS.story = ({ id }) => {
   const s = STORIES.concat(S.aiStories || []).find(x => x.id === id); if (!s) return VIEWS.read();
@@ -60,7 +65,7 @@ VIEWS.story = ({ id }) => {
       const opts = h('div.opts', q.opts.map((o, oi) => h('button.opt', { style: { fontFamily: 'var(--f-jp-hand)', fontSize: '1.05rem' }, onclick: e => {
         if (opts.dataset.done) return; opts.dataset.done = 1; const ok = oi === q.a; e.currentTarget.classList.add(ok ? 'right' : 'wrong'); if (!ok) opts.children[q.a].classList.add('right');
         answered++; if (ok) { right++; Sfx.ok(); } else Sfx.bad();
-        if (answered === s.qs.length) { const prev = S.stories[s.id]; S.stories[s.id] = { read: now(), score: Math.max(prev?.score || 0, right) }; addXP(prev ? 5 : 15 + right * 5); if (right === s.qs.length) petals(); quiz.append(h('div.feedback.ok', h('strong', `${right}/${s.qs.length} correct · story complete`))); checkAchievements(); }
+        if (answered === s.qs.length) { const prev = S.stories[s.id]; S.stories[s.id] = { read: now(), score: Math.max(prev?.score || 0, right) }; addXP(prev ? 5 : 15 + right * 5); if (right === s.qs.length) petals(); window.Fun?.event?.('story', { id: s.id }); quiz.append(h('div.feedback.ok', h('strong', `${right}/${s.qs.length} correct · story complete`))); checkAchievements(); }
       } }, o)));
       box.append(opts); quiz.append(box);
     });
@@ -83,7 +88,7 @@ function wordPop(el, t, sent) {
   const saved = (S.saved || []).includes(t.s);
   const pop = h('div.pop', { role: 'dialog' },
     h('div.row.between', h('span.w', { html: ruby(t.s, t.r) }), speakBtn(reading)),
-    S.settings.romaji ? h('div.muted.small', kanaToRomaji(reading)) : null,
+    showRomaji() ? h('div.muted.small', kanaToRomaji(reading)) : null,
     h('div', t.g || ''),
     dictHit && dictHit.w !== t.s ? h('div.muted.small', { html: `Dictionary form: ${ruby(dictHit.w, dictHit.r)} — ${esc(dictHit.m)}` }) : null,
     kanjiIn(t.s).length ? h('div.row.small', kanjiIn(t.s).map(k => h('button.chip', { onclick: () => openKanji(k.k) }, `${k.k} ${shortM(k.m)}`))) : null,
@@ -120,7 +125,7 @@ VIEWS.grammar = ({ id }) => {
   let qi = 0, right = 0; const qs = p.quiz || [];
   const renderQ = () => {
     if (qi >= qs.length) {
-      const was = S.grammar[p.id]; S.grammar[p.id] = { done: now(), score: Math.max(was?.score || 0, right) };
+      const was = S.grammar[p.id]; S.grammar[p.id] = { done: now(), score: Math.max(was?.score || 0, right) }; window.Fun?.event?.('grammar', { id: p.id });
       addXP(was ? 3 : 12 + right * 2); Sfx.done(); if (right === qs.length) petals(16);
       quizHost.replaceChildren(h('div.result-hero', h('span.hanko.stamp', right === qs.length ? '満点' : '済'), h('h3', `${right}/${qs.length} correct`),
         h('div.row', { style: { justifyContent: 'center' } }, next ? h('button.btn.primary', { onclick: () => App.go('grammar', { id: next.id }) }, `Next: ${next.t}`) : null, h('button.btn', { onclick: () => { qi = 0; right = 0; renderQ(); } }, 'Retry'))));
@@ -134,7 +139,7 @@ VIEWS.grammar = ({ id }) => {
       Voice.say(q.type === 'mc' ? (q.q.includes('___') ? q.q.replace('___', q.a) : q.a) : q.tiles.join('')); setTimeout(() => nb.focus(), 30);
     };
     if (q.type === 'mc') {
-      const opts = h('div.opts', q.opts.map(o => h('button.opt.bigopt', { style: { fontSize: o.length > 12 ? '1.1rem' : '1.4rem' }, onclick: e => { if (opts.dataset.done) return; opts.dataset.done = 1; const ok = o === q.a; e.currentTarget.classList.add(ok ? 'right' : 'wrong'); if (!ok) [...opts.children].find(c => c.textContent.endsWith(q.a))?.classList.add('right'); after(ok); } }, o)));
+      const opts = h('div.opts', q.opts.map(o => h('button.opt.bigopt', { 'data-v': o, style: { fontSize: o.length > 12 ? '1.1rem' : '1.4rem' }, onclick: e => { if (opts.dataset.done) return; opts.dataset.done = 1; const ok = o === q.a; e.currentTarget.classList.add(ok ? 'right' : 'wrong'); if (!ok) [...opts.children].find(c => c.dataset.v === q.a)?.classList.add('right'); after(ok); } }, o)));
       quizHost.replaceChildren(h('div.eyebrow', `Question ${qi + 1} of ${qs.length}`), h('div' + (q.q.includes('___') ? '.jp' : ''), { style: { fontSize: q.q.includes('___') ? '1.5rem' : '1.1rem', textAlign: 'center', fontWeight: q.q.includes('___') ? 400 : 700 } }, q.q.replace('___', '＿＿')), q.en ? h('div.muted.small', { style: { textAlign: 'center' } }, q.en) : null, opts, fb);
     } else {
       const pool = shuffle(q.tiles.map((t, i) => ({ t, i }))); const chosen = [];
@@ -171,8 +176,8 @@ function openKanji(ch) {
   $$('.pop').forEach(p => p.remove());
   const { box, replay } = strokeBox(ch); const key = 'j:' + ch; const c = S.cards[key];
   const words = VOCAB.filter(v => v.w.includes(ch)).slice(0, 6);
-  const close = () => back.remove();
-  const back = h('div.modal-back', { onclick: e => { if (e.target === back) close(); } }, h('div.modal', { role: 'dialog', 'aria-label': ch },
+  let close = () => {};
+  const dlg = h('div.modal', { role: 'dialog', 'aria-label': ch },
     h('div.row.between', h('h2', `${ch} · ${k.m}`), h('button.icon-btn', { 'aria-label': 'Close', onclick: close }, icon('x'))),
     h('div.teach-hero', h('div.stack', { style: { justifyItems: 'center' } }, box, replay), h('div.stack',
       h('dl.kv', h('dt', 'On'), h('dd.jp', (k.on || []).join('、') || '—'), h('dt', 'Kun'), h('dd.jp', (k.kun || []).join('、') || '—'), h('dt', 'Strokes'), h('dd', String(k.s)), h('dt', 'Level'), h('dd', `N${k.lv}`)),
@@ -180,7 +185,6 @@ function openKanji(ch) {
     k.mn ? h('div.mnemonic', k.mn) : null,
     h('div.stack', { style: { gap: '6px' } }, (k.ex || []).map(e => h('div.row.between.example', { style: { padding: '8px 12px' } }, h('span', h('span.jp', { style: { fontSize: '1.2rem' }, html: ruby(e[0], e[1]) }), h('span.muted.small', ' ' + e[2])), speakBtn(e[1])))),
     words.length ? h('div.stack', { style: { gap: '6px' } }, h('div.eyebrow', 'In your vocabulary list'), h('div.row', words.map(v => h('span.chip', { html: `${ruby(v.w, v.r)} ${esc(shortM(v.m))}` })))) : null,
-    h('div.row', h('button.btn.sm', { onclick: () => { close(); App.go('write', { chars: ch }); } }, icon('brush'), 'Write it'), !c ? h('button.btn.sm', { onclick: () => { addCardsFromKeys([key]); toast('Added to reviews'); close(); App.renderNav(); } }, icon('plus'), 'Add to reviews') : null)));
-  document.body.append(back);
-  const kd = e => { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', kd); } }; document.addEventListener('keydown', kd);
+    h('div.row', h('button.btn.sm', { onclick: () => { close(); App.go('write', { chars: ch }); } }, icon('brush'), 'Write it'), !c ? h('button.btn.sm', { onclick: () => { addCardsFromKeys([key]); toast('Added to reviews'); close(); App.renderNav(); } }, icon('plus'), 'Add to reviews') : null));
+  close = openModal(dlg);
 }

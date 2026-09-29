@@ -39,7 +39,7 @@ function placementItems(sec) {
     const pool = shuffle(VOCAB.filter(v => v.lv === lv && !v.w.startsWith('〜') && v.cat !== 'greet'));
     const seenCat = new Set(), pickd = [];
     for (const v of pool) { if (pickd.length >= n) break; if (seenCat.has(v.cat) && pickd.length < 8) continue; seenCat.add(v.cat); pickd.push(v); }
-    return pickd.map(v => ({ q: 'What does this mean?', bigHTML: hasKanji(v.w) ? esc(v.w) : esc(v.w), cls: 'word', sub: hasKanji(v.w) ? '' : '', opts: shuffle([v, ...vocabDistractors(v)].map(x => shortM(x.m))), a: shortM(v.m), say: v.r, reveal: `${v.w}（${v.r}）` }));
+    return pickd.map(v => ({ q: 'What does this mean?', bigHTML: ruby(v.w, v.r), cls: 'word', opts: shuffle([v, ...vocabDistractors(v)].map(x => shortM(x.m))), a: shortM(v.m), say: v.r, reveal: `${v.w}（${v.r}）` }));
   }
   if (sec.id === 'j5' || sec.id === 'j4') {
     const lv = sec.id === 'j5' ? 5 : 4;
@@ -249,7 +249,7 @@ function skillProfileCard(pr) {
   g += `<polygon points="${poly}" fill="var(--ai)" fill-opacity=".22" stroke="var(--ai)" stroke-width="2.2" stroke-linejoin="round"/>`;
   axes.forEach(([k, label], i) => { const [x, y] = pt(i, Math.max(0.15, pr[k])); g += `<circle cx="${x}" cy="${y}" r="3.6" fill="var(--seal)"/>`; const [lx, ly] = pt(i, 4.75); g += `<text x="${lx}" y="${ly + 4}" text-anchor="${Math.abs(lx - cx) < 8 ? 'middle' : lx > cx ? 'start' : 'end'}">${label}</text>`; });
   const lvName = v => v >= 3.5 ? 'N4' : v >= 2.5 ? 'Solid N5' : v >= 1.5 ? 'Early N5' : v >= 0.75 ? 'Kana' : 'Starting';
-  return h('div.profile', h('svg.chart.radar', { viewBox: `-40 -10 ${W + 80} 300`, role: 'img', 'aria-label': 'Skill profile', html: g }),
+  return h('div.profile', h('div.radar-wrap', { html: `<svg class="chart radar" viewBox="-40 -10 ${W + 80} 300" role="img" aria-label="Skill profile radar chart">${g}</svg>` }),
     h('div.profile-list', axes.map(([k, label]) => h('div.row.between', h('span', label), h('span.chip' + (pr[k] >= 2.5 ? '.young' : pr[k] >= 1 ? '.learning' : ''), lvName(pr[k]))))));
 }
 function sectionBlurb(id) {
@@ -265,7 +265,7 @@ function sectionBlurb(id) {
 function applyPlacement(r, quick) {
   const ok = id => r[id]?.pct >= PASS, t = now(); const placed = [];
   const seed = (keys, spreadDays) => {
-    let n = 0; for (const k of keys) if (!S.cards[k]) {
+    spreadDays = Math.max(spreadDays, keys.length / 12); let n = 0; for (const k of keys) if (!S.cards[k]) {
       const c = FSRS.review(null, 3, t); c.s = Math.max(c.s, 6); c.due = t + (1 + Math.random() * spreadDays) * DAY; S.cards[k] = c; n++;
     } return n;
   };

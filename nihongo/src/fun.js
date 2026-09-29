@@ -7,6 +7,7 @@ const Fun = (() => {
   const hash = s => { let x = 0; for (const c of String(s)) x = (x * 31 + c.charCodeAt(0)) | 0; return Math.abs(x); };
   const MAX_FREEZE = 2, MULT_MIN = 15, MILESTONES = [3, 7, 14, 30, 50, 100];
   const dayOn = k => S.days[k]?.xp > 0 || !!S.days[k]?.frozen;
+  const streakN = () => { let n = 0, t = now(); if (!dayOn(dayKey(t))) t -= DAY; while (dayOn(dayKey(t))) { n++; t -= DAY; } return n; };
 
   ICONS.snow = '<path d="M12 2v20M4 7l16 10M20 7L4 17M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5" fill="none"/>';
   ICONS.crown = '<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/>';
@@ -76,11 +77,11 @@ const Fun = (() => {
     const studied = () => (S.days[dayKey()]?.xp || 0) > 0;
     const all = (list, fn) => list.length > 0 && list.every(fn);
     const kanaRows = s => [...KANA_ROWS.map(([id, label, cells]) => [id, label, cells.filter(Boolean).map(c => s === 'h' ? c[0] : c[1])]), ['yoon', 'Combos', YOON_ROWS.flatMap(([, c]) => c.map(x => s === 'h' ? x[0] : x[1]))]]
-      .map(([id, label, chars]) => ({ id: `row-${s}-${id}`, sec: s === 'h' ? 'hira' : 'kata', kind: 'round', g: chars[0], t: `${s === 'h' ? 'Hiragana' : 'Katakana'} · ${label}`, hint: 'Keep every character in this row stable for 7+ days', test: () => all(chars, c => S.cards[`${s}:${c}`]?.s >= 7) }));
+      .map(([id, label, chars]) => ({ id: `row-${s}-${id}`, sec: s === 'h' ? 'hira' : 'kata', kind: 'round', g: chars[0], t: `${s === 'h' ? 'Hiragana' : 'Katakana'} · ${label}`, short: label, hint: 'Keep every character in this row stable for 7+ days', test: () => all(chars, c => S.cards[`${s}:${c}`]?.s >= 7) }));
     const jl = (lv, what, g) => {
       const t = { v: `N${lv} vocabulary`, j: `N${lv} kanji`, g: `N${lv} grammar` }[what];
       const test = what === 'g' ? () => all(GRAMMAR_POINTS.filter(p => p.lv === lv), p => S.grammar[p.id]) : what === 'v' ? () => all(VOCAB.filter(v => v.lv === lv), v => S.cards['v:' + v.id]) : () => all(KANJI.filter(k => k.lv === lv), k => S.cards['j:' + k.k]);
-      return { id: `jlpt-${what}${lv}`, sec: 'jlpt', kind: 'seal', g, tag: 'N' + lv, t, hint: `Learn every ${t.replace(/^N\d /, 'N' + lv + ' ')} item`, test };
+      return { id: `jlpt-${what}${lv}`, sec: 'jlpt', kind: 'seal', g, tag: 'N' + lv, t, hint: what === 'g' ? `Complete every ${t} point` : `Learn every ${t} item`, test };
     };
     CAT = [
       ...SEASONS.map(([id, g, t, months, hint]) => ({ id: 'season-' + id, sec: 'season', kind: 'ai', g, t, hint, test: () => studied() && months.includes(md()[0]) })),
@@ -97,17 +98,17 @@ const Fun = (() => {
       { id: 'feat-chest', sec: 'feat', kind: 'round', g: '宝', t: 'First chest', hint: 'Open a quest chest', test: () => F().opened > 0 },
       { id: 'feat-q7', sec: 'feat', kind: 'round', g: '勤', t: 'Diligent', hint: 'Clear all daily quests on 7 days', test: () => F().questDays >= 7 },
       { id: 'feat-lv10', sec: 'feat', kind: 'round', g: '十', tag: '級', t: 'Level 10', hint: 'Reach level 10', test: () => levelInfo().level >= 10 },
-      ...RARE.map(([id, g, t]) => ({ id: 'rare-' + id, sec: 'rare', kind: 'gold', g, t, hint: 'Found only in quest chests', rare: true })),
+      ...RARE.map(([id, g, t]) => ({ id: 'rare-' + id, sec: 'rare', kind: 'gold', g, t, hint: 'Found only in quest chests', rare: true, quiet: true })),
       ...kanaRows('h'), ...kanaRows('k'),
     ];
     return CAT;
   }
-  const SECTIONS = [['season', '季節', 'Seasonal', 'Earned by studying at the right time of year'], ['streak', '連続', 'Streaks', 'Consecutive days of study'], ['jlpt', '試験', 'JLPT', 'Every item of a level learned'], ['feat', '技', 'Feats', 'Moments worth remembering'], ['rare', '珍', 'Rare', 'Only found in quest chests'], ['hira', 'ひらがな', 'Hiragana rows', 'One stamp per row once it sticks'], ['kata', 'カタカナ', 'Katakana rows', 'One stamp per row once it sticks']];
+  const SECTIONS = [['season', '季節', 'Seasonal', 'Earned by studying at the right time of year'], ['streak', '連続', 'Streaks', 'Consecutive days of study'], ['jlpt', '試験', 'JLPT', 'Every item of a level learned'], ['feat', '技', 'Feats', 'Moments worth remembering'], ['rare', '珍', 'Rare', 'Only found in quest chests'], ['hira', 'ひらがな', 'Hiragana rows', 'One stamp per row, once every character in it stays stable for 7+ days'], ['kata', 'カタカナ', 'Katakana rows', 'One stamp per row, once every character in it stays stable for 7+ days']];
   const stampDef = id => catalog().find(d => d.id === id);
 
   function stampEl(d, owned = true, size = '') {
     const g = String(d.g), vert = [...g].length > 1;
-    return h(`span.fun-stamp.k-${d.kind}${owned ? '' : '.locked'}${vert ? '.vert' : ''}${size ? '.' + size : ''}`, { style: `--rot:${(hash(d.id) % 15) - 9}deg`, 'aria-hidden': 'true' }, h('b', g), d.tag ? h('small', d.tag) : null);
+    return h(`span.fun-stamp.k-${d.kind}${owned ? '' : '.locked'}${vert ? '.vert' : ''}${size ? '.' + size : ''}`, { style: `--rot:${(hash(d.id) % 15) - 9}deg`, 'aria-hidden': 'true' }, h('b', g), d.tag && !vert ? h('small', d.tag) : null);
   }
   function award(id, quiet) {
     const f = F(); if (f.stamps[id]) return false;
@@ -121,9 +122,13 @@ const Fun = (() => {
     for (const d of catalog()) if (d.test && !F().stamps[d.id]) { let ok = false; try { ok = d.test(); } catch (e) {} if (ok && award(d.id, quiet)) n++; }
     return n;
   }
-  function richToast(visual, eyebrow, text) {
-    const t = h('div.toast.fun-toast', { role: 'status' }, visual, h('span', h('small', eyebrow), h('b', text)));
-    $('#toasts')?.append(t); setTimeout(() => t.classList.add('out'), 3000); setTimeout(() => t.remove(), 3500);
+  const tq = []; let tBusy = false;
+  function richToast(visual, eyebrow, text) { if (tq.length < 6) tq.push([visual, eyebrow, text]); if (!tBusy) nextToast(); }
+  function nextToast() { // one at a time, so a burst (quest + stamp + combo) reads as a sequence, not a pile
+    const x = tq.shift(); if (!x) { tBusy = false; return; } tBusy = true;
+    const t = h('div.toast.fun-toast', { role: 'status' }, x[0], h('span', h('small', x[1]), h('b', x[2])));
+    $('#toasts')?.append(t); setTimeout(() => t.classList.add('out'), 2200); setTimeout(() => t.remove(), 2700);
+    setTimeout(nextToast, tq.length ? 1100 : 0);
   }
 
   // ── Daily quests ────────────────────────────────────────────────────────
@@ -197,7 +202,7 @@ const Fun = (() => {
       chest.classList.add('open'); Snd.chest(); buzz(HAPTIC.cheer); petals(24);
       if (res.kind === 'rare') { const d = stampDef(res.id); prize.replaceChildren(stampEl(d, true, 'big'), h('b', d.t), h('span.chip.seal', 'Rare stamp')); title.textContent = 'A rare stamp!'; }
       else if (res.kind === 'freeze') { prize.replaceChildren(h('span.fun-freeze', icon('snow')), h('b', 'Streak freeze'), h('span.muted.small', `${f.freezes}/${MAX_FREEZE} equipped · covers one missed day automatically`)); title.textContent = 'A streak freeze'; }
-      else { prize.replaceChildren(h('b.fun-bigxp', `+${res.n} XP`), res.note ? h('span.muted.small', res.note) : null); title.textContent = 'Bonus XP'; }
+      else { prize.replaceChildren(...[h('b.fun-bigxp', `+${res.n} XP`), res.note && h('span.muted.small', res.note)].filter(Boolean)); title.textContent = 'Bonus XP'; }
       prize.classList.add('show');
       sub.replaceChildren(h('span.chip.gold', icon('bolt'), `Double XP for ${MULT_MIN} minutes`));
       foot.replaceChildren(h('button.btn.primary', { onclick: () => m.close() }, f.chests > 0 ? 'Next chest' : 'Collect'));
@@ -230,10 +235,10 @@ const Fun = (() => {
     if (!missed.length || missed.length > f.freezes || !dayOn(dayKey(t))) return; // nothing missed, or too many to save
     for (const k of missed) (S.days[k] || (S.days[k] = { xp: 0, rev: 0, new: 0, ok: 0 })).frozen = true;
     f.freezes -= missed.length; save();
-    enqueue(() => showCelebrate({ eyebrow: 'Streak protected', glyph: '氷', kind: 'ai', title: `Streak freeze used`, text: `You missed ${missed.length === 1 ? 'a day' : missed.length + ' days'}, so ${missed.length === 1 ? 'a freeze' : 'your freezes'} kept your ${streak()}-day streak alive. ${f.freezes ? `${f.freezes} left.` : 'Clear your daily quests to win more.'}` }));
+    enqueue(() => showCelebrate({ eyebrow: 'Streak protected', glyph: '氷', kind: 'ai', title: `Streak freeze used`, text: `You missed ${missed.length === 1 ? 'a day' : missed.length + ' days'}, so ${missed.length === 1 ? 'a freeze' : 'your freezes'} kept your ${streakN()}-day streak alive. ${f.freezes ? `${f.freezes} left.` : 'Clear your daily quests to win more.'}` }));
   }
   function checkStreak() {
-    const f = F(), s = streak(); if (s > f.bestStreak) f.bestStreak = s;
+    const f = F(), s = streakN(); if (s > f.bestStreak) f.bestStreak = s;
     if (!(S.days[dayKey()]?.xp > 0)) return;
     const start = dayKey(now() - (s - 1) * DAY);
     const hit = MILESTONES.filter(m => s >= m && !(f.ms[m] >= start));
@@ -261,7 +266,7 @@ const Fun = (() => {
       h('div.fun-share-top', h('span.fun-brand', '道'), h('span', 'Michi'), h('span.muted', new Date().toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }))),
       stampEl({ id: 'lv' + level, g: numKanji(level), kind: 'seal', tag: '級' }, true, 'huge'),
       h('div.eyebrow', 'Level up · 昇級'), h('h2.fun-lv', `Level ${level}`),
-      h('div.fun-share-stats', stat(String(streak()), 'day streak'), stat(String(words), 'words'), stat(String(kanji), 'kanji'), stat(S.xp.toLocaleString(), 'XP')));
+      h('div.fun-share-stats', stat(String(streakN()), 'day streak'), stat(String(words), 'words'), stat(String(kanji), 'kanji'), stat(S.xp.toLocaleString(), 'XP')));
     m = modal(h('div.fun-cel', card, h('div.row', { style: { justifyContent: 'center' } }, h('button.btn.primary', { onclick: () => m.close() }, 'Keep going'))), { label: `Level ${level}`, cls: '.wide' });
   }
   function stampDetail(d) {
@@ -306,16 +311,16 @@ const Fun = (() => {
     return h('section.card.fun-quests',
       h('div.fun-quests-head', h('div', h('div.eyebrow', '今日の任務 · Daily quests'), h('h3', done === 3 ? 'All clear. お疲れさま！' : `${3 - done} quest${3 - done === 1 ? '' : 's'} left today`)), chest),
       h('ul.fun-qlist', rows),
-      h('div.fun-quests-foot', m > 1 ? h('span.chip.gold', icon('bolt'), `2× XP · ${mmss(f.multUntil - now())} left`) : h('span.muted.small', `New quests in ${Math.floor(left / 3600000)}h ${Math.floor(left / 60000) % 60}m`),
+      h('div.fun-quests-foot', m > 1 ? h('span.chip.gold', icon('bolt'), `2× XP · ${mmss(f.multUntil - now())} left`) : h('span.muted.small', `Resets in ${Math.floor(left / 3600000)}h ${Math.floor(left / 60000) % 60}m`),
         h('button.btn.sm.ghost', { onclick: () => App.go('stamps') }, h('span.fun-stamp.k-seal.micro', { style: '--rot:-6deg' }, h('b', '印')), `Stamp book · ${Object.keys(f.stamps).length}`)));
   }
   function streakBanner() {
-    const s = streak(), hr = new Date().getHours(), f = F();
+    const s = streakN(), hr = new Date().getHours(), f = F();
     if (hr < 18 || (S.days[dayKey()]?.xp || 0) > 0 || s < 1) return null;
     const mid = new Date(); mid.setHours(24, 0, 0, 0); const left = mid - now();
     const go = () => { if (dueCards().length) startReview(); else { const n = nextLesson(); n ? App.go('lesson', { id: n.id }) : App.go('practice'); } };
     return h('section.fun-risk', { role: 'status' },
-      h('span.fun-stamp.k-seal', { style: '--rot:-7deg' }, icon('flame')),
+      h('span.fun-stamp.k-seal', { style: '--rot:-7deg', 'aria-hidden': 'true' }, h('b', '火')),
       h('div.fun-risk-body', h('b', `Your ${s}-day streak ends at midnight`),
         h('span', `${Math.floor(left / 3600000)}h ${Math.floor(left / 60000) % 60}m left. Any XP keeps it going${f.freezes ? ` — and you have ${f.freezes} freeze${f.freezes > 1 ? 's' : ''} as backup.` : '.'}`)),
       h('button.btn.seal.sm', { onclick: go }, dueCards().length ? 'Quick review' : 'Quick lesson'));
@@ -379,7 +384,7 @@ const Fun = (() => {
         h('p.muted.small', { style: { marginTop: '-6px' } }, blurb),
         h('div.fun-book.gridpaper', ds.map(d => { const own = !!f.stamps[d.id];
           return h('button.fun-cell' + (own ? '' : '.locked'), { type: 'button', onclick: () => stampDetail(d), 'aria-label': `${d.t}: ${own ? 'collected' : 'locked. ' + d.hint}` },
-            unseen.has(d.id) ? h('span.fun-new', 'New') : null, stampEl(d, own), h('b', d.t), own ? null : h('span', d.hint)); })));
+            unseen.has(d.id) ? h('span.fun-new', 'New') : null, stampEl(d, own), h('b', d.short || d.t), own || d.short || d.quiet ? null : h('span', d.hint)); })));
     });
     const left = RARE.filter(([id]) => !f.stamps['rare-' + id]).length;
     return h('div',
@@ -423,12 +428,13 @@ const Fun = (() => {
 
   function init() {
     const f = F();
+    applyFreezes();
     if (!f.seeded) { // existing learners: don't replay milestones they already passed
-      f.seeded = true; f.level = levelInfo().level; f.bestStreak = streak();
-      MILESTONES.filter(m => streak() >= m).forEach(m => f.ms[m] = dayKey());
+      f.seeded = true; f.level = levelInfo().level; f.bestStreak = streakN();
+      MILESTONES.filter(m => streakN() >= m).forEach(m => f.ms[m] = dayKey());
       checkStamps(true); Object.keys(f.stamps).forEach(id => f.seen[id] = 1);
     }
-    applyFreezes(); rollQuests(); checkStamps(); tickMult(); save();
+    rollQuests(); checkStamps(); tickMult(); save();
     let day = dayKey();
     setInterval(() => { if (dayKey() !== day) { day = dayKey(); rollQuests(); refresh(); } }, 60000);
     if (f.chests > 0) enqueue(() => showChest(true));
@@ -440,3 +446,5 @@ const Fun = (() => {
     openChest: () => showChest(), dayOn, stampCount: () => Object.keys(F().stamps).length,
   };
 })();
+
+window.Fun = Fun;

@@ -39,16 +39,15 @@ VIEWS.kana = (p) => {
 function kanaModal(ch, script) {
   const romaji = KANA_ROMAJI[ch]; const key = `${script}:${ch}`; const c = S.cards[key];
   const { box, replay } = strokeBox(ch);
-  const close = () => back.remove();
-  const back = h('div.modal-back', { onclick: e => { if (e.target === back) close(); } }, h('div.modal', { role: 'dialog', 'aria-label': ch },
+  let close = () => {};
+  const dlg = h('div.modal', { role: 'dialog', 'aria-label': ch },
     h('div.row.between', h('h2', `${ch} · ${romaji}`), h('button.icon-btn', { 'aria-label': 'Close', onclick: close }, icon('x'))),
     h('div.teach-hero', h('div.stack', { style: { justifyItems: 'center' } }, box, replay), h('div.stack',
       h('div.row', speakBtn(ch), h('span.chip.' + cardStage(c), cardStage(c)), c ? h('span.muted.small', `next review ${c.due <= now() ? 'now' : 'in ' + fmtIvl(c.due - now())}`) : null),
       KANA_MN[ch] ? h('div.mnemonic', KANA_MN[ch]) : null,
       h('div.muted.small', `Pair: ${script === 'h' ? toKata(ch) : toHira(ch)}`),
-      h('div.row', h('button.btn.sm', { onclick: () => { close(); App.go('write', { chars: ch }); } }, icon('brush'), 'Write it'), !c ? h('button.btn.sm', { onclick: () => { addCardsFromKeys([key]); toast('Added to reviews'); close(); App.render(); } }, icon('plus'), 'Add to reviews') : null)))));
-  document.body.append(back); Voice.say(ch);
-  const k = e => { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', k); } }; document.addEventListener('keydown', k);
+      h('div.row', h('button.btn.sm', { onclick: () => { close(); App.go('write', { chars: ch }); } }, icon('brush'), 'Write it'), !c ? h('button.btn.sm', { onclick: () => { addCardsFromKeys([key]); toast('Added to reviews'); close(); App.render(); } }, icon('plus'), 'Add to reviews') : null))));
+  close = openModal(dlg); Voice.say(ch);
 }
 
 // ─── Writing practice ─────────────────────────────────────────────────────
@@ -72,6 +71,7 @@ VIEWS.write = (p) => {
         const score = Math.round(res.score * 100);
         verdict.replaceChildren(h('div.feedback.' + (res.score >= .8 ? 'ok' : 'no'), h('strong', res.score === 1 ? '完璧！ Perfect strokes' : res.score >= .8 ? `Good — ${score}%` : `${score}%. Watch the red strokes`), h('span.ans', res.extra || (res.score < 1 ? 'Red numbers mark strokes drawn in the wrong place, order or direction.' : 'Order and direction all correct.'))));
         if (res.score >= .8) { addXP(res.score === 1 ? 4 : 2); Sfx.ok(); } else Sfx.bad();
+        window.Fun?.event?.('write', { ok: res.score >= .8 });
         aiBtn.hidden = !Sensei.available;
       }
     });
@@ -199,7 +199,7 @@ VIEWS.blitz = () => {
         const missList = Object.entries(misses).sort((a, b) => b[1] - a[1]);
         Sfx.done(); if (rec) petals();
         host.replaceChildren(h('div.qcard', h('div.result-hero', h('span.hanko.stamp', rec ? '新' : '終'), h('h2', rec ? 'New high score!' : 'Time!'),
-          h('div', { style: { font: '400 3rem/1 var(--f-display)' } }, String(score)), h('p.muted', `${right} correct · ${n ? Math.round(right / n * 100) : 0}% accuracy · ${(right / 60 * 60).toFixed(0)} per minute`),
+          h('div', { style: { font: '400 3rem/1 var(--f-display)' } }, String(score)), h('p.muted', `${right} correct · ${n ? Math.round(right / n * 100) : 0}% accuracy · ${n - right} missed`),
           missList.length ? h('div.row', { style: { justifyContent: 'center' } }, missList.slice(0, 12).map(([c, k]) => h('span.chip.seal', `${c} ${KANA_ROMAJI[c]} ×${k}`))) : null,
           h('div.row', { style: { justifyContent: 'center' } }, h('button.btn.primary', { onclick: start }, 'Again'), h('button.btn', { onclick: intro }, 'Change set')))));
       }
@@ -212,14 +212,14 @@ VIEWS.blitz = () => {
 
 // ─── Conjugation Gym ──────────────────────────────────────────────────────
 VIEWS.conj = () => {
-  const cfg = Object.assign({ kind: 'verb', forms: ['masu', 'te', 'nai', 'ta'], learnedOnly: false }, (() => { try { return JSON.parse(localStorage.getItem('michi.conj') || 'null'); } catch (e) { return null; } })() || {});
+  const cfg = Object.assign({ kind: 'verb', forms: ['masu', 'te', 'nai', 'ta'], learnedOnly: CONJ_VERBS().filter(v => S.cards['v:' + v.id]).length >= 10 }, (() => { try { return JSON.parse(localStorage.getItem('michi.conj') || 'null'); } catch (e) { return null; } })() || {});
   const saveCfg = () => { try { localStorage.setItem('michi.conj', JSON.stringify(cfg)); } catch (e) {} };
   const host = h('div'); let score = 0, n = 0;
   const formsFor = () => cfg.kind === 'verb' ? CONJ_FORMS : ADJ_FORMS;
   const settings = () => h('section.card.stack',
     h('div.row.between', h('div.tabs', [['verb', 'Verbs'], ['adj', 'Adjectives']].map(([id, l]) => h('button', { 'aria-selected': cfg.kind === id ? 'true' : 'false', onclick: () => { cfg.kind = id; cfg.forms = id === 'verb' ? ['masu', 'te', 'nai', 'ta'] : ['a-neg', 'a-past']; saveCfg(); App.render(); } }, l))),
       h('label.row.small', { style: { gap: '6px' } }, h('input', { type: 'checkbox', id: 'conjLearned', checked: cfg.learnedOnly ? true : null, onchange: e => { cfg.learnedOnly = e.target.checked; saveCfg(); ask(); } }), 'Only words I have learned')),
-    h('div.row', { style: { gap: '6px' } }, formsFor().map(f => h('button.chip' + (cfg.forms.includes(f.id) ? '.new' : ''), { style: { cursor: 'pointer', border: 0, padding: '6px 11px' }, onclick: () => { cfg.forms = cfg.forms.includes(f.id) ? cfg.forms.filter(x => x !== f.id) : cfg.forms.concat(f.id); if (!cfg.forms.length) cfg.forms = [f.id]; saveCfg(); App.render(); } }, `${f.jp} ${f.label}`))));
+    h('details', h('summary', { style: { cursor: 'pointer', fontWeight: 700 } }, `Forms: ${cfg.forms.map(id => formsFor().find(f => f.id === id)?.jp).filter(Boolean).join(' ')}`), h('div.row', { style: { gap: '6px', marginTop: '10px' } }, formsFor().map(f => h('button.chip' + (cfg.forms.includes(f.id) ? '.new' : ''), { style: { cursor: 'pointer', border: 0, padding: '6px 11px' }, onclick: () => { cfg.forms = cfg.forms.includes(f.id) ? cfg.forms.filter(x => x !== f.id) : cfg.forms.concat(f.id); if (!cfg.forms.length) cfg.forms = [f.id]; saveCfg(); App.render(); } }, `${f.jp} ${f.label}`)))));
   const ask = () => {
     let pool = cfg.kind === 'verb' ? CONJ_VERBS() : CONJ_ADJS();
     if (cfg.learnedOnly) { const l = pool.filter(v => S.cards['v:' + v.id]); if (l.length >= 3) pool = l; }

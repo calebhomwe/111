@@ -1,6 +1,6 @@
 // ─── App shell, router, home, learn path, lessons, reviews ────────────────
 const NAV = [
-  { id: 'home', label: 'Today', icon: 'home' },
+  { id: 'home', label: 'Today', icon: 'home', count: () => window.Fun?.questBadge?.() || 0 },
   { id: 'learn', label: 'Learn', icon: 'learn' },
   { id: 'review', label: 'Review', icon: 'review', count: () => dueCards().length },
   { id: 'practice', label: 'Dojo', icon: 'brush' },
@@ -8,13 +8,14 @@ const NAV = [
   { id: 'sensei', label: 'Sensei', icon: 'chat' },
   { id: 'dict', label: 'Dictionary', icon: 'search', more: true },
   { id: 'stats', label: 'Progress', icon: 'stats', more: true },
+  { id: 'stamps', label: 'Stamp book', icon: 'star', more: true },
   { id: 'settings', label: 'Settings', icon: 'gear', more: true },
 ];
 const App = {
   route: 'home', params: {}, cleanup: null,
   go(route, params = {}, push = true) {
     if (this.cleanup) { try { this.cleanup(); } catch (e) {} this.cleanup = null; }
-    if (window.speechSynthesis) speechSynthesis.cancel();
+    Voice.stop(); $$('.pop').forEach(p => p.remove());
     this.route = route; this.params = params;
     if (push) { try { history.replaceState(null, '', '#' + route); } catch (e) {} }
     this.render(); window.scrollTo({ top: 0 });
@@ -34,7 +35,7 @@ const App = {
   },
   renderNav() {
     const nav = $('#nav'); nav.innerHTML = '';
-    const tabRoute = { lesson: 'learn', session: 'review', kana: 'practice', write: 'practice', blitz: 'practice', conj: 'practice', numbers: 'practice', listen: 'practice', kanji: 'learn', grammar: 'learn', story: 'read', welcome: 'home', placement: 'home' }[this.route] || this.route;
+    const tabRoute = { lesson: 'learn', session: 'review', kana: 'practice', write: 'practice', blitz: 'practice', conj: 'practice', numbers: 'practice', listen: 'practice', kanji: 'learn', grammar: 'learn', story: 'read', welcome: 'home', placement: 'home', styles: 'learn', style: 'learn', styleswitch: 'practice', readroom: 'practice' }[this.route] || this.route;
     for (const n of NAV) {
       const c = n.count ? n.count() : 0;
       nav.append(h('button' + (n.more ? '.more-only' : ''), { 'aria-current': tabRoute === n.id ? 'page' : null, onclick: () => App.go(n.id) }, icon(n.icon), h('span', n.label), c ? h('span.count', c > 99 ? '99+' : String(c)) : null));
@@ -132,7 +133,7 @@ function strokeSVG(ch, { animate = true, numbers = false, speed = 0.55, cls = 's
 const drawStyle = document.createElement('style'); drawStyle.textContent = '@keyframes draw{to{stroke-dashoffset:0}}'; document.head.append(drawStyle);
 function strokeBox(ch, big = false) {
   const box = h('div.teach-glyph.gridpaper', { style: big ? {} : {} });
-  const draw = () => { box.innerHTML = ''; const s = strokeSVG(ch, { numbers: true }); if (s) box.append(s); else box.append(h('span.jp', ch)); };
+  const draw = () => { box.innerHTML = ''; const s = strokeSVG(ch, { numbers: true }); if (s) box.append(h('span.under.jp', { 'aria-hidden': 'true' }, ch), s); else box.append(h('span.jp', ch)); };
   draw();
   const replay = h('button.btn.sm.ghost', { onclick: draw }, icon('play'), 'Replay strokes');
   return { box, replay };
@@ -150,6 +151,7 @@ VIEWS.home = () => {
   const hero = h('section.hero',
     h('div.stack', { style: { gap: '14px' } },
       h('div', h('div.eyebrow', { style: { color: 'rgb(255 255 255 / .75)' } }, greetEn), h('h1.jp', { style: { fontFamily: 'var(--f-jp-hand)', fontWeight: 600 } }, greet)),
+      t.new >= S.settings.newPerDay ? h('p', { style: { fontWeight: 700 } }, `You've added ${t.new} new items today (your limit is ${S.settings.newPerDay}). More now means a heavier review pile tomorrow.`) : null,
       h('p', due ? `${due} card${due === 1 ? '' : 's'} ready for review. Clear them first while they're fresh, then learn something new.` : nxt ? `Nothing to review right now. Next up: ${nxt.title}.` : 'You have finished every lesson. Keep your reviews going and read a story.'),
       h('div.row', due ? h('button.btn.primary', { onclick: () => startReview() }, icon('review'), `Review ${due}`) : null,
         nxt ? h('button.btn' + (due ? '.light' : '.primary'), { onclick: () => App.go('lesson', { id: nxt.id }) }, icon('learn'), due ? 'New lesson' : `Start: ${nxt.title}`) : null)),
@@ -171,7 +173,7 @@ VIEWS.home = () => {
   const wotdCard = wotd && h('section.card.pad-lg.wotd',
     h('div.teach-glyph.word.gridpaper', { style: { minWidth: '160px' } }, h('span', { html: ruby(wotd.w, wotd.r) })),
     h('div.stack', h('div.eyebrow', '今日の言葉 · Word of the day'), h('div.row', h('h2', wotd.m), speakBtn(wotd.r)),
-      S.settings.romaji ? h('div.muted', kanaToRomaji(wotd.r)) : null,
+      showRomaji() ? h('div.muted', kanaToRomaji(wotd.r)) : null,
       wotd.ex ? h('div.example', h('div.row.between', h('span.jp', wotd.ex), speakBtn(wotd.ex, 'Play sentence', wotd.exr)), h('span.muted.small', wotd.exm)) : null,
       h('div.row', h('button.btn.sm', { onclick: () => { addCardsFromKeys(['v:' + wotd.id]); toast('Added to your reviews'); App.render(); }, disabled: S.cards['v:' + wotd.id] ? true : null }, icon('plus'), S.cards['v:' + wotd.id] ? 'In your reviews' : 'Add to reviews'))));
 
@@ -187,7 +189,8 @@ VIEWS.home = () => {
     gp ? h('button.card.scenario', { onclick: () => App.go('grammar', { id: gp.id }) }, h('div.eyebrow', 'Next grammar point'), h('div.jp', { style: { fontSize: '1.3rem' } }, gp.t), h('div.muted', gp.sum)) : null,
     h('button.card.scenario', { onclick: () => App.go('sensei') }, h('div.eyebrow', 'Talk it out'), h('div', { style: { fontWeight: 700 } }, 'Practise a real conversation with Sensei'), h('div.muted', 'Order at a café, ask for directions, introduce yourself. Your sentences get corrected as you go.')));
 
-  return h('div', hero, tiles, wotdCard, h('section.grid.g3', tracks), extra, heatmapCard());
+  const fun = window.Fun ? [Fun.streakBanner(), h('div.grid.g2', Fun.questsCard(), Fun.weekCard())] : [];
+  return h('div', fun[0] || null, hero, fun[1] || null, tiles, wotdCard, h('section.grid.g3', tracks), extra, heatmapCard());
 };
 function heatmapCard() {
   const weeks = 20, cells = [], start = new Date(); start.setHours(12, 0, 0, 0); start.setDate(start.getDate() - (weeks * 7 - 1) - start.getDay());
@@ -228,16 +231,21 @@ function lessonTile(l) {
   const thumb = l.cat ? art('cat-' + l.cat, '.thumb') : null;
   return h('button.lesson' + (thumb ? '.has-thumb' : ''), { onclick: () => App.go('lesson', { id: l.id }) },
     thumb, done ? h('span.hanko.round.done', '済') : null,
-    h('div.t', l.title), h('div.s', l.sub),
+    h('div.t', l.title, window.Fun?.lessonCrown?.(l.id) || null), h('div.s', l.sub),
     h('div.bar' + (prog >= 1 ? '.ok' : ''), h('i', { style: { width: `${prog * 100}%` } })));
 }
 function sessionStorageGet(k) { try { return sessionStorage.getItem('michi.' + k); } catch (e) { return null; } }
 function sessionStorageSet(k, v) { try { sessionStorage.setItem('michi.' + k, v); } catch (e) {} }
 
 // ─── Lesson flow: teach → quiz → cards ────────────────────────────────────
-function addCardsFromKeys(keys, gradeFor = () => 3) {
+function addCardsFromKeys(keys, gradeFor = () => 3, learningStep = false) {
   let n = 0;
-  for (const k of keys) if (!S.cards[k]) { S.cards[k] = FSRS.review(null, gradeFor(k)); n++; }
+  for (const k of keys) if (!S.cards[k]) {
+    const g = gradeFor(k), c = FSRS.review(null, g);
+    // Learning step: first check-in within a day (sooner if it was shaky), then FSRS takes over.
+    if (learningStep) c.due = now() + (g <= 2 ? 6 : 20) * 3600e3;
+    S.cards[k] = c; n++;
+  }
   if (n) { today().new += n; save(); }
   return n;
 }
@@ -258,7 +266,7 @@ function teachCard(key) {
       h('div.teach-glyph.word.gridpaper', h('span', { html: ruby(it.w, it.r) })),
       h('div.stack',
         h('div.row', h('h2', { style: { fontSize: '1.5rem' } }, it.m), speakBtn(it.r)),
-        h('dl.kv', h('dt', 'Reading'), h('dd.jp', it.r), S.settings.romaji ? [h('dt', 'Romaji'), h('dd', kanaToRomaji(it.r))] : null, h('dt', 'Type'), h('dd', POS_NAME[it.pos] || it.pos), h('dt', 'Level'), h('dd', `JLPT N${it.lv}`)),
+        h('dl.kv', h('dt', 'Reading'), h('dd.jp', it.r), showRomaji() ? [h('dt', 'Romaji'), h('dd', kanaToRomaji(it.r))] : null, h('dt', 'Type'), h('dd', POS_NAME[it.pos] || it.pos), h('dt', 'Level'), h('dd', `JLPT N${it.lv}`)),
         it.ex ? h('div.example', h('div.row.between', h('span.jp', it.ex), speakBtn(it.ex, 'Play sentence', it.exr)), h('span.muted.small', it.exm)) : null,
         kanjiIn(it.w).length ? h('div.row.small.muted', 'Kanji: ', kanjiIn(it.w).map(k => h('button.chip', { onclick: () => openKanji(k.k) }, `${k.k} ${shortM(k.m)}`))) : null)));
     setTimeout(() => Voice.say(it.r), 250);
@@ -299,7 +307,7 @@ VIEWS.lesson = ({ id }) => {
       host: stage, keys: shuffle(keys).concat(shuffle(keys)), lesson: true, progress: (d, n) => { bar.style.width = `${(keys.length + d / n * keys.length) / total * 100}%`; top.lastChild.textContent = `Check ${Math.min(d + 1, n)} / ${n}`; },
       done: (res) => {
         const firstTry = res.firstTry;
-        const added = addCardsFromKeys(keys, k => firstTry[k] === false ? 2 : 3);
+        const added = addCardsFromKeys(keys, k => firstTry[k] === false ? 2 : 3, true);
         const was = S.lessons[id];
         S.lessons[id] = { done: now(), best: Math.max(was?.best || 0, res.pct) };
         addXP((was ? 5 : 20) + added * 3);
@@ -308,12 +316,12 @@ VIEWS.lesson = ({ id }) => {
         stage.replaceChildren(h('div.qcard', h('div.result-hero',
           h('span.hanko.stamp', '合格'), h('h2', 'Lesson complete'),
           h('p.muted', `${Math.round(res.pct * 100)}% on the first try · ${added} new item${added === 1 ? '' : 's'} added to your reviews`),
-          h('div.row', { style: { justifyContent: 'center' } }, (keys.map(k => h('span.chip', { html: esc(itemLabel(item(k))) })))),
+          h('div.row', { style: { justifyContent: 'center' } }, ([...new Set(keys)].map(k => h('span.chip', { html: esc(itemLabel(item(k))) })))),
           h('div.row', { style: { justifyContent: 'center' } },
             nx ? h('button.btn.primary', { onclick: () => App.go('lesson', { id: nx.id }) }, `Next: ${nx.title}`) : null,
             l.track === 'kana' || l.track === 'kanji' ? h('button.btn', { onclick: () => App.go('write', { chars: keys.map(k => k.slice(2)).join('') }) }, icon('brush'), 'Practise writing') : null,
             h('button.btn', { onclick: () => App.go('learn', { track: l.track }) }, 'Back to path')))));
-        checkAchievements();
+        checkAchievements(); window.Fun?.event?.('lesson', { id, perfect: res.correct === res.total });
       },
     });
   };
@@ -354,15 +362,15 @@ VIEWS.session = ({ keys, cram }) => {
   wrap.append(h('div.study-top', h('button.icon-btn', { 'aria-label': 'End review', onclick: () => App.go('review') }, icon('x')), h('div.bar', bar), count), stage);
   runSession({
     host: stage, keys, review: !cram,
-    progress: (d, n, combo) => { bar.style.width = `${d / n * 100}%`; count.textContent = combo >= 3 ? `${combo} combo` : `${d}/${n}`; },
+    progress: (d, n, combo) => { bar.style.width = `${d / n * 100}%`; window.Fun?.combo ? Fun.combo(count, combo, `${d}/${n}`) : (count.textContent = combo >= 3 ? `${combo} combo` : `${d}/${n}`); },
     done: res => {
       Sfx.done(); if (res.pct >= 0.9) petals(18);
       stage.replaceChildren(h('div.qcard', h('div.result-hero',
         h('span.hanko.stamp', res.pct >= .9 ? '優' : res.pct >= .7 ? '良' : '可'), h('h2', cram ? 'Practice done' : 'Review done'),
-        h('p.muted', `${res.correct}/${res.total} correct on the first try · best combo ${res.bestCombo} · +${res.xp} XP`),
+        window.Fun?.sessionSummary ? Fun.sessionSummary(res) : h('p.muted', `${res.correct}/${res.total} correct on the first try · best combo ${res.bestCombo} · +${res.xp} XP`),
         res.missed.length ? h('div.stack', h('div.eyebrow', 'Missed'), h('div.row', { style: { justifyContent: 'center' } }, res.missed.map(k => h('span.chip.seal', { html: esc(itemLabel(item(k))) })))) : null,
         h('div.row', { style: { justifyContent: 'center' } }, dueCards().length ? h('button.btn.primary', { onclick: () => startReview() }, `Keep going (${dueCards().length})`) : null, h('button.btn', { onclick: () => App.go('home') }, 'Done')))));
-      App.renderNav();
+      App.renderNav(); if (!cram) window.Fun?.event?.('review-done', { correct: res.correct, total: res.total });
     },
   });
   return wrap;
@@ -370,38 +378,46 @@ VIEWS.session = ({ keys, cram }) => {
 
 // Shared quiz runner. First attempt per key is graded; misses are re-queued.
 function runSession({ host, keys, review = false, lesson = false, progress, done }) {
-  const queue = keys.slice(); const total = queue.length; let doneN = 0, combo = 0, bestCombo = 0, correct = 0, xp = 0;
-  const firstTry = {}, missed = []; const seenCount = {};
+  // Every original entry in `keys` is one scored question (lessons list each item twice: recognition, then recall).
+  // A miss re-queues the item as an unscored retry. An item counts as "first try" only if none of its scored questions was missed.
+  const queue = keys.map(key => ({ key, scored: true })); const total = queue.length;
+  let doneN = 0, combo = 0, bestCombo = 0, correct = 0, xp = 0;
+  const missedKey = {}, graded = {}, missed = []; const seenCount = {};
   const next = () => {
-    if (!queue.length) { Session.lessonChars = null; return done({ pct: total ? correct / total : 1, correct, total, bestCombo, xp, firstTry, missed }); }
-    const key = queue.shift(); seenCount[key] = (seenCount[key] || 0) + 1;
-    // In lessons, the first pass is recognition and the second is recall.
+    if (!queue.length) {
+      Session.lessonChars = null;
+      const firstTry = Object.fromEntries(keys.map(k => [k, !missedKey[k]]));
+      return done({ pct: total ? correct / total : 1, correct, total, bestCombo, xp, firstTry, missed: [...new Set(missed)] });
+    }
+    const entry = queue.shift(), key = entry.key; seenCount[key] = (seenCount[key] || 0) + 1;
     let force; if (lesson) { const it = item(key); force = seenCount[key] === 1 ? { kana: 'k2r', vocab: 'v2m', kanji: 'j2m' }[it.type] : { kana: pick(['a2k', 'r2k']), vocab: pick(['m2v', 'a2m']), kanji: pick(['m2j', 'jex']) }[it.type]; }
     const q = makeQuestion(key, force); if (!q) return next();
     progress && progress(doneN, total, combo);
-    const t0 = now(); const prevCard = S.cards[key] ? Object.assign({}, S.cards[key]) : null; let wasFirst = false;
+    let t0 = now(); if (q.audio) t0 += 1500; // don't count listening time against the answer
+    const prevCard = S.cards[key] ? Object.assign({}, S.cards[key]) : null; let scoredMiss = false, requeued = null, fsrsHere = false;
     renderQuestion(host, q, (ok, typed, override) => {
       if (override) { // learner flagged a typo: undo the miss
-        const qi = queue.lastIndexOf(key); if (qi >= 0) queue.splice(qi, 1);
-        if (wasFirst) {
-          firstTry[key] = true; correct++; combo++; bestCombo = Math.max(bestCombo, combo); const mi = missed.lastIndexOf(key); if (mi >= 0) missed.splice(mi, 1);
-          if (review && prevCard) { S.cards[key] = FSRS.review(prevCard, 3); const d = today(); d.ok = (d.ok || 0) + 1; }
+        if (requeued) { const qi = queue.indexOf(requeued); if (qi >= 0) queue.splice(qi, 1); }
+        if (scoredMiss) {
+          correct++; combo++; bestCombo = Math.max(bestCombo, combo); missedKey[key] = false; const mi = missed.lastIndexOf(key); if (mi >= 0) missed.splice(mi, 1);
+          if (fsrsHere && prevCard) { S.cards[key] = FSRS.review(prevCard, 3); const d = today(); d.ok = (d.ok || 0) + 1; }
           addXP(2);
         }
         return;
       }
-      const dt = (now() - t0) / 1000; const first = !(key in firstTry); wasFirst = first;
-      if (first) {
-        firstTry[key] = ok; doneN++;
-        if (ok) { correct++; combo++; bestCombo = Math.max(bestCombo, combo); } else { combo = 0; missed.push(key); }
-        if (review) {
+      const dt = (now() - t0) / 1000;
+      if (entry.scored) {
+        doneN++;
+        if (ok) { correct++; combo++; bestCombo = Math.max(bestCombo, combo); window.Fun?.event?.('answer', { ok: true, combo }); }
+        else { combo = 0; missedKey[key] = true; missed.push(key); scoredMiss = true; window.Fun?.event?.('answer', { ok: false, combo: 0 }); }
+        if (review && !graded[key]) {
+          graded[key] = fsrsHere = true;
           const g = !ok ? 1 : dt > (typed ? 14 : 9) ? 2 : (typed && dt < 4 && S.cards[key]?.s > 5) ? 4 : 3;
           S.cards[key] = FSRS.review(S.cards[key], g); today().rev++; if (ok) today().ok = (today().ok || 0) + 1;
         }
-        const gain = ok ? (lesson ? 1 : 2) + (combo > 0 && combo % 10 === 0 ? 5 : 0) : 0; xp += gain; if (gain) addXP(gain); else save();
+        const gain = ok ? (lesson ? 1 : 2) + (combo > 0 && combo % 10 === 0 ? 5 : 0) : 0; xp += gain; if (gain) { addXP(gain); window.Fun?.floatXP?.(gain, host); } else save();
       } else if (!ok) combo = 0;
-      if (!ok) queue.splice(Math.min(queue.length, 3 + rand(3)), 0, key); // see it again soon
-      else if (!first && lesson) { /* recovered */ }
+      if (!ok) { requeued = { key, scored: false }; queue.splice(Math.min(queue.length, 3 + rand(3)), 0, requeued); } // see it again soon
       progress && progress(doneN, total, combo);
     }, next);
   };
@@ -421,8 +437,10 @@ function renderQuestion(host, q, answer, continueFn) {
     const cont = h('button.btn.primary', { onclick: () => { cleanup(); continueFn(); } }, 'Continue', h('span.kbd', 'Enter'));
     const extra = [];
     if (typed && !ok) extra.push(h('button.btn.sm.ghost', { onclick: () => { cleanup(); answeredOverride(); } }, icon('undo'), 'I made a typo'));
-    fb.replaceChildren(h('div.feedback.' + (ok ? 'ok' : 'no'), h('div.row.between', h('strong', ok ? pick(['正解！ Correct', 'いいね！ Nice', 'すごい！ Great', 'その通り！ Exactly']) : 'Not quite'), h('div.row', q.say ? speakBtn(q.say) : null)), h('div.ans', { html: esc(q.answer) }), h('div.row.between', h('div', extra), cont)));
-    setTimeout(() => cont.focus(), 30);
+    const it = !ok && q.key ? item(q.key) : null; const lapses = it ? (S.cards[q.key]?.lapses || 0) : 0;
+    const aid = it && lapses >= 2 ? (it.type === 'kana' ? KANA_MN[it.ch] : it.type === 'kanji' ? it.mn : it.ex ? `${it.ex} — ${it.exm}` : '') : '';
+    fb.replaceChildren(h('div.feedback.' + (ok ? 'ok' : 'no'), h('div.row.between', h('strong', ok ? pick(['正解！ Correct', 'いいね！ Nice', 'すごい！ Great', 'その通り！ Exactly']) : 'Not quite'), h('div.row', q.say ? speakBtn(q.say) : null)), h('div.ans', { html: esc(q.answer) }), aid ? h('div.mnemonic', { style: { color: 'var(--ink)' } }, h('b', `Tricky one (missed ${lapses}×): `), aid) : null, h('div.row.between', h('div', extra), cont)));
+    setTimeout(() => { cont.focus({ preventScroll: true }); fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 30);
   };
   const answeredOverride = () => { answer(true, true, true); continueFn(); };
   if (q.kind === 'mc') {
@@ -441,7 +459,9 @@ function renderQuestion(host, q, answer, continueFn) {
     const inp = h('input#answer', { type: 'text', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', lang: q.ime ? 'ja' : 'en', placeholder: q.ime ? 'type romaji → かな' : 'romaji', 'aria-label': 'Your answer' });
     if (q.ime) bindIME(inp);
     const go = h('button.btn.primary', { type: 'submit' }, 'Check');
-    const form = h('form.typein', { onsubmit: e => { e.preventDefault(); if (answered) return; const v = inp.value; if (!v.trim()) return; const ok = q.check(v); inp.classList.add(ok ? 'right' : 'wrong'); inp.readOnly = true; go.remove(); finish(ok, true); } }, inp, go);
+    let retried = false;
+    const form = h('form.typein', { onsubmit: e => { e.preventDefault(); if (answered) return; const v = inp.value; if (!v.trim()) return; const ok = q.check(v);
+      if (!ok && !retried && q.kana) { const inK = toHira(/[a-z]/i.test(v) && window.wanakana ? wanakana.toHiragana(v) : v).replace(/\s/g, ''); if (editDistance(inK, toHira(q.kana)) === 1) { retried = true; inp.classList.add('wrong'); setTimeout(() => inp.classList.remove('wrong'), 400); fb.replaceChildren(h('div.feedback.no', h('strong', 'Almost! One kana is off. Try again.'))); inp.select(); return; } } inp.classList.add(ok ? 'right' : 'wrong'); inp.readOnly = true; go.remove(); finish(ok, true); } }, inp, go);
     card.append(h('div.q', q.q), big, form, fb);
     setTimeout(() => inp.focus(), 60);
   }
