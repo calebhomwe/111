@@ -10,7 +10,7 @@ VIEWS.practice = () => {
   ];
   const hs = S.blitzBest || 0;
   return h('div',
-    h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '道場 · Dojo'), h('h1', 'Practice')),
+    banner('tr-dojo', '道場 · Dojo', 'Practice', 'Drills for the skills reviews can\'t reach: handwriting, speed, conjugation, numbers and listening.'),
     h('div.grid.g3', tiles.map(([id, glyph, title, desc]) => h('button.scenario', { onclick: () => App.go(id) },
       h('div.row', h('span.hanko', { style: { width: '46px', height: '46px', fontSize: '1.3rem' } }, glyph), h('h3', title)),
       h('p.muted.small', desc), id === 'blitz' && hs ? h('span.chip.seal', `Best: ${hs}`) : null))));

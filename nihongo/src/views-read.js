@@ -4,8 +4,7 @@ VIEWS.read = () => {
   const all = STORIES.concat(S.aiStories || []);
   const groups = [['kana', 'Kana only'], ['N5', 'JLPT N5'], ['N4', 'JLPT N4']];
   return h('div',
-    h('div.track-head', h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '読み物 · Graded readers'), h('h1', 'Read'), h('p.muted', { style: { maxWidth: '60ch' } }, 'Short stories written for your level. Tap any word for its meaning, switch furigana on or off, and listen sentence by sentence.')),
-      Sensei.available ? h('button.btn.seal', { onclick: () => App.go('sensei', { tab: 'story' }) }, icon('sparkle'), 'Write me a new story') : null),
+    banner('tr-read', '読み物 · Graded readers', 'Read', 'Short stories written for your level. Tap any word for its meaning, switch furigana on or off, and listen to every sentence read by a native voice.', Sensei.available ? h('button.btn.seal', { onclick: () => App.go('sensei', { tab: 'story' }) }, icon('sparkle'), 'Write me a new story') : null),
     groups.map(([lv, label]) => {
       const list = all.filter(s => s.lv === lv); if (!list.length) return null;
       return h('section.stack', h('div.level-sep', h('h2', label)), h('div.grid.g3', list.map(storyCard)));
@@ -32,6 +31,7 @@ VIEWS.story = ({ id }) => {
     });
     el.append(en, ...toks, ' ');
     const play = h('button.icon-btn.speak', { style: { width: '30px', height: '30px', verticalAlign: 'middle', marginLeft: '6px' }, 'aria-label': 'Play sentence', onclick: () => speakSent(si) }, icon('speaker'));
+    play.oncontextmenu = e => { e.preventDefault(); Voice.say(plain(sent), { tts: kanaOf(sent), slow: true }); };
     el.append(play);
     return el;
   });
@@ -41,7 +41,7 @@ VIEWS.story = ({ id }) => {
   let playing = false;
   const speakSent = async (i, chain = false) => {
     sentEls.forEach(e => e.classList.remove('speaking')); sentEls[i].classList.add('speaking');
-    await Voice.say(kanaOf(s.sents[i]), { rate: S.settings.rate * 0.95 });
+    await Voice.say(plain(s.sents[i]), { tts: kanaOf(s.sents[i]), rate: S.settings.rate * 0.95 });
     sentEls[i].classList.remove('speaking');
     if (chain && playing && i + 1 < sentEls.length) speakSent(i + 1, true); else { playing = false; playAll.replaceChildren(icon('play'), 'Read aloud'); }
   };
@@ -110,7 +110,7 @@ function grammarList() {
 function inlineMd(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>'); }
 function exampleRow(e) {
   const kana = e.fu || e.jp;
-  return h('div.example', h('div.row.between', { style: { flexWrap: 'nowrap', alignItems: 'flex-start' } }, h('span.jp', e.jp), h('div.row', { style: { flexWrap: 'nowrap', gap: '6px' } }, speakBtn(kana, 'Play sentence'), Sensei.available ? h('button.icon-btn', { title: 'Break it down', 'aria-label': 'Break down this sentence', onclick: () => explainText(e.jp, e.en) }, icon('sparkle')) : null)),
+  return h('div.example', h('div.row.between', { style: { flexWrap: 'nowrap', alignItems: 'flex-start' } }, h('span.jp', e.jp), h('div.row', { style: { flexWrap: 'nowrap', gap: '6px' } }, speakBtn(e.jp, 'Play sentence', kana), Sensei.available ? h('button.icon-btn', { title: 'Break it down', 'aria-label': 'Break down this sentence', onclick: () => explainText(e.jp, e.en) }, icon('sparkle')) : null)),
     e.fu && e.fu !== e.jp ? h('span.muted.small.jp', e.fu) : null, h('span.muted.small', e.en));
 }
 VIEWS.grammar = ({ id }) => {

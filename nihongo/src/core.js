@@ -170,21 +170,62 @@ const Voice = {
     };
     load(); speechSynthesis.onvoiceschanged = load;
   },
-  get ok() { return 'speechSynthesis' in window; },
-  say(text, opts = {}) {
-    if (!this.ok || !text) return Promise.resolve();
+  get ok() { return 'speechSynthesis' in window || !!Clips.index; },
+  seq: 0, audio: null,
+  stop() { this.seq++; if (this.audio) { this.audio.pause(); this.audio = null; } if ('speechSynthesis' in window) speechSynthesis.cancel(); },
+  // text: the lookup key for recorded audio (exact course text). opts.tts: what the browser voice reads if no recording exists.
+  async say(text, opts = {}) {
+    if (!text) return;
+    this.stop(); const my = this.seq;
+    const keys = [text, ...(opts.alt || [])];
+    let url = null;
+    if (Clips.index || Clips.loading) { await Clips.load(); for (const k of keys) { url = await Clips.url(k); if (url) break; } }
+    if (my !== this.seq) return;
+    if (url) {
+      return new Promise(res => {
+        const a = new Audio(url); this.audio = a;
+        a.playbackRate = opts.slow ? 0.72 : (S.settings.clipRate || 1); a.preservesPitch = true;
+        a.onended = a.onerror = () => { if (this.audio === a) this.audio = null; res(); };
+        a.play().catch(() => { this.audio = null; this.tts(opts.tts || text, opts).then(res); });
+      });
+    }
+    return this.tts(opts.tts || text, opts);
+  },
+  tts(text, opts = {}) {
+    if (!('speechSynthesis' in window)) return Promise.resolve();
     speechSynthesis.cancel();
     return new Promise(res => {
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'ja-JP'; if (this.ja) u.voice = this.ja;
-      u.rate = opts.rate || S.settings.rate; u.onend = u.onerror = res;
-      if (opts.onboundary) u.onboundary = opts.onboundary;
+      u.rate = opts.slow ? 0.6 : (opts.rate || S.settings.rate); u.onend = u.onerror = res;
       speechSynthesis.speak(u);
     });
   },
 };
-function speakBtn(text, label = 'Play audio') {
-  return h('button.icon-btn.speak', { type: 'button', 'aria-label': label, title: label, onclick: e => { e.stopPropagation(); Voice.say(text); } }, icon('speaker'));
+// Recorded native audio: audio/index.json maps exact text → [pack, offset, length, ms]; packs are MP3 byte ranges.
+const Clips = {
+  index: null, loading: null, packs: new Map(), urls: new Map(),
+  load() {
+    if (!this.loading) this.loading = fetch('audio/index.json').then(r => r.ok ? r.json() : null).catch(() => null).then(j => { this.index = j && j.clips ? j : null; return this.index; });
+    return this.loading;
+  },
+  has(t) { return !!this.index?.clips?.[t]; },
+  pack(p) {
+    let pk = this.packs.get(p);
+    if (!pk) { pk = fetch('audio/' + this.index.packs[p]).then(r => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }); pk.catch(() => this.packs.delete(p)); this.packs.set(p, pk); }
+    return pk;
+  },
+  async url(t) {
+    const c = this.index?.clips?.[t]; if (!c) return null;
+    if (this.urls.has(t)) return this.urls.get(t);
+    try { const buf = await this.pack(c[0]); const u = URL.createObjectURL(new Blob([buf.slice(c[1], c[1] + c[2])], { type: 'audio/mpeg' })); this.urls.set(t, u); return u; } catch (e) { return null; }
+  },
+  prefetch(texts) { if (!this.index) return; const ps = new Set(); for (const t of texts) { const c = this.index.clips[t]; if (c) ps.add(c[0]); } [...ps].slice(0, 4).forEach(p => this.pack(p).catch(() => {})); },
+};
+// speakBtn(key, label, tts): plays the recording for `key`, else reads `tts` (or key) with the browser voice. Right-click / long-press plays slowly.
+function speakBtn(text, label = 'Play audio', tts) {
+  const b = h('button.icon-btn.speak', { type: 'button', 'aria-label': label, title: label + ' (right-click: slow)', onclick: e => { e.stopPropagation(); Voice.say(text, { tts }); }, oncontextmenu: e => { e.preventDefault(); e.stopPropagation(); Voice.say(text, { tts, slow: true }); } }, icon('speaker'));
+  return b;
 }
 
 // ─── Sound effects (WebAudio, generated) ──────────────────────────────────

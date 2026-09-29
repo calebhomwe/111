@@ -34,7 +34,7 @@ const App = {
   },
   renderNav() {
     const nav = $('#nav'); nav.innerHTML = '';
-    const tabRoute = { lesson: 'learn', session: 'review', kana: 'practice', write: 'practice', blitz: 'practice', conj: 'practice', numbers: 'practice', listen: 'practice', kanji: 'learn', grammar: 'learn', story: 'read' }[this.route] || this.route;
+    const tabRoute = { lesson: 'learn', session: 'review', kana: 'practice', write: 'practice', blitz: 'practice', conj: 'practice', numbers: 'practice', listen: 'practice', kanji: 'learn', grammar: 'learn', story: 'read', welcome: 'home', placement: 'home' }[this.route] || this.route;
     for (const n of NAV) {
       const c = n.count ? n.count() : 0;
       nav.append(h('button' + (n.more ? '.more-only' : ''), { 'aria-current': tabRoute === n.id ? 'page' : null, onclick: () => App.go(n.id) }, icon(n.icon), h('span', n.label), c ? h('span.count', c > 99 ? '99+' : String(c)) : null));
@@ -44,6 +44,11 @@ const App = {
   },
 };
 const VIEWS = {};
+const art = (key, cls = '', alt = '') => DATA.images?.[key] ? h('img' + cls, { src: DATA.images[key], alt, loading: 'lazy', decoding: 'async' }) : null;
+function banner(key, eyebrow, title, text, extra) {
+  const im = art(key, '.banner-img');
+  return h('section.banner' + (im ? '' : '.plain'), im, h('div.banner-body', h('div.eyebrow', eyebrow), h('h1', title), text ? h('p', text) : null, extra || null));
+}
 
 // ─── Generative scenery (story covers, hero) ──────────────────────────────
 function seeded(seed) { let s = 0; for (const c of String(seed)) s = (s * 31 + c.charCodeAt(0)) >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
@@ -150,7 +155,7 @@ VIEWS.home = () => {
         nxt ? h('button.btn' + (due ? '.light' : '.primary'), { onclick: () => App.go('lesson', { id: nxt.id }) }, icon('learn'), due ? 'New lesson' : `Start: ${nxt.title}`) : null)),
     ring);
   const hs = sceneEl('home', { w: 1100, h: 300, palette: [2, 0, 1, 1, 5, 0, 2][Math.floor(hour / 3.5) % 7], noTorii: false }); hs.className = 'scene'; hs.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:.28;mix-blend-mode:luminosity';
-  hero.prepend(hs);
+  const heroArt = art('hero', '.scene'); if (heroArt) { heroArt.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:.42'; hero.prepend(heroArt); } else hero.prepend(hs);
 
   const learned = Object.keys(S.cards).length;
   const vocabN = Object.keys(S.cards).filter(k => k[0] === 'v').length, kanjiN = Object.keys(S.cards).filter(k => k[0] === 'j').length, kanaN = Object.keys(S.cards).filter(k => k[0] === 'h' || k[0] === 'k').length;
@@ -167,7 +172,7 @@ VIEWS.home = () => {
     h('div.teach-glyph.word.gridpaper', { style: { minWidth: '160px' } }, h('span', { html: ruby(wotd.w, wotd.r) })),
     h('div.stack', h('div.eyebrow', '今日の言葉 · Word of the day'), h('div.row', h('h2', wotd.m), speakBtn(wotd.r)),
       S.settings.romaji ? h('div.muted', kanaToRomaji(wotd.r)) : null,
-      wotd.ex ? h('div.example', h('div.row.between', h('span.jp', wotd.ex), speakBtn(wotd.exr || wotd.ex, 'Play sentence')), h('span.muted.small', wotd.exm)) : null,
+      wotd.ex ? h('div.example', h('div.row.between', h('span.jp', wotd.ex), speakBtn(wotd.ex, 'Play sentence', wotd.exr)), h('span.muted.small', wotd.exm)) : null,
       h('div.row', h('button.btn.sm', { onclick: () => { addCardsFromKeys(['v:' + wotd.id]); toast('Added to your reviews'); App.render(); }, disabled: S.cards['v:' + wotd.id] ? true : null }, icon('plus'), S.cards['v:' + wotd.id] ? 'In your reviews' : 'Add to reviews'))));
 
   // continue tracks
@@ -206,7 +211,7 @@ VIEWS.learn = (p) => {
     kanji: ['Kanji', 'N5 then N4 kanji with animated stroke order, readings, example words and a memory trick for each.'],
     grammar: ['Grammar', 'From です to the passive. Short explanations, patterns, examples you can hear, and a quick check for each point.'],
   }[track];
-  const head = h('div.track-head', h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', 'Learn'), h('h1', intro[0]), h('p.muted', { style: { maxWidth: '60ch' } }, intro[1])), tabs);
+  const head = h('div.stack', banner('tr-' + track, 'Learn', intro[0], intro[1]), tabs);
   if (track === 'grammar') return h('div', head, grammarList());
   const list = LESSONS.filter(l => l.track === track);
   const groups = {};
@@ -220,8 +225,9 @@ VIEWS.learn = (p) => {
 };
 function lessonTile(l) {
   const done = S.lessons[l.id], prog = lessonProgress(l);
-  return h('button.lesson', { onclick: () => App.go('lesson', { id: l.id }) },
-    done ? h('span.hanko.round.done', '済') : null,
+  const thumb = l.cat ? art('cat-' + l.cat, '.thumb') : null;
+  return h('button.lesson' + (thumb ? '.has-thumb' : ''), { onclick: () => App.go('lesson', { id: l.id }) },
+    thumb, done ? h('span.hanko.round.done', '済') : null,
     h('div.t', l.title), h('div.s', l.sub),
     h('div.bar' + (prog >= 1 ? '.ok' : ''), h('i', { style: { width: `${prog * 100}%` } })));
 }
@@ -253,7 +259,7 @@ function teachCard(key) {
       h('div.stack',
         h('div.row', h('h2', { style: { fontSize: '1.5rem' } }, it.m), speakBtn(it.r)),
         h('dl.kv', h('dt', 'Reading'), h('dd.jp', it.r), S.settings.romaji ? [h('dt', 'Romaji'), h('dd', kanaToRomaji(it.r))] : null, h('dt', 'Type'), h('dd', POS_NAME[it.pos] || it.pos), h('dt', 'Level'), h('dd', `JLPT N${it.lv}`)),
-        it.ex ? h('div.example', h('div.row.between', h('span.jp', it.ex), speakBtn(it.exr || it.ex, 'Play sentence')), h('span.muted.small', it.exm)) : null,
+        it.ex ? h('div.example', h('div.row.between', h('span.jp', it.ex), speakBtn(it.ex, 'Play sentence', it.exr)), h('span.muted.small', it.exm)) : null,
         kanjiIn(it.w).length ? h('div.row.small.muted', 'Kanji: ', kanjiIn(it.w).map(k => h('button.chip', { onclick: () => openKanji(k.k) }, `${k.k} ${shortM(k.m)}`))) : null)));
     setTimeout(() => Voice.say(it.r), 250);
   } else {
@@ -273,6 +279,7 @@ const kanjiIn = w => [...new Set(w)].map(c => KANJI_BY[c]).filter(Boolean);
 VIEWS.lesson = ({ id }) => {
   const l = LESSON_BY[id]; if (!l) return VIEWS.learn({});
   const keys = l.keys; let i = 0;
+  Clips.load().then(() => Clips.prefetch(keys.map(k => { const it = item(k); return it.type === 'kana' ? it.ch : it.type === 'vocab' ? it.r : (it.ex?.[0] || [])[1]; })));
   const wrap = h('div.study');
   const bar = h('i', { style: { width: '0%' } });
   const top = h('div.study-top', h('button.icon-btn', { 'aria-label': 'Leave lesson', onclick: () => App.go('learn', { track: l.track }) }, icon('x')), h('div.bar', bar), h('span.muted.small', { style: { fontVariantNumeric: 'tabular-nums' } }, ''));

@@ -81,21 +81,26 @@ const SCENARIOS = [
 VIEWS.sensei = (p) => {
   const tab = p.tab || 'talk';
   const tabs = h('div.tabs', [['talk', 'Conversation'], ['story', 'Story writer'], ['ask', 'Ask anything']].map(([id, l]) => h('button', { 'aria-selected': tab === id ? 'true' : 'false', onclick: () => App.go('sensei', { tab: id }) }, l)));
-  const head = h('div.track-head', h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '先生 · Sensei'), h('h1', 'Practise with Sensei'), h('p.muted', { style: { maxWidth: '62ch' } }, 'Sensei is Claude, set up as your Japanese tutor. It adapts to what you have learned in Michi, corrects your sentences and suggests what to say next.')), tabs);
+  const head = h('div.stack', h('div.sensei-head', art('sensei', '.avatar-lg', 'Sensei'), h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '先生 · Sensei'), h('h1', 'Practise with Sensei'), h('p.muted', { style: { maxWidth: '62ch' } }, 'Sensei is Claude, set up as your Japanese tutor. It adapts to what you have learned in Michi, corrects your sentences (including speech style: casual vs polite) and suggests what to say next.'))), tabs);
   if (!Sensei.available) return h('div', head, h('section.card.pad-lg.empty.stack', { style: { justifyItems: 'center' } }, h('span.hanko', '先'), h('h3', 'Sensei is waking up…'), h('p.muted', { style: { maxWidth: '52ch' } }, 'Sensei runs on your Claude account and only works while Michi is open in Claude. If this message stays, AI features are not available in this view. Lessons, reviews, writing and reading all work without it.')));
   if (tab === 'story') return h('div', head, storyWriter());
   if (tab === 'ask') return h('div', head, askAnything());
-  return h('div', head, p.scenario ? chatView(SCENARIOS.find(s => s.id === p.scenario) || SCENARIOS[0]) : h('div.grid.g4', SCENARIOS.map(sc => h('button.scenario', { onclick: () => App.go('sensei', { tab: 'talk', scenario: sc.id }) }, h('div.jp', sc.jp), h('div.muted.small', sc.en)))));
+  return h('div', head, p.scenario ? chatView(SCENARIOS.find(s => s.id === p.scenario) || SCENARIOS[0]) : h('div.grid.g4', SCENARIOS.map(sc => h('button.scenario.scene-card', { onclick: () => App.go('sensei', { tab: 'talk', scenario: sc.id }) }, art('sc-' + sc.id, '.scene-img'), h('div.scene-meta', h('div.jp', sc.jp), h('div.muted.small', sc.en))))));
 };
 function chatView(sc) {
   const turns = []; // {role, content} for Claude; plus display data
   const msgs = h('div.msgs', { 'aria-live': 'polite' });
   let showKana = S.settings.furigana !== 'never', ctl = null;
+  // Service scenes are always polite (that's how Japan works); free talk and introductions can switch.
+  let reg = sc.id === 'weekend' ? 'casual' : ['free', 'intro'].includes(sc.id) ? (S.settings.senseiReg || 'polite') : 'polite';
   const prof = Sensei.learnerProfile();
-  const RULES = `You are role-playing as ${sc.role} to help an English-speaking learner practise Japanese. The learner is a ${prof.level}. Words they have studied include: ${prof.known.slice(0, 80).join('、') || '(mostly kana so far)'}. Kanji they know: ${prof.kanjiKnown || 'none yet'}.
+  const regRule = () => reg === 'casual' ? 'This is a casual relationship (friends/peers). Speak natural casual Japanese: plain forms, contractions like 〜てる/〜ちゃう, sentence-final よ/ね/じゃん where natural, dropped particles as friends do. The learner should also speak casually.' : sc.id === 'free' ? 'Speak polite です/ます Japanese as a friendly teacher would.' : 'Speak the way this role really speaks in Japan: staff and service workers use polite speech and set keigo phrases (いらっしゃいませ, かしこまりました, 〜でございます, 少々お待ちください); strangers and doctors use です/ます. The learner should use です/ます.';
+  const rulesFor = () => `You are role-playing as ${sc.role} to help an English-speaking learner practise Japanese. The learner is a ${prof.level}. Words they have studied include: ${prof.known.slice(0, 80).join('、') || '(mostly kana so far)'}. Kanji they know: ${prof.kanjiKnown || 'none yet'}.
 Rules:
 - Stay in character and keep the conversation moving with ONE short reply (1–2 sentences) that ends with something the learner can respond to.
-- Use Japanese the learner can handle: ${prof.vocab < 80 ? 'very simple words, です/ます, mostly hiragana' : 'N5–N4 grammar and vocabulary'}.${sc.id === 'weekend' ? ' Use casual plain-form speech.' : ''}
+- Use Japanese the learner can handle: ${prof.vocab < 80 ? 'very simple words, mostly hiragana' : 'N5–N4 grammar and vocabulary'}.
+- SPEECH STYLE: ${regRule()}
+- Register mistakes count as mistakes: if the learner is too casual for the situation (plain form or 〜てる/じゃん to a clerk, doctor or stranger) or oddly stiff with a close friend, put the natural version in "fix" and say who talks that way.${window.REGISTER_SCENARIO_HINT ? '\n- ' + window.REGISTER_SCENARIO_HINT : ''}
 - If the learner writes in English or mixes English, gently give them the Japanese way to say it in "fix".
 - If the learner's Japanese has a mistake (particle, conjugation, word choice, politeness), set "fix" with the corrected sentence and a one-sentence English reason. If it is natural and correct, set "fix" to null.
 Reply ONLY with a JSON object: {"jp": "your reply in natural Japanese (kanji allowed only if common)", "kana": "the same reply written entirely in hiragana/katakana", "en": "English translation of your reply", "fix": null or {"better": "corrected Japanese", "why": "short English reason"}, "hints": ["2 or 3 short Japanese replies the learner could say next"], "hints_en": ["their English meanings"]}`;
@@ -104,6 +109,7 @@ Reply ONLY with a JSON object: {"jp": "your reply in natural Japanese (kanji all
     const kana = h('div.muted.jp', { hidden: !showKana || r.kana === r.jp }, r.kana);
     const en = h('div.en', { hidden: true }, r.en);
     const b = h('div.msg.ai',
+      art('sensei', '.avatar'),
       h('div.row.between', { style: { flexWrap: 'nowrap', alignItems: 'flex-start' } }, h('div.jp', r.jp), speakBtn(r.kana || r.jp)),
       kana, en,
       h('div.row', { style: { gap: '6px' } }, h('button.btn.sm.ghost', { onclick: () => { en.hidden = !en.hidden; } }, 'Translate'), h('button.btn.sm.ghost', { onclick: () => explainText(r.jp, r.en) }, icon('sparkle'), 'Break down')));
@@ -122,7 +128,7 @@ Reply ONLY with a JSON object: {"jp": "your reply in natural Japanese (kanji all
     sendBtn.disabled = true; ctl = new AbortController();
     try {
       const recent = turns.slice(-16);
-      const input = [{ role: 'user', content: RULES }, { role: 'assistant', content: JSON.stringify({ jp: sc.open, kana: sc.open, en: '', fix: null, hints: [], hints_en: [] }) }, ...recent];
+      const input = [{ role: 'user', content: rulesFor() }, { role: 'assistant', content: JSON.stringify({ jp: sc.open, kana: sc.open, en: '', fix: null, hints: [], hints_en: [] }) }, ...recent];
       if (input[2]?.role === 'assistant') input.splice(2, 1);
       const r = await Sensei.fn.json(input, { signal: ctl.signal, cache: false, modelTier: 'default' });
       typing.remove();
@@ -140,7 +146,7 @@ Reply ONLY with a JSON object: {"jp": "your reply in natural Japanese (kanji all
   App.cleanup = () => ctl?.abort();
   setTimeout(() => { Voice.say(sc.open); input.focus(); }, 300);
   return h('section.card.pad-lg.chat',
-    h('div.row.between', h('div', h('div.jp', { style: { fontSize: '1.3rem', fontWeight: 600 } }, sc.jp), h('div.muted.small', sc.en)), h('button.btn.sm', { onclick: () => App.go('sensei', { tab: 'talk' }) }, 'Change scene')),
+    h('div.chat-head', art('sc-' + sc.id, '.chat-scene'), h('div.row.between', h('div', h('div.jp', { style: { fontSize: '1.3rem', fontWeight: 600 } }, sc.jp), h('div.muted.small', sc.en)), h('div.row', { style: { gap: '8px' } }, !['free', 'intro'].includes(sc.id) ? h('span.chip' + (reg === 'casual' ? '.learning' : '.new'), reg === 'casual' ? 'casual · タメ口' : 'polite · 丁寧語') : h('div.tabs', { title: 'Speech style' }, [['polite', 'Polite です/ます'], ['casual', 'Casual タメ口']].map(([v, l]) => h('button', { 'aria-selected': reg === v ? 'true' : 'false', onclick: e => { reg = v; S.settings.senseiReg = v; save(); e.currentTarget.parentElement.querySelectorAll('button').forEach(b => b.setAttribute('aria-selected', b === e.currentTarget ? 'true' : 'false')); toast(v === 'casual' ? 'Sensei will talk like a friend' : 'Sensei will speak politely'); } }, l))), h('button.btn.sm', { onclick: () => App.go('sensei', { tab: 'talk' }) }, 'Change scene')))),
     msgs, h('div.stack', { style: { gap: '8px' } }, h('div.eyebrow', 'You could say'), suggest), form);
 }
 function storyWriter() {

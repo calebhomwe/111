@@ -284,6 +284,43 @@ input:focus, select:focus, textarea:focus { border-color: var(--ai); outline: no
 .result-hero { text-align: center; display: grid; gap: 14px; justify-items: center; padding: 12px 0; }
 .result-hero .hanko { width: 96px; height: 96px; font-size: 2.6rem; border-width: 4px; }
 
+
+/* Illustrated surfaces */
+.banner { position: relative; border-radius: 18px; overflow: hidden; min-height: 190px; display: grid; align-items: end; background: var(--hero); color: #fff; isolation: isolate; }
+.banner-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.banner::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(12 20 38 / .82) 0%, rgb(12 20 38 / .55) 45%, rgb(12 20 38 / .05) 100%); }
+.banner-body { padding: clamp(18px, 3vw, 28px); display: grid; gap: 6px; max-width: 640px; }
+.banner-body .eyebrow { color: rgb(255 255 255 / .78); }
+.banner-body h1 { color: #fff; }
+.banner-body p { color: rgb(255 255 255 / .86); }
+.banner.plain { min-height: 0; }
+.lesson.has-thumb { grid-template-columns: 64px minmax(0, 1fr); column-gap: 12px; align-items: center; }
+.lesson.has-thumb .thumb { grid-row: 1 / span 3; width: 64px; height: 64px; border-radius: 10px; object-fit: cover; }
+.lesson.has-thumb .bar { grid-column: 2; }
+.sensei-head { display: flex; gap: 18px; align-items: center; }
+.avatar-lg { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; border: 3px solid var(--paper); box-shadow: var(--shadow); flex: none; }
+.msg.ai { position: relative; margin-left: 44px; }
+.msg.ai .avatar { position: absolute; left: -44px; top: 0; width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
+.scene-card { padding: 0; overflow: hidden; gap: 0; }
+.scene-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+.scene-meta { padding: 12px 14px; display: grid; gap: 2px; }
+.chat-head { display: grid; gap: 12px; }
+.chat-scene { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; }
+.hero img.scene { position: absolute; inset: 0; z-index: -1; }
+.welcome { min-height: 300px; grid-template-columns: minmax(0, 1fr); align-items: end; }
+.welcome img.scene { width: 100%; height: 100%; object-fit: cover; }
+.welcome::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgb(12 20 38 / .8), rgb(12 20 38 / .1)); }
+.start-opt { gap: 10px; padding: 20px; }
+.start-opt .hanko { width: 50px; height: 50px; font-size: 1.4rem; }
+@media (max-width: 560px) { .sensei-head .avatar-lg { width: 64px; height: 64px; } .msg.ai { margin-left: 0; } .msg.ai .avatar { display: none; } }
+.passage { font-size: 1.35rem; line-height: 2; padding: 16px 18px; border-radius: 12px; background: var(--paper-2); border-left: 4px solid var(--ai); white-space: pre-line; }
+.skill-q .q { text-align: left; }
+.scene-line { display: flex; gap: 12px; align-items: center; font-weight: 700; }
+.cando { display: grid; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.profile { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; align-items: center; }
+.radar text { font-size: 12px; font-weight: 700; }
+.profile-list { display: grid; gap: 6px; }
+@media (max-width: 560px) { .profile { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 760px) { .gram-grid { grid-template-columns: minmax(0, 1fr) !important; } }
 @media (max-width: 900px) {
   .app { grid-template-columns: minmax(0, 1fr); }

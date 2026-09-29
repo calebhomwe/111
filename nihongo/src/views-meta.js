@@ -45,6 +45,7 @@ VIEWS.stats = () => {
   return h('div',
     h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '進歩 · Progress'), h('h1', 'Your progress')),
     h('section.stat-tiles', h('div.tile', h('b', `Lv ${lv.level}`), h('span', `${S.xp.toLocaleString()} XP total`)), h('div.tile', h('b', String(streak())), h('span', 'day streak')), h('div.tile', h('b', ret == null ? '—' : ret + '%'), h('span', 'first-try accuracy, 30 days')), h('div.tile', h('b', String(cards.length)), h('span', 'cards in rotation'))),
+    S.placement?.profile ? h('section.card.stack', h('div.row.between', h('h3', 'Skill profile'), h('button.btn.sm', { onclick: () => App.go('placement') }, 'Retake test')), h('p.muted.small', `From your placement test on ${new Date(S.placement.at).toLocaleDateString()}. Scale: kana · early N5 · solid N5 · N4.`), skillProfileCard(S.placement.profile)) : h('section.card.row.between', h('div', h('h3', 'Find your level'), h('p.muted.small', 'Take the placement test to get a reading, listening, speaking and writing profile.')), h('button.btn.sm.primary', { onclick: () => App.go('placement') }, 'Take the test')),
     h('div.grid.g2', h('section.card.stack', h('h3', 'Reviews due, next 14 days'), h('div', { html: chart })), h('section.card.stack', h('h3', 'XP per day'), h('div', { html: line }))),
     h('section.card.stack', h('h3', 'Coverage'), h('div.legend', h('span', h('i', { style: { background: 'var(--ai)', opacity: .45 } }), 'learned'), h('span', h('i', { style: { background: 'var(--ok)' } }), 'mature (3-week+ interval)')),
       trackRow('Hiragana', HIRA.map(c => 'h:' + c)), trackRow('Katakana', KATA.map(c => 'k:' + c)),
@@ -105,10 +106,12 @@ VIEWS.settings = () => {
       row('Furigana', 'Readings above kanji. “Auto” hides them once you know a word well.', h('select#furi', { onchange: e => set('furigana', e.target.value) }, [['auto', 'Auto'], ['always', 'Always'], ['never', 'Never']].map(([v, l]) => h('option', { value: v, selected: st.furigana === v ? true : null }, l)))),
       row('Sound effects', null, toggle('sound', 'sound')),
       row('Japanese voice', Voice.ok ? `${Voice.voices.length} Japanese voice${Voice.voices.length === 1 ? '' : 's'} on this device` : 'This browser has no speech voices', voiceSel),
-      row('Speaking speed', null, rate),
+      row('Speaking speed', 'Browser voice speed, used where no recording exists.', rate),
+      row('Recording speed', Clips.index ? `${Object.keys(Clips.index.clips).length.toLocaleString()} native recordings available. Right-click (long-press) any speaker for slow playback.` : 'Native recordings load with the page.', h('select#clipRate', { onchange: e => { set('clipRate', +e.target.value); Voice.say('ありがとうございます'); } }, [[0.8, 'Slower'], [0.9, 'Slightly slower'], [1, 'Natural'], [1.1, 'Faster']].map(([v, l]) => h('option', { value: v, selected: (st.clipRate || 1) === v ? true : null }, l)))),
       row('Theme', null, h('select#theme', { onchange: e => { set('theme', e.target.value); applyTheme(); } }, [['system', 'Match system'], ['light', 'Light'], ['dark', 'Dark']].map(([v, l]) => h('option', { value: v, selected: st.theme === v ? true : null }, l))))),
     h('section.card.pad-lg.stack', h('h3', 'Your data'), h('p.muted', Cloud.ref ? 'Progress is saved to your Claude account, so it follows you to any device where you open Michi. A copy is also kept in this browser.' : 'Progress is saved in this browser. Export a backup to move it to another device.'),
       h('div.row', exportBtn, h('button.btn.sm', { onclick: () => importInp.click() }, 'Import backup'), importInp, reset)),
+    h('section.card.pad-lg.row.between', h('div', h('h3', 'Placement test'), h('p.muted.small', S.placement?.level && !S.placement.skipped ? `Last placed: ${S.placement.level.toUpperCase()} · ${new Date(S.placement.at).toLocaleDateString()}` : 'Find your level and skip what you already know.')), h('button.btn.sm', { onclick: () => App.go('placement') }, 'Take the test')),
     h('section.card.pad-lg.stack', h('h3', 'Keyboard'), h('p.muted.small', { html: '<span class="kbd">1</span>–<span class="kbd">4</span> pick an answer · <span class="kbd">Enter</span> check / continue · <span class="kbd">Space</span> replay audio' })),
     h('section.card.pad-lg.stack', h('h3', 'Credits'), h('p.muted.small', { html: 'Stroke order data from <a href="https://kanjivg.tagaini.net" target="_blank" rel="noopener">KanjiVG</a> by Ulrich Apel, CC BY-SA 3.0. Scheduling uses the open FSRS-4.5 algorithm. Romaji input by <a href="https://wanakana.com" target="_blank" rel="noopener">WanaKana</a>.' })));
 };
@@ -116,10 +119,11 @@ function applyTheme() { const t = S.settings.theme; if (t === 'light' || t === '
 
 // ─── Boot ──────────────────────────────────────────────────────────────────
 function boot() {
-  applyTheme(); Voice.init();
+  applyTheme(); Voice.init(); Clips.load();
   const start = (hot = {}) => {
     const r = (location.hash || '').slice(1);
-    const route = hot.route || (VIEWS[r] && !['session', 'lesson', 'story', 'grammar'].includes(r) ? r : 'home');
+    const fresh = !S.placement && !Object.keys(S.cards).length && !S.xp;
+    const route = hot.route || (fresh ? 'welcome' : VIEWS[r] && !['session', 'lesson', 'story', 'grammar', 'placement'].includes(r) ? r : 'home');
     App.go(route, hot.params || {}, false);
     initCloud();
     checkAchievements();
