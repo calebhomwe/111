@@ -118,6 +118,7 @@ NOTES = {
     's5': 'All station notice boards, timetables and signs are blank.',
     's6': 'The food stalls have plain solid-colour awnings only: no hanging paper signs, menus, flags or banners anywhere.',
     's7': 'Shop signs are blank plain boards.',
+    's12': 'The miso tub, jars and packets are plain and unlabelled.',
     's13': 'No signs, seat numbers or display screens with writing.',
     's15': 'The police box signboard and the station signs are completely blank.',
     's17': 'The noren curtain, menu boards and wall tags are plain with no writing.',
