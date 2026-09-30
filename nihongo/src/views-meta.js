@@ -93,8 +93,17 @@ VIEWS.settings = () => {
   const voiceSel = h('select#voice', { onchange: e => { set('voice', e.target.value); Voice.init(); Voice.say('こんにちは、よろしくおねがいします。'); } }, h('option', { value: '' }, 'Best available'), Voice.voices.map(v => h('option', { value: v.name, selected: st.voice === v.name ? true : null }, v.name)));
   const rate = h('input#rate', { type: 'range', min: '0.6', max: '1.2', step: '0.05', value: String(st.rate), oninput: e => set('rate', +e.target.value), onchange: () => Voice.say('ゆっくり はなして ください。') });
   const importInp = h('input#importFile', { type: 'file', accept: 'application/json,.json', hidden: true, onchange: async e => {
-    const f = e.target.files[0]; if (!f) return;
-    try { const data = JSON.parse(await f.text()); if (!isObj(data) || !isObj(data.cards) || !isObj(data.settings)) throw 0; S = sanitize(data); S.updated = now(); save(); toast('Progress imported'); App.render(); } catch (err) { toast('That file is not a Michi backup', 'bad'); }
+    const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+    let data; try { data = JSON.parse(await f.text()); if (!isObj(data) || !isObj(data.cards) || !isObj(data.settings)) throw 0; data = sanitize(data); } catch (err) { toast('That file is not a Michi backup', 'bad'); return; }
+    const cur = { cards: Object.keys(S.cards).length, xp: S.xp }, inc = { cards: Object.keys(data.cards).length, xp: data.xp };
+    const older = data.updated && S.updated && data.updated < S.updated;
+    let close = () => {};
+    const dlg = h('div.modal', { role: 'dialog', 'aria-label': 'Import backup' },
+      h('h2', 'Replace your progress with this backup?'),
+      h('div.grid.g2', h('div.card.stack', h('div.eyebrow', 'Now'), h('b', `${cur.cards} cards`), h('span.muted', `${cur.xp.toLocaleString()} XP`)), h('div.card.stack', h('div.eyebrow', 'Backup'), h('b', `${inc.cards} cards`), h('span.muted', `${inc.xp.toLocaleString()} XP${data.updated ? ' · saved ' + new Date(data.updated).toLocaleDateString() : ''}`))),
+      older || inc.cards < cur.cards ? h('div.feedback.no', 'This backup is older or smaller than what you have now. Replacing will lose the difference (a copy of your current progress is kept on this device).') : null,
+      h('div.row', { style: { justifyContent: 'flex-end' } }, h('button.btn', { onclick: () => close() }, 'Cancel'), h('button.btn.primary', { onclick: () => { try { localStorage.setItem(LS_KEY + '.bak', JSON.stringify(S)); } catch (x) {} S = data; S.updated = now(); save(); applyTheme(); close(); toast('Progress imported'); App.render(); } }, 'Replace')));
+    close = openModal(dlg);
   } });
   let armed = false;
   const reset = h('button.btn.sm', { style: { color: 'var(--bad)' }, onclick: () => { if (!armed) { armed = true; reset.textContent = 'Tap again to erase everything'; setTimeout(() => { armed = false; reset.textContent = 'Reset progress'; }, 4000); return; } S = DEFAULT_STATE(); save(); toast('Progress reset'); App.go('welcome'); } }, 'Reset progress');

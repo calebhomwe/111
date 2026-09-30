@@ -159,9 +159,10 @@ VIEWS.home = () => {
     h('div.stack', { style: { gap: '14px' } },
       h('div', h('div.eyebrow', { style: { color: 'rgb(255 255 255 / .75)' } }, greetEn), h('h1.jp', { style: { fontFamily: 'var(--f-jp-hand)', fontWeight: 600 } }, greet)),
       t.new >= S.settings.newPerDay ? h('p', { style: { fontWeight: 700 } }, `You've added ${t.new} new items today (your limit is ${S.settings.newPerDay}). More now means a heavier review pile tomorrow.`) : null,
+      due > 45 ? h('p', { style: { fontWeight: 700 } }, 'Your review pile is getting big. Clear some reviews before learning anything new; it keeps tomorrow light.') : null,
       h('p', due ? `${due} card${due === 1 ? '' : 's'} ready for review. Clear them first while they're fresh, then learn something new.` : nxt ? `Nothing to review right now. Next up: ${nxt.title}.` : 'You have finished every lesson. Keep your reviews going and read a story.'),
       h('div.row', due ? h('button.btn.primary', { onclick: () => startReview() }, icon('review'), `Review ${due}`) : null,
-        nxt ? h('button.btn' + (due ? '.light' : '.primary'), { onclick: () => App.go('lesson', { id: nxt.id }) }, icon('learn'), due ? 'New lesson' : `Start: ${nxt.title}`) : null)),
+        nxt && !(due > 45 || t.new >= S.settings.newPerDay * 2) ? h('button.btn' + (due ? '.light' : '.primary'), { onclick: () => App.go('lesson', { id: nxt.id }) }, icon('learn'), due ? 'New lesson' : `Start: ${nxt.title}`) : null)),
     ring);
   const hs = sceneEl('home', { w: 1100, h: 300, palette: [2, 0, 1, 1, 5, 0, 2][Math.floor(hour / 3.5) % 7], noTorii: false }); hs.className = 'scene'; hs.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:.28;mix-blend-mode:luminosity';
   const heroArt = art('hero', '.scene'); if (heroArt) { heroArt.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:.42'; hero.prepend(heroArt); } else hero.prepend(hs);
@@ -200,11 +201,11 @@ VIEWS.home = () => {
   return h('div', fun[0] || null, hero, fun[1] || null, tiles, wotdCard, h('section.grid.g3', tracks), extra, heatmapCard());
 };
 function heatmapCard() {
-  const weeks = 20, cells = [], start = new Date(); start.setHours(12, 0, 0, 0); start.setDate(start.getDate() - (weeks * 7 - 1) - start.getDay());
+  const weeks = 20, cells = [], start = new Date(); start.setHours(12, 0, 0, 0); start.setDate(start.getDate() - start.getDay() - (weeks - 1) * 7);
   for (let i = 0; i < weeks * 7; i++) {
     const d = new Date(start.getTime() + i * DAY); const k = dayKey(d.getTime()); const xp = S.days[k]?.xp || 0;
     const l = xp === 0 ? 0 : xp < 20 ? 1 : xp < 50 ? 2 : xp < 100 ? 3 : 4;
-    cells.push(h('i', { 'data-l': l, title: `${k}: ${xp} XP` }));
+    cells.push(h('i', { 'data-l': l, title: `${k}: ${xp} XP`, style: d.getTime() > now() + DAY / 2 ? { opacity: '.35' } : null }));
   }
   const total = Object.values(S.days).reduce((a, d) => a + (d.rev || 0), 0);
   return h('section.card.stack', h('div.row.between', h('h3', 'Study calendar'), h('span.muted.small', `${total.toLocaleString()} reviews all time`)), h('div.heat', cells));
@@ -321,7 +322,7 @@ VIEWS.lesson = ({ id }) => {
         S.lessons[id] = { done: now(), best: Math.max(was?.best || 0, res.pct) };
         addXP((was ? 5 : 20) + added * 3);
         save(); petals(); Sfx.done(); bar.style.width = '100%';
-        const nx = nextLesson(l.track);
+        const li = LESSONS.indexOf(l), nx = LESSONS.slice(li + 1).find(x => x.track === l.track && !S.lessons[x.id]) || nextLesson(l.track);
         stage.replaceChildren(h('div.qcard', h('div.result-hero',
           h('span.hanko.stamp', '合格'), h('h2', 'Lesson complete'),
           h('p.muted', `${Math.round(res.pct * 100)}% on the first try · ${added} new item${added === 1 ? '' : 's'} added to your reviews`),
@@ -335,7 +336,7 @@ VIEWS.lesson = ({ id }) => {
     });
   };
   showTeach();
-  const onKey = e => { if (e.key === 'Enter' && document.activeElement?.tagName !== 'INPUT') { const b = stage.querySelector('.btn.primary'); if (b) { e.preventDefault(); b.click(); } } };
+  const onKey = e => { if (e.key === 'Enter' && document.activeElement?.tagName !== 'INPUT') { const b = stage.querySelector('.teach') ? stage.querySelector('.btn.primary') : null; if (b) { e.preventDefault(); b.click(); } } };
   document.addEventListener('keydown', onKey); App.cleanup = () => document.removeEventListener('keydown', onKey);
   return wrap;
 };
@@ -347,7 +348,7 @@ VIEWS.review = () => {
   for (const k of all) { const s = cardStage(S.cards[k]); if (byStage[s] != null) byStage[s]++; }
   const soon = all.filter(k => S.cards[k].due > now() && S.cards[k].due < now() + DAY).length;
   const nextDue = all.map(k => S.cards[k].due).filter(d => d > now()).sort((a, b) => a - b)[0];
-  const weak = all.filter(k => S.cards[k].lapses >= 2).sort((a, b) => S.cards[b].lapses - S.cards[a].lapses);
+  const weak = all.filter(k => S.cards[k].lapses >= 2 && S.cards[k].s < 21).sort((a, b) => S.cards[b].lapses - S.cards[a].lapses);
   return h('div',
     h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', 'Spaced repetition · FSRS'), h('h1', 'Reviews')),
     h('section.card.pad-lg.row.between',
@@ -370,7 +371,7 @@ VIEWS.session = ({ keys, cram }) => {
   const stage = h('div');
   wrap.append(h('div.study-top', h('button.icon-btn', { 'aria-label': 'End review', onclick: () => App.go('review') }, icon('x')), h('div.bar', bar), count), stage);
   runSession({
-    host: stage, keys, review: !cram,
+    host: stage, keys, review: !cram, cram,
     progress: (d, n, combo) => { bar.style.width = `${d / n * 100}%`; window.Fun?.combo ? Fun.combo(count, combo, `${d}/${n}`) : (count.textContent = combo >= 3 ? `${combo} combo` : `${d}/${n}`); },
     done: res => {
       Sfx.done(); if (res.pct >= 0.9) petals(18);
@@ -386,7 +387,7 @@ VIEWS.session = ({ keys, cram }) => {
 };
 
 // Shared quiz runner. First attempt per key is graded; misses are re-queued.
-function runSession({ host, keys, review = false, lesson = false, progress, done }) {
+function runSession({ host, keys, review = false, lesson = false, cram = false, progress, done }) {
   // Every original entry in `keys` is one scored question (lessons list each item twice: recognition, then recall).
   // A miss re-queues the item as an unscored retry. An item counts as "first try" only if none of its scored questions was missed.
   const queue = keys.map(key => ({ key, scored: true })); const total = queue.length;
@@ -424,7 +425,7 @@ function runSession({ host, keys, review = false, lesson = false, progress, done
           const g = !ok ? 1 : dt > (typed ? 14 : 9) ? 2 : (typed && dt < 4 && S.cards[key]?.s > 5) ? 4 : 3;
           S.cards[key] = FSRS.review(S.cards[key], g); today().rev++; if (ok) today().ok = (today().ok || 0) + 1;
         }
-        const gain = ok ? (lesson ? 1 : 2) + (combo > 0 && combo % 10 === 0 ? 5 : 0) : 0; xp += gain; if (gain) { addXP(gain); window.Fun?.floatXP?.(gain, host); } else save();
+        const gain = cram ? 0 : ok ? (lesson ? 1 : 2) + (combo > 0 && combo % 10 === 0 ? 5 : 0) : 0; xp += gain; if (gain) { addXP(gain); window.Fun?.floatXP?.(gain, host); } else save();
       } else if (!ok) combo = 0;
       if (!ok) { requeued = { key, scored: false }; queue.splice(Math.min(queue.length, 3 + rand(3)), 0, requeued); } // see it again soon
       progress && progress(doneN, total, combo);

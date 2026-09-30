@@ -274,7 +274,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--ai); }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
 .ach { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
 .ach .a { display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--paper); }
-.ach .a.off { opacity: .55; }
+.ach .a.off .hanko { opacity: .45; }
+.ach .a.off { opacity: 1; }
 
 /* Search */
 .results { display: grid; gap: 8px; }
@@ -952,7 +953,15 @@ function flushCloud() {
   });
   return Cloud.chain;
 }
-try { document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushCloud(); }); addEventListener('pagehide', flushCloud); } catch (e) {}
+try {
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushCloud(); });
+  addEventListener('pagehide', flushCloud);
+  // Another tab saved: merge its progress into ours so the next save from this tab can't erase it.
+  addEventListener('storage', e => {
+    if (e.key !== LS_KEY || !e.newValue) return;
+    try { if (mergeInto(S, sanitize(JSON.parse(e.newValue)))) { saveLocal(); if (window.App?.renderNav) App.renderNav(); pushCloud(); } } catch (err) {}
+  });
+} catch (e) {}
 function updateSyncBadge() {
   const b = $('#sync'); if (!b) return;
   const map = { local: ['This device', 'Progress is saved in this browser'], saving: ['Saving…', 'Saving to your account'], synced: ['Synced', 'Progress is saved to your Claude account'], error: ['Sync paused', 'Could not reach the store; saved on this device'] };
@@ -1244,6 +1253,7 @@ const LESSONS = (() => {
   for (const lv of [5, 4]) {
     const byCat = {};
     for (const v of VOCAB.filter(v => v.lv === lv)) (byCat[v.cat] = byCat[v.cat] || []).push(v);
+    for (const c of Object.keys(byCat)) if (c !== 'misc' && byCat[c].length < 4) { (byCat.misc = byCat.misc || []).push(...byCat[c]); delete byCat[c]; }
     const cats = Object.keys(byCat).sort((a, b) => (CAT_ORDER.indexOf(a) + 99) % 124 - (CAT_ORDER.indexOf(b) + 99) % 124);
     for (const cat of cats) {
       const list = byCat[cat]; const n = Math.ceil(list.length / 8);
@@ -1266,7 +1276,7 @@ function nextLesson(track) {
   if (track) return LESSONS.find(l => l.track === track && !S.lessons[l.id]);
   // Recommended path: hiragana first, then interleave katakana, vocabulary and kanji by relative progress.
   const hira = LESSONS.find(l => l.id.startsWith('kana-h') && !S.lessons[l.id]); if (hira) return hira;
-  const c = ['kana', 'vocab', 'kanji'].map(t => { const all = LESSONS.filter(l => l.track === t); const d = all.filter(l => S.lessons[l.id]).length; return { n: nextLesson(t), f: all.length ? d / all.length * (t === 'kanji' ? 1.5 : 1) : 1 }; }).filter(x => x.n);
+  const c = ['kana', 'vocab', 'kanji'].map(t => { const all = t === 'kana' ? LESSONS.filter(l => l.id.startsWith('kana-k')) : LESSONS.filter(l => l.track === t); const d = all.filter(l => S.lessons[l.id]).length; return { n: nextLesson(t), f: all.length ? d / all.length * (t === 'kanji' ? 1.5 : t === 'kana' ? 0.6 : 1) : 1 }; }).filter(x => x.n);
   c.sort((a, b) => a.f - b.f); return c[0]?.n;
 }
 
@@ -1650,9 +1660,10 @@ VIEWS.home = () => {
     h('div.stack', { style: { gap: '14px' } },
       h('div', h('div.eyebrow', { style: { color: 'rgb(255 255 255 / .75)' } }, greetEn), h('h1.jp', { style: { fontFamily: 'var(--f-jp-hand)', fontWeight: 600 } }, greet)),
       t.new >= S.settings.newPerDay ? h('p', { style: { fontWeight: 700 } }, `You've added ${t.new} new items today (your limit is ${S.settings.newPerDay}). More now means a heavier review pile tomorrow.`) : null,
+      due > 45 ? h('p', { style: { fontWeight: 700 } }, 'Your review pile is getting big. Clear some reviews before learning anything new; it keeps tomorrow light.') : null,
       h('p', due ? `${due} card${due === 1 ? '' : 's'} ready for review. Clear them first while they're fresh, then learn something new.` : nxt ? `Nothing to review right now. Next up: ${nxt.title}.` : 'You have finished every lesson. Keep your reviews going and read a story.'),
       h('div.row', due ? h('button.btn.primary', { onclick: () => startReview() }, icon('review'), `Review ${due}`) : null,
-        nxt ? h('button.btn' + (due ? '.light' : '.primary'), { onclick: () => App.go('lesson', { id: nxt.id }) }, icon('learn'), due ? 'New lesson' : `Start: ${nxt.title}`) : null)),
+        nxt && !(due > 45 || t.new >= S.settings.newPerDay * 2) ? h('button.btn' + (due ? '.light' : '.primary'), { onclick: () => App.go('lesson', { id: nxt.id }) }, icon('learn'), due ? 'New lesson' : `Start: ${nxt.title}`) : null)),
     ring);
   const hs = sceneEl('home', { w: 1100, h: 300, palette: [2, 0, 1, 1, 5, 0, 2][Math.floor(hour / 3.5) % 7], noTorii: false }); hs.className = 'scene'; hs.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:.28;mix-blend-mode:luminosity';
   const heroArt = art('hero', '.scene'); if (heroArt) { heroArt.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:.42'; hero.prepend(heroArt); } else hero.prepend(hs);
@@ -1691,11 +1702,11 @@ VIEWS.home = () => {
   return h('div', fun[0] || null, hero, fun[1] || null, tiles, wotdCard, h('section.grid.g3', tracks), extra, heatmapCard());
 };
 function heatmapCard() {
-  const weeks = 20, cells = [], start = new Date(); start.setHours(12, 0, 0, 0); start.setDate(start.getDate() - (weeks * 7 - 1) - start.getDay());
+  const weeks = 20, cells = [], start = new Date(); start.setHours(12, 0, 0, 0); start.setDate(start.getDate() - start.getDay() - (weeks - 1) * 7);
   for (let i = 0; i < weeks * 7; i++) {
     const d = new Date(start.getTime() + i * DAY); const k = dayKey(d.getTime()); const xp = S.days[k]?.xp || 0;
     const l = xp === 0 ? 0 : xp < 20 ? 1 : xp < 50 ? 2 : xp < 100 ? 3 : 4;
-    cells.push(h('i', { 'data-l': l, title: `${k}: ${xp} XP` }));
+    cells.push(h('i', { 'data-l': l, title: `${k}: ${xp} XP`, style: d.getTime() > now() + DAY / 2 ? { opacity: '.35' } : null }));
   }
   const total = Object.values(S.days).reduce((a, d) => a + (d.rev || 0), 0);
   return h('section.card.stack', h('div.row.between', h('h3', 'Study calendar'), h('span.muted.small', `${total.toLocaleString()} reviews all time`)), h('div.heat', cells));
@@ -1812,7 +1823,7 @@ VIEWS.lesson = ({ id }) => {
         S.lessons[id] = { done: now(), best: Math.max(was?.best || 0, res.pct) };
         addXP((was ? 5 : 20) + added * 3);
         save(); petals(); Sfx.done(); bar.style.width = '100%';
-        const nx = nextLesson(l.track);
+        const li = LESSONS.indexOf(l), nx = LESSONS.slice(li + 1).find(x => x.track === l.track && !S.lessons[x.id]) || nextLesson(l.track);
         stage.replaceChildren(h('div.qcard', h('div.result-hero',
           h('span.hanko.stamp', '合格'), h('h2', 'Lesson complete'),
           h('p.muted', `${Math.round(res.pct * 100)}% on the first try · ${added} new item${added === 1 ? '' : 's'} added to your reviews`),
@@ -1826,7 +1837,7 @@ VIEWS.lesson = ({ id }) => {
     });
   };
   showTeach();
-  const onKey = e => { if (e.key === 'Enter' && document.activeElement?.tagName !== 'INPUT') { const b = stage.querySelector('.btn.primary'); if (b) { e.preventDefault(); b.click(); } } };
+  const onKey = e => { if (e.key === 'Enter' && document.activeElement?.tagName !== 'INPUT') { const b = stage.querySelector('.teach') ? stage.querySelector('.btn.primary') : null; if (b) { e.preventDefault(); b.click(); } } };
   document.addEventListener('keydown', onKey); App.cleanup = () => document.removeEventListener('keydown', onKey);
   return wrap;
 };
@@ -1838,7 +1849,7 @@ VIEWS.review = () => {
   for (const k of all) { const s = cardStage(S.cards[k]); if (byStage[s] != null) byStage[s]++; }
   const soon = all.filter(k => S.cards[k].due > now() && S.cards[k].due < now() + DAY).length;
   const nextDue = all.map(k => S.cards[k].due).filter(d => d > now()).sort((a, b) => a - b)[0];
-  const weak = all.filter(k => S.cards[k].lapses >= 2).sort((a, b) => S.cards[b].lapses - S.cards[a].lapses);
+  const weak = all.filter(k => S.cards[k].lapses >= 2 && S.cards[k].s < 21).sort((a, b) => S.cards[b].lapses - S.cards[a].lapses);
   return h('div',
     h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', 'Spaced repetition · FSRS'), h('h1', 'Reviews')),
     h('section.card.pad-lg.row.between',
@@ -1861,7 +1872,7 @@ VIEWS.session = ({ keys, cram }) => {
   const stage = h('div');
   wrap.append(h('div.study-top', h('button.icon-btn', { 'aria-label': 'End review', onclick: () => App.go('review') }, icon('x')), h('div.bar', bar), count), stage);
   runSession({
-    host: stage, keys, review: !cram,
+    host: stage, keys, review: !cram, cram,
     progress: (d, n, combo) => { bar.style.width = `${d / n * 100}%`; window.Fun?.combo ? Fun.combo(count, combo, `${d}/${n}`) : (count.textContent = combo >= 3 ? `${combo} combo` : `${d}/${n}`); },
     done: res => {
       Sfx.done(); if (res.pct >= 0.9) petals(18);
@@ -1877,7 +1888,7 @@ VIEWS.session = ({ keys, cram }) => {
 };
 
 // Shared quiz runner. First attempt per key is graded; misses are re-queued.
-function runSession({ host, keys, review = false, lesson = false, progress, done }) {
+function runSession({ host, keys, review = false, lesson = false, cram = false, progress, done }) {
   // Every original entry in `keys` is one scored question (lessons list each item twice: recognition, then recall).
   // A miss re-queues the item as an unscored retry. An item counts as "first try" only if none of its scored questions was missed.
   const queue = keys.map(key => ({ key, scored: true })); const total = queue.length;
@@ -1915,7 +1926,7 @@ function runSession({ host, keys, review = false, lesson = false, progress, done
           const g = !ok ? 1 : dt > (typed ? 14 : 9) ? 2 : (typed && dt < 4 && S.cards[key]?.s > 5) ? 4 : 3;
           S.cards[key] = FSRS.review(S.cards[key], g); today().rev++; if (ok) today().ok = (today().ok || 0) + 1;
         }
-        const gain = ok ? (lesson ? 1 : 2) + (combo > 0 && combo % 10 === 0 ? 5 : 0) : 0; xp += gain; if (gain) { addXP(gain); window.Fun?.floatXP?.(gain, host); } else save();
+        const gain = cram ? 0 : ok ? (lesson ? 1 : 2) + (combo > 0 && combo % 10 === 0 ? 5 : 0) : 0; xp += gain; if (gain) { addXP(gain); window.Fun?.floatXP?.(gain, host); } else save();
       } else if (!ok) combo = 0;
       if (!ok) { requeued = { key, scored: false }; queue.splice(Math.min(queue.length, 3 + rand(3)), 0, requeued); } // see it again soon
       progress && progress(doneN, total, combo);
@@ -2415,7 +2426,8 @@ const Fun = (() => {
     }
     rollQuests(); checkStamps(); tickMult(); saveLocal();
     let day = dayKey();
-    setInterval(() => { if (dayKey() !== day) { day = dayKey(); rollQuests(); refresh(); } }, 60000);
+    const rollover = () => { if (dayKey() !== day) { day = dayKey(); applyFreezes(); rollQuests(); refresh(); if (App.route === 'home') App.render(); else App.renderNav(); } };
+    setInterval(rollover, 60000); document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') rollover(); });
     if (f.chests > 0) enqueue(() => showChest(true));
   }
 
@@ -2473,7 +2485,7 @@ function kanaModal(ch, script) {
   const { box, replay } = strokeBox(ch);
   let close = () => {};
   const dlg = h('div.modal', { role: 'dialog', 'aria-label': ch },
-    h('div.row.between', h('h2', `${ch} · ${romaji}`), h('button.icon-btn', { 'aria-label': 'Close', onclick: close }, icon('x'))),
+    h('div.row.between', h('h2', `${ch} · ${romaji}`), h('button.icon-btn', { 'aria-label': 'Close', onclick: () => close() }, icon('x'))),
     h('div.teach-hero', h('div.stack', { style: { justifyItems: 'center' } }, box, replay), h('div.stack',
       h('div.row', speakBtn(ch), h('span.chip.' + cardStage(c), cardStage(c)), c ? h('span.muted.small', `next review ${c.due <= now() ? 'now' : 'in ' + fmtIvl(c.due - now())}`) : null),
       KANA_MN[ch] ? h('div.mnemonic', KANA_MN[ch]) : null,
@@ -2505,7 +2517,7 @@ VIEWS.write = (p) => {
         if (res.score >= .8) { addXP(res.score === 1 ? 4 : 2); Sfx.ok(); } else Sfx.bad();
         window.Fun?.event?.('write', { ok: res.score >= .8 });
         aiBtn.hidden = !Sensei.available;
-      }
+      } else { verdict.replaceChildren(); aiBtn.hidden = true; }
     });
     const list = h('div.stroke-list', refs.map((_, i) => h('i', String(i + 1))));
     const verdict = h('div');
@@ -2612,12 +2624,14 @@ VIEWS.blitz = () => {
     const big = h('div.kana', cur); const inp = h('input#blitzIn', { type: 'text', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', 'aria-label': 'Romaji' });
     const timer = h('i', { style: { width: '100%', transition: 'none' } }); const sc = h('b', '0'); const mult = h('span.chip', '×1');
     host.replaceChildren(h('div.qcard', h('div.row.between', h('div', 'Score ', sc), mult), h('div.bar', timer), h('div.qbig.gridpaper', big), h('div.typein', inp)));
-    inp.focus();
+    inp.focus(); let swallowN = false;
     inp.addEventListener('input', () => {
+      if (swallowN && /^n$/i.test(inp.value)) { inp.value = ''; swallowN = false; return; }
+      swallowN = false;
       const v = normRomaji(inp.value); const r = normRomaji(KANA_ROMAJI[cur]);
       if (v === r || (cur === 'を' || cur === 'ヲ') && v === 'o') {
         n++; right++; streak++; const m = 1 + Math.floor(streak / 5); score += 10 * m; sc.textContent = score; mult.textContent = `×${m}`; Sfx.tick();
-        let nx; do { nx = pick(chars); } while (nx === cur); cur = nx; big.textContent = cur; inp.value = '';
+        swallowN = cur === 'ん' || cur === 'ン'; let nx; do { nx = pick(chars); } while (nx === cur); cur = nx; big.textContent = cur; inp.value = '';
       } else if (v.length >= r.length + 1 || (v.length >= r.length && !r.startsWith(v.slice(0, r.length)))) {
         misses[cur] = (misses[cur] || 0) + 1; streak = 0; mult.textContent = '×1'; n++; inp.classList.add('wrong'); setTimeout(() => inp.classList.remove('wrong'), 250);
         big.animate([{ transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'none' }], 250);
@@ -2652,7 +2666,7 @@ VIEWS.conj = () => {
   const settings = () => h('section.card.stack',
     h('div.row.between', h('div.tabs', [['verb', 'Verbs'], ['adj', 'Adjectives']].map(([id, l]) => h('button', { 'aria-selected': cfg.kind === id ? 'true' : 'false', onclick: () => { cfg.kind = id; cfg.forms = id === 'verb' ? ['masu', 'te', 'nai', 'ta'] : ['a-neg', 'a-past']; saveCfg(); App.render(); } }, l))),
       h('label.row.small', { style: { gap: '6px' } }, h('input', { type: 'checkbox', id: 'conjLearned', checked: cfg.learnedOnly ? true : null, onchange: e => { cfg.learnedOnly = e.target.checked; saveCfg(); ask(); } }), 'Only words I have learned')),
-    h('details', h('summary', { style: { cursor: 'pointer', fontWeight: 700 } }, `Forms: ${cfg.forms.map(id => formsFor().find(f => f.id === id)?.jp).filter(Boolean).join(' ')}`), h('div.row', { style: { gap: '6px', marginTop: '10px' } }, formsFor().map(f => h('button.chip' + (cfg.forms.includes(f.id) ? '.new' : ''), { style: { cursor: 'pointer', border: 0, padding: '6px 11px' }, onclick: () => { cfg.forms = cfg.forms.includes(f.id) ? cfg.forms.filter(x => x !== f.id) : cfg.forms.concat(f.id); if (!cfg.forms.length) cfg.forms = [f.id]; saveCfg(); App.render(); } }, `${f.jp} ${f.label}`)))));
+    h('details', h('summary', { style: { cursor: 'pointer', fontWeight: 700 } }, `Forms: ${cfg.forms.map(id => formsFor().find(f => f.id === id)?.jp).filter(Boolean).join(' ')}`), h('div.row', { style: { gap: '6px', marginTop: '10px' } }, formsFor().map(f => h('button.chip' + (cfg.forms.includes(f.id) ? '.new' : ''), { style: { cursor: 'pointer', border: 0, padding: '6px 11px' }, onclick: e => { cfg.forms = cfg.forms.includes(f.id) ? cfg.forms.filter(x => x !== f.id) : cfg.forms.concat(f.id); if (!cfg.forms.length) cfg.forms = [f.id]; saveCfg(); const row = e.currentTarget.parentElement; [...row.children].forEach((c, i) => c.classList.toggle('new', cfg.forms.includes(formsFor()[i].id))); const sm = row.closest('details')?.querySelector('summary'); if (sm) sm.textContent = `Forms: ${cfg.forms.map(id => formsFor().find(x => x.id === id)?.jp).filter(Boolean).join(' ')}`; ask(); } }, `${f.jp} ${f.label}`)))));
   const ask = () => {
     let pool = cfg.kind === 'verb' ? CONJ_VERBS() : CONJ_ADJS();
     if (cfg.learnedOnly) { const l = pool.filter(v => S.cards['v:' + v.id]); if (l.length >= 3) pool = l; }
@@ -3171,7 +3185,10 @@ VIEWS.read = () => {
 };
 function storyKnown(s) {
   const toks = s.sents.flatMap(x => x.tok).filter(t => t.g && !t.p); if (!toks.length) return null;
-  const known = toks.filter(t => { const r = toHira(t.r || t.s); const v = VOCAB.find(v => v.w === t.s || v.r === r || (hasKanji(v.w) && v.w.length > 1 && t.s.startsWith(v.w.slice(0, -1)))); return v && S.cards['v:' + v.id]; }).length;
+  const learned = VOCAB.filter(v => S.cards['v:' + v.id]);
+  const exact = new Set(learned.flatMap(v => [v.w, toHira(v.r)]));
+  const stems = learned.filter(v => ['v1', 'v5', 'vs', 'vk', 'adj-i'].includes(v.pos)).map(v => toHira(v.r).slice(0, -1)).filter(x => x.length >= 2);
+  const known = toks.filter(t => { const r = toHira(t.r || t.s); return exact.has(t.s) || exact.has(r) || /^(です|でした|ます|ました|ません)$/.test(r) || stems.some(st => r.startsWith(st)); }).length;
   return Math.round(known / toks.length * 100);
 }
 function storyCard(s) {
@@ -3338,7 +3355,7 @@ function openKanji(ch) {
   const words = VOCAB.filter(v => v.w.includes(ch)).slice(0, 6);
   let close = () => {};
   const dlg = h('div.modal', { role: 'dialog', 'aria-label': ch },
-    h('div.row.between', h('h2', `${ch} · ${k.m}`), h('button.icon-btn', { 'aria-label': 'Close', onclick: close }, icon('x'))),
+    h('div.row.between', h('h2', `${ch} · ${k.m}`), h('button.icon-btn', { 'aria-label': 'Close', onclick: () => close() }, icon('x'))),
     h('div.teach-hero', h('div.stack', { style: { justifyItems: 'center' } }, box, replay), h('div.stack',
       h('dl.kv', h('dt', 'On'), h('dd.jp', (k.on || []).join('、') || '—'), h('dt', 'Kun'), h('dd.jp', (k.kun || []).join('、') || '—'), h('dt', 'Strokes'), h('dd', String(k.s)), h('dt', 'Level'), h('dd', `N${k.lv}`)),
       h('span.chip.' + cardStage(c), cardStage(c)))),
@@ -3955,8 +3972,17 @@ VIEWS.settings = () => {
   const voiceSel = h('select#voice', { onchange: e => { set('voice', e.target.value); Voice.init(); Voice.say('こんにちは、よろしくおねがいします。'); } }, h('option', { value: '' }, 'Best available'), Voice.voices.map(v => h('option', { value: v.name, selected: st.voice === v.name ? true : null }, v.name)));
   const rate = h('input#rate', { type: 'range', min: '0.6', max: '1.2', step: '0.05', value: String(st.rate), oninput: e => set('rate', +e.target.value), onchange: () => Voice.say('ゆっくり はなして ください。') });
   const importInp = h('input#importFile', { type: 'file', accept: 'application/json,.json', hidden: true, onchange: async e => {
-    const f = e.target.files[0]; if (!f) return;
-    try { const data = JSON.parse(await f.text()); if (!isObj(data) || !isObj(data.cards) || !isObj(data.settings)) throw 0; S = sanitize(data); S.updated = now(); save(); toast('Progress imported'); App.render(); } catch (err) { toast('That file is not a Michi backup', 'bad'); }
+    const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+    let data; try { data = JSON.parse(await f.text()); if (!isObj(data) || !isObj(data.cards) || !isObj(data.settings)) throw 0; data = sanitize(data); } catch (err) { toast('That file is not a Michi backup', 'bad'); return; }
+    const cur = { cards: Object.keys(S.cards).length, xp: S.xp }, inc = { cards: Object.keys(data.cards).length, xp: data.xp };
+    const older = data.updated && S.updated && data.updated < S.updated;
+    let close = () => {};
+    const dlg = h('div.modal', { role: 'dialog', 'aria-label': 'Import backup' },
+      h('h2', 'Replace your progress with this backup?'),
+      h('div.grid.g2', h('div.card.stack', h('div.eyebrow', 'Now'), h('b', `${cur.cards} cards`), h('span.muted', `${cur.xp.toLocaleString()} XP`)), h('div.card.stack', h('div.eyebrow', 'Backup'), h('b', `${inc.cards} cards`), h('span.muted', `${inc.xp.toLocaleString()} XP${data.updated ? ' · saved ' + new Date(data.updated).toLocaleDateString() : ''}`))),
+      older || inc.cards < cur.cards ? h('div.feedback.no', 'This backup is older or smaller than what you have now. Replacing will lose the difference (a copy of your current progress is kept on this device).') : null,
+      h('div.row', { style: { justifyContent: 'flex-end' } }, h('button.btn', { onclick: () => close() }, 'Cancel'), h('button.btn.primary', { onclick: () => { try { localStorage.setItem(LS_KEY + '.bak', JSON.stringify(S)); } catch (x) {} S = data; S.updated = now(); save(); applyTheme(); close(); toast('Progress imported'); App.render(); } }, 'Replace')));
+    close = openModal(dlg);
   } });
   let armed = false;
   const reset = h('button.btn.sm', { style: { color: 'var(--bad)' }, onclick: () => { if (!armed) { armed = true; reset.textContent = 'Tap again to erase everything'; setTimeout(() => { armed = false; reset.textContent = 'Reset progress'; }, 4000); return; } S = DEFAULT_STATE(); save(); toast('Progress reset'); App.go('welcome'); } }, 'Reset progress');

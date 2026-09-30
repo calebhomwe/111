@@ -43,7 +43,7 @@ function kanaModal(ch, script) {
   const { box, replay } = strokeBox(ch);
   let close = () => {};
   const dlg = h('div.modal', { role: 'dialog', 'aria-label': ch },
-    h('div.row.between', h('h2', `${ch} · ${romaji}`), h('button.icon-btn', { 'aria-label': 'Close', onclick: close }, icon('x'))),
+    h('div.row.between', h('h2', `${ch} · ${romaji}`), h('button.icon-btn', { 'aria-label': 'Close', onclick: () => close() }, icon('x'))),
     h('div.teach-hero', h('div.stack', { style: { justifyItems: 'center' } }, box, replay), h('div.stack',
       h('div.row', speakBtn(ch), h('span.chip.' + cardStage(c), cardStage(c)), c ? h('span.muted.small', `next review ${c.due <= now() ? 'now' : 'in ' + fmtIvl(c.due - now())}`) : null),
       KANA_MN[ch] ? h('div.mnemonic', KANA_MN[ch]) : null,
@@ -75,7 +75,7 @@ VIEWS.write = (p) => {
         if (res.score >= .8) { addXP(res.score === 1 ? 4 : 2); Sfx.ok(); } else Sfx.bad();
         window.Fun?.event?.('write', { ok: res.score >= .8 });
         aiBtn.hidden = !Sensei.available;
-      }
+      } else { verdict.replaceChildren(); aiBtn.hidden = true; }
     });
     const list = h('div.stroke-list', refs.map((_, i) => h('i', String(i + 1))));
     const verdict = h('div');
@@ -182,12 +182,14 @@ VIEWS.blitz = () => {
     const big = h('div.kana', cur); const inp = h('input#blitzIn', { type: 'text', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', 'aria-label': 'Romaji' });
     const timer = h('i', { style: { width: '100%', transition: 'none' } }); const sc = h('b', '0'); const mult = h('span.chip', '×1');
     host.replaceChildren(h('div.qcard', h('div.row.between', h('div', 'Score ', sc), mult), h('div.bar', timer), h('div.qbig.gridpaper', big), h('div.typein', inp)));
-    inp.focus();
+    inp.focus(); let swallowN = false;
     inp.addEventListener('input', () => {
+      if (swallowN && /^n$/i.test(inp.value)) { inp.value = ''; swallowN = false; return; }
+      swallowN = false;
       const v = normRomaji(inp.value); const r = normRomaji(KANA_ROMAJI[cur]);
       if (v === r || (cur === 'を' || cur === 'ヲ') && v === 'o') {
         n++; right++; streak++; const m = 1 + Math.floor(streak / 5); score += 10 * m; sc.textContent = score; mult.textContent = `×${m}`; Sfx.tick();
-        let nx; do { nx = pick(chars); } while (nx === cur); cur = nx; big.textContent = cur; inp.value = '';
+        swallowN = cur === 'ん' || cur === 'ン'; let nx; do { nx = pick(chars); } while (nx === cur); cur = nx; big.textContent = cur; inp.value = '';
       } else if (v.length >= r.length + 1 || (v.length >= r.length && !r.startsWith(v.slice(0, r.length)))) {
         misses[cur] = (misses[cur] || 0) + 1; streak = 0; mult.textContent = '×1'; n++; inp.classList.add('wrong'); setTimeout(() => inp.classList.remove('wrong'), 250);
         big.animate([{ transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'none' }], 250);
@@ -222,7 +224,7 @@ VIEWS.conj = () => {
   const settings = () => h('section.card.stack',
     h('div.row.between', h('div.tabs', [['verb', 'Verbs'], ['adj', 'Adjectives']].map(([id, l]) => h('button', { 'aria-selected': cfg.kind === id ? 'true' : 'false', onclick: () => { cfg.kind = id; cfg.forms = id === 'verb' ? ['masu', 'te', 'nai', 'ta'] : ['a-neg', 'a-past']; saveCfg(); App.render(); } }, l))),
       h('label.row.small', { style: { gap: '6px' } }, h('input', { type: 'checkbox', id: 'conjLearned', checked: cfg.learnedOnly ? true : null, onchange: e => { cfg.learnedOnly = e.target.checked; saveCfg(); ask(); } }), 'Only words I have learned')),
-    h('details', h('summary', { style: { cursor: 'pointer', fontWeight: 700 } }, `Forms: ${cfg.forms.map(id => formsFor().find(f => f.id === id)?.jp).filter(Boolean).join(' ')}`), h('div.row', { style: { gap: '6px', marginTop: '10px' } }, formsFor().map(f => h('button.chip' + (cfg.forms.includes(f.id) ? '.new' : ''), { style: { cursor: 'pointer', border: 0, padding: '6px 11px' }, onclick: () => { cfg.forms = cfg.forms.includes(f.id) ? cfg.forms.filter(x => x !== f.id) : cfg.forms.concat(f.id); if (!cfg.forms.length) cfg.forms = [f.id]; saveCfg(); App.render(); } }, `${f.jp} ${f.label}`)))));
+    h('details', h('summary', { style: { cursor: 'pointer', fontWeight: 700 } }, `Forms: ${cfg.forms.map(id => formsFor().find(f => f.id === id)?.jp).filter(Boolean).join(' ')}`), h('div.row', { style: { gap: '6px', marginTop: '10px' } }, formsFor().map(f => h('button.chip' + (cfg.forms.includes(f.id) ? '.new' : ''), { style: { cursor: 'pointer', border: 0, padding: '6px 11px' }, onclick: e => { cfg.forms = cfg.forms.includes(f.id) ? cfg.forms.filter(x => x !== f.id) : cfg.forms.concat(f.id); if (!cfg.forms.length) cfg.forms = [f.id]; saveCfg(); const row = e.currentTarget.parentElement; [...row.children].forEach((c, i) => c.classList.toggle('new', cfg.forms.includes(formsFor()[i].id))); const sm = row.closest('details')?.querySelector('summary'); if (sm) sm.textContent = `Forms: ${cfg.forms.map(id => formsFor().find(x => x.id === id)?.jp).filter(Boolean).join(' ')}`; ask(); } }, `${f.jp} ${f.label}`)))));
   const ask = () => {
     let pool = cfg.kind === 'verb' ? CONJ_VERBS() : CONJ_ADJS();
     if (cfg.learnedOnly) { const l = pool.filter(v => S.cards['v:' + v.id]); if (l.length >= 3) pool = l; }

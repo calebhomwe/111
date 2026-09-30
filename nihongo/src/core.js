@@ -182,7 +182,15 @@ function flushCloud() {
   });
   return Cloud.chain;
 }
-try { document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushCloud(); }); addEventListener('pagehide', flushCloud); } catch (e) {}
+try {
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushCloud(); });
+  addEventListener('pagehide', flushCloud);
+  // Another tab saved: merge its progress into ours so the next save from this tab can't erase it.
+  addEventListener('storage', e => {
+    if (e.key !== LS_KEY || !e.newValue) return;
+    try { if (mergeInto(S, sanitize(JSON.parse(e.newValue)))) { saveLocal(); if (window.App?.renderNav) App.renderNav(); pushCloud(); } } catch (err) {}
+  });
+} catch (e) {}
 function updateSyncBadge() {
   const b = $('#sync'); if (!b) return;
   const map = { local: ['This device', 'Progress is saved in this browser'], saving: ['Saving…', 'Saving to your account'], synced: ['Synced', 'Progress is saved to your Claude account'], error: ['Sync paused', 'Could not reach the store; saved on this device'] };

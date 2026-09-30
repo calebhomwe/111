@@ -436,7 +436,8 @@ const Fun = (() => {
     }
     rollQuests(); checkStamps(); tickMult(); saveLocal();
     let day = dayKey();
-    setInterval(() => { if (dayKey() !== day) { day = dayKey(); rollQuests(); refresh(); } }, 60000);
+    const rollover = () => { if (dayKey() !== day) { day = dayKey(); applyFreezes(); rollQuests(); refresh(); if (App.route === 'home') App.render(); else App.renderNav(); } };
+    setInterval(rollover, 60000); document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') rollover(); });
     if (f.chests > 0) enqueue(() => showChest(true));
   }
 

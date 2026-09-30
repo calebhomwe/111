@@ -71,6 +71,7 @@ const LESSONS = (() => {
   for (const lv of [5, 4]) {
     const byCat = {};
     for (const v of VOCAB.filter(v => v.lv === lv)) (byCat[v.cat] = byCat[v.cat] || []).push(v);
+    for (const c of Object.keys(byCat)) if (c !== 'misc' && byCat[c].length < 4) { (byCat.misc = byCat.misc || []).push(...byCat[c]); delete byCat[c]; }
     const cats = Object.keys(byCat).sort((a, b) => (CAT_ORDER.indexOf(a) + 99) % 124 - (CAT_ORDER.indexOf(b) + 99) % 124);
     for (const cat of cats) {
       const list = byCat[cat]; const n = Math.ceil(list.length / 8);
@@ -93,7 +94,7 @@ function nextLesson(track) {
   if (track) return LESSONS.find(l => l.track === track && !S.lessons[l.id]);
   // Recommended path: hiragana first, then interleave katakana, vocabulary and kanji by relative progress.
   const hira = LESSONS.find(l => l.id.startsWith('kana-h') && !S.lessons[l.id]); if (hira) return hira;
-  const c = ['kana', 'vocab', 'kanji'].map(t => { const all = LESSONS.filter(l => l.track === t); const d = all.filter(l => S.lessons[l.id]).length; return { n: nextLesson(t), f: all.length ? d / all.length * (t === 'kanji' ? 1.5 : 1) : 1 }; }).filter(x => x.n);
+  const c = ['kana', 'vocab', 'kanji'].map(t => { const all = t === 'kana' ? LESSONS.filter(l => l.id.startsWith('kana-k')) : LESSONS.filter(l => l.track === t); const d = all.filter(l => S.lessons[l.id]).length; return { n: nextLesson(t), f: all.length ? d / all.length * (t === 'kanji' ? 1.5 : t === 'kana' ? 0.6 : 1) : 1 }; }).filter(x => x.n);
   c.sort((a, b) => a.f - b.f); return c[0]?.n;
 }
 

@@ -12,7 +12,10 @@ VIEWS.read = () => {
 };
 function storyKnown(s) {
   const toks = s.sents.flatMap(x => x.tok).filter(t => t.g && !t.p); if (!toks.length) return null;
-  const known = toks.filter(t => { const r = toHira(t.r || t.s); const v = VOCAB.find(v => v.w === t.s || v.r === r || (hasKanji(v.w) && v.w.length > 1 && t.s.startsWith(v.w.slice(0, -1)))); return v && S.cards['v:' + v.id]; }).length;
+  const learned = VOCAB.filter(v => S.cards['v:' + v.id]);
+  const exact = new Set(learned.flatMap(v => [v.w, toHira(v.r)]));
+  const stems = learned.filter(v => ['v1', 'v5', 'vs', 'vk', 'adj-i'].includes(v.pos)).map(v => toHira(v.r).slice(0, -1)).filter(x => x.length >= 2);
+  const known = toks.filter(t => { const r = toHira(t.r || t.s); return exact.has(t.s) || exact.has(r) || /^(です|でした|ます|ました|ません)$/.test(r) || stems.some(st => r.startsWith(st)); }).length;
   return Math.round(known / toks.length * 100);
 }
 function storyCard(s) {
@@ -179,7 +182,7 @@ function openKanji(ch) {
   const words = VOCAB.filter(v => v.w.includes(ch)).slice(0, 6);
   let close = () => {};
   const dlg = h('div.modal', { role: 'dialog', 'aria-label': ch },
-    h('div.row.between', h('h2', `${ch} · ${k.m}`), h('button.icon-btn', { 'aria-label': 'Close', onclick: close }, icon('x'))),
+    h('div.row.between', h('h2', `${ch} · ${k.m}`), h('button.icon-btn', { 'aria-label': 'Close', onclick: () => close() }, icon('x'))),
     h('div.teach-hero', h('div.stack', { style: { justifyItems: 'center' } }, box, replay), h('div.stack',
       h('dl.kv', h('dt', 'On'), h('dd.jp', (k.on || []).join('、') || '—'), h('dt', 'Kun'), h('dd.jp', (k.kun || []).join('、') || '—'), h('dt', 'Strokes'), h('dd', String(k.s)), h('dt', 'Level'), h('dd', `N${k.lv}`)),
       h('span.chip.' + cardStage(c), cardStage(c)))),
