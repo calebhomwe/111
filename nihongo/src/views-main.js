@@ -15,7 +15,7 @@ const App = {
   route: 'home', params: {}, cleanup: null,
   go(route, params = {}, push = true) {
     if (this.cleanup) { try { this.cleanup(); } catch (e) {} this.cleanup = null; }
-    Voice.stop(); $$('.pop').forEach(p => p.remove());
+    Voice.stop(); $$('.pop, .modal-back').forEach(p => p.remove());
     this.route = route; this.params = params;
     if (push) { try { history.replaceState(null, '', '#' + route); } catch (e) {} }
     this.render(); window.scrollTo({ top: 0 });
@@ -28,10 +28,13 @@ const App = {
       h('button.icon-btn', { 'aria-label': 'Progress', onclick: () => App.go('stats') }, icon('stats')),
       h('button.icon-btn', { 'aria-label': 'Settings', onclick: () => App.go('settings') }, icon('gear'))));
     main.append(top);
-    const fn = VIEWS[this.route] || VIEWS.home;
-    const v = fn(this.params) || h('div');
+    const fn = Object.prototype.hasOwnProperty.call(VIEWS, this.route) ? VIEWS[this.route] : VIEWS.home;
+    let v; try { v = fn(this.params) || h('div'); } catch (e) {
+      console.error(e);
+      v = h('section.card.pad-lg.stack', h('h2', 'Something went wrong on this screen'), h('p.muted', 'Your progress is safe. You can go back to Today, or save a backup and reset if the problem keeps coming back.'), h('div.row', h('button.btn.primary', { onclick: () => App.go('home') }, 'Go to Today'), h('button.btn', { onclick: () => App.go('settings') }, 'Settings and backup')));
+    }
     v.classList.add('view'); main.append(v);
-    this.renderNav();
+    try { this.renderNav(); } catch (e) { console.error(e); }
   },
   renderNav() {
     const nav = $('#nav'); nav.innerHTML = '';
@@ -430,7 +433,7 @@ function renderQuestion(host, q, answer, continueFn) {
   const card = h('div.qcard'); let answered = false;
   const big = h('div.qbig' + (q.bigClass === 'kana' || q.bigClass === 'kanji' ? '.gridpaper' : ''));
   if (q.big) big.append(h('div.' + (q.bigClass || 'word'), q.big)); else if (q.bigHTML) big.append(h('div.' + (q.bigClass || 'word'), { html: q.bigHTML }));
-  if (q.audio) { const b = h('button.btn.primary', { style: { width: '84px', height: '84px', borderRadius: '50%' }, 'aria-label': 'Play again', onclick: () => Voice.say(q.audio) }, icon('speaker')); b.querySelector('svg').style.cssText = 'width:34px;height:34px'; big.append(b); setTimeout(() => Voice.say(q.audio), 200); }
+  if (q.audio) { const b = h('button.btn.primary', { style: { width: '84px', height: '84px', borderRadius: '50%' }, 'aria-label': 'Play again', onclick: () => Voice.say(q.audio) }, icon('speaker')); b.querySelector('svg').style.cssText = 'width:34px;height:34px'; big.append(b); const rt = App.route; setTimeout(() => { if (App.route === rt) Voice.say(q.audio); }, 200); }
   if (q.sub) big.append(h('div.hint', q.sub)); if (q.hint) big.append(h('div.hint', q.hint));
   const fb = h('div');
   const finish = (ok, typed) => {

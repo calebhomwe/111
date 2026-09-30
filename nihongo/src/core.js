@@ -33,6 +33,7 @@ function h(tag, attrs, ...kids) {
 
 // Ruby text: word + reading → <ruby> markup (furigana only over kanji runs when possible).
 function ruby(word, reading) {
+  word = String(word ?? ''); reading = reading == null ? reading : String(reading);
   if (!reading || !hasKanji(word) || reading === word) return esc(word);
   // Split okurigana: match leading/trailing kana shared between word and reading.
   let pre = 0; while (pre < word.length && !hasKanji(word[pre]) && word[pre] === reading[pre]) pre++;
@@ -64,41 +65,123 @@ const DEFAULT_STATE = () => ({
   settings: { romaji: true, furigana: 'auto', goal: 50, rate: 0.9, voice: '', newPerDay: 15, sound: true, theme: 'system', level: 'beginner' },
 });
 let S = DEFAULT_STATE();
-function loadLocal() { try { const raw = localStorage.getItem(LS_KEY); if (raw) return JSON.parse(raw); } catch (e) {} return null; }
-function mergeState(base, extra) { const out = Object.assign(DEFAULT_STATE(), base); out.settings = Object.assign(DEFAULT_STATE().settings, base.settings || {}); return out; }
-{ const l = loadLocal(); if (l) S = mergeState(l); }
 
-// Cloud sync through the artifact's per-viewer db subtree; localStorage stays as the fast mirror.
-const Cloud = { db: null, uid: null, ref: null, status: 'local', timer: 0 };
+// ── Sanitising: anything read from storage, a backup file or the cloud is coerced to the shapes the app expects.
+const isObj = o => !!o && typeof o === 'object' && !Array.isArray(o);
+const numOr = (x, d = 0, lo = -Infinity, hi = Infinity) => Number.isFinite(+x) && x !== null && x !== '' ? Math.min(hi, Math.max(lo, +x)) : d;
+const cleanMap = (src, fn) => { const o = {}; if (isObj(src)) for (const k of Object.keys(src)) { if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue; const v = fn(src[k], k); if (v !== undefined) o[k] = v; } return o; };
+function sanitize(raw) {
+  const out = DEFAULT_STATE(); if (!isObj(raw)) return out;
+  out.created = numOr(raw.created, out.created, 0); out.updated = numOr(raw.updated, 0, 0);
+  out.xp = Math.floor(numOr(raw.xp, 0, 0, 1e9)); out.blitzBest = numOr(raw.blitzBest, 0, 0, 1e6);
+  out.cards = cleanMap(raw.cards, c => {
+    if (!isObj(c)) return undefined;
+    const st = [0, 1, 2].includes(+c.st) ? +c.st : (+c.s > 0 ? 2 : 0), s = numOr(c.s, 0, 0, 36500);
+    const card = { s: st && s <= 0 ? 0.4 : s, d: numOr(c.d, 5, 1, 10), due: numOr(c.due, now(), 0), last: numOr(c.last, 0, 0), reps: numOr(c.reps, 0, 0, 1e6), lapses: numOr(c.lapses, 0, 0, 1e6), st };
+    if (c.placed) card.placed = 1; return card;
+  });
+  out.days = cleanMap(raw.days, (v, k) => /^\d{4}-\d{2}-\d{2}$/.test(k) && isObj(v) ? Object.assign({ xp: numOr(v.xp, 0, 0, 1e7), rev: numOr(v.rev, 0, 0, 1e6), new: numOr(v.new, 0, 0, 1e6), ok: numOr(v.ok, 0, 0, 1e6) }, v.frozen ? { frozen: true } : {}) : undefined);
+  for (const k of ['lessons', 'grammar', 'stories', 'ach']) out[k] = cleanMap(raw[k], v => isObj(v) ? { ...v } : typeof v === 'number' ? v : undefined);
+  out.saved = Array.isArray(raw.saved) ? raw.saved.filter(x => typeof x === 'string').slice(-500) : [];
+  out.aiStories = Array.isArray(raw.aiStories) ? raw.aiStories.filter(x => isObj(x) && typeof x.id === 'string' && Array.isArray(x.sents) && x.sents.length).slice(0, 12) : [];
+  if (isObj(raw.settings)) for (const k of Object.keys(out.settings)) { const v = raw.settings[k]; if (typeof v === typeof out.settings[k] && (typeof v !== 'number' || Number.isFinite(v))) out.settings[k] = v; }
+  if (isObj(raw.settings)) for (const k of ['clipRate', 'senseiReg', 'romajiAuto']) if (raw.settings[k] !== undefined && ['number', 'string', 'boolean'].includes(typeof raw.settings[k])) out.settings[k] = raw.settings[k];
+  for (const k of ['fun', 'register', 'placement']) if (isObj(raw[k])) out[k] = JSON.parse(JSON.stringify(raw[k], (kk, v) => (kk === '__proto__' ? undefined : v)));
+  if (out.fun) for (const k of ['stamps', 'seen', 'ms', 'bests', 'quests', 'opened']) if (out.fun[k] !== undefined && !isObj(out.fun[k]) && typeof out.fun[k] !== 'number') delete out.fun[k];
+  return out;
+}
+const mergeState = sanitize;
+function loadLocal() { try { const raw = localStorage.getItem(LS_KEY); if (raw) return JSON.parse(raw); } catch (e) {} return null; }
+{ const l = loadLocal(); if (l) S = sanitize(l); }
+let storageFull = false;
+function saveLocal() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); storageFull = false; } catch (e) { if (!storageFull && e && /quota/i.test(e.name + e.message)) { storageFull = true; try { toast('This browser is out of storage, so progress is not being saved here', 'bad'); } catch (_) {} } } }
+function save() { S.updated = now(); saveLocal(); pushCloud(); }
+
+// ── Cloud sync. State is split into small documents (meta + 16 card shards + AI stories) so it never nears the
+// 256 KiB document limit, only changed shards are rewritten, and every load MERGES remote into local instead of
+// replacing either side.
+const Cloud = { db: null, uid: null, ready: false, status: 'local', timer: 0, maxTimer: 0, hashes: {}, chain: Promise.resolve(), dirty: false };
+const SHARDS = 16;
+const shardOf = k => { let x = 0; for (let i = 0; i < k.length; i++) x = (x * 31 + k.charCodeAt(i)) >>> 0; return x % SHARDS; };
+const packCard = c => [+c.s.toFixed(3), +c.d.toFixed(3), Math.round(c.due / 6e4), Math.round(c.last / 6e4), c.reps, c.lapses, c.st].concat(c.placed ? [1] : []);
+const unpackCard = a => Array.isArray(a) ? { s: a[0], d: a[1], due: a[2] * 6e4, last: a[3] * 6e4, reps: a[4], lapses: a[5], st: a[6], placed: a[7] } : null;
+function partsOf(st) {
+  const meta = {}; for (const k of Object.keys(st)) if (k !== 'cards' && k !== 'aiStories') meta[k] = st[k];
+  meta.v = 2; meta.shards = SHARDS;
+  const parts = { meta }, shards = Array.from({ length: SHARDS }, () => ({}));
+  for (const k of Object.keys(st.cards)) shards[shardOf(k)][k] = packCard(st.cards[k]);
+  shards.forEach((c, i) => { parts['c' + i] = { c }; });
+  parts.ai = { stories: st.aiStories };
+  return parts;
+}
+const hashStr = s => { let x = 5381; for (let i = 0; i < s.length; i++) x = ((x << 5) + x + s.charCodeAt(i)) | 0; return x + ':' + s.length; };
+const partPath = (uid, name) => name === 'meta' ? `data/users/${uid}/progress` : `data/users/${uid}/progress/parts/${name}`;
+async function readRemote(db, uid) {
+  const snap = await db.doc(partPath(uid, 'meta')).get();
+  if (!snap.exists) return null;
+  const m = snap.data() || {};
+  if (typeof m.state === 'string') return sanitize(JSON.parse(m.state)); // v1 format: one JSON string
+  if (isObj(m.state)) return sanitize(m.state);
+  const st = Object.assign({}, m, { cards: {}, aiStories: [] });
+  const names = Array.from({ length: m.shards || SHARDS }, (_, i) => 'c' + i).concat('ai');
+  const docs = await Promise.all(names.map(n => db.doc(partPath(uid, n)).get()));
+  docs.forEach((d, i) => {
+    const data = d.exists ? d.data() : null; if (!data) return;
+    if (names[i] === 'ai') { if (Array.isArray(data.stories)) st.aiStories = data.stories; }
+    else if (isObj(data.c)) for (const k of Object.keys(data.c)) { const c = unpackCard(data.c[k]); if (c) st.cards[k] = c; }
+  });
+  return sanitize(st);
+}
+// Merge remote into local in place. Returns true if local changed.
+function mergeInto(L, R) {
+  const before = JSON.stringify(L), rNewer = R.updated > L.updated;
+  for (const k of Object.keys(R.cards)) { const a = L.cards[k], b = R.cards[k]; if (!a || b.last > a.last) L.cards[k] = b; }
+  for (const k of Object.keys(R.days)) { const a = L.days[k], b = R.days[k]; if (!a) L.days[k] = b; else { for (const f of ['xp', 'rev', 'new', 'ok']) a[f] = Math.max(a[f] || 0, b[f] || 0); if (b.frozen) a.frozen = true; } }
+  L.xp = Math.max(L.xp, R.xp); L.blitzBest = Math.max(L.blitzBest || 0, R.blitzBest || 0); L.created = Math.min(L.created, R.created || L.created);
+  const better = (a, b) => { const score = v => typeof v === 'number' ? v : Math.max(+v.best || 0, +v.score || 0, +v.done || 0, +v.read || 0); return score(b) > score(a) ? b : a; };
+  for (const g of ['lessons', 'grammar', 'stories']) for (const k of Object.keys(R[g])) L[g][k] = L[g][k] ? better(L[g][k], R[g][k]) : R[g][k];
+  for (const k of Object.keys(R.ach)) L.ach[k] = L.ach[k] ? Math.min(L.ach[k], R.ach[k]) : R.ach[k];
+  L.saved = [...new Set(L.saved.concat(R.saved))].slice(-500);
+  const ids = new Set(L.aiStories.map(s => s.id)); L.aiStories = L.aiStories.concat(R.aiStories.filter(s => !ids.has(s.id))).slice(0, 12);
+  if (rNewer) { L.settings = Object.assign(L.settings, R.settings); for (const k of ['fun', 'register', 'placement']) if (R[k]) L[k] = R[k]; }
+  else for (const k of ['fun', 'register', 'placement']) if (!L[k] && R[k]) L[k] = R[k];
+  L.updated = Math.max(L.updated, R.updated);
+  return JSON.stringify(L) !== before;
+}
 async function initCloud() {
   if (!window.claude?.use) return;
   try {
     const [db, user] = await Promise.all([claude.use('db'), claude.use('user')]);
     if (!db || !user) return;
-    const uid = await user.id();
-    if (!uid) return;
-    Cloud.db = db; Cloud.uid = uid; Cloud.ref = db.doc(`data/users/${uid}/progress`);
-    const snap = await Cloud.ref.get();
-    const remote = snap.exists ? snap.data()?.state : null;
-    if (remote) {
-      const r = typeof remote === 'string' ? JSON.parse(remote) : remote;
-      if ((r.updated || 0) > (S.updated || 0)) { S = mergeState(r); saveLocal(); App.render(); toast('Progress synced from your account'); }
-      else if ((S.updated || 0) > (r.updated || 0)) pushCloud(true);
-    } else if (S.updated) pushCloud(true);
-    Cloud.status = 'synced'; updateSyncBadge();
-  } catch (e) { Cloud.status = 'local'; updateSyncBadge(); }
+    const uid = await user.id(); if (!uid) return;
+    const remote = await readRemote(db, uid); // any failure throws: we never write over a remote we could not read
+    if (remote) { Cloud.hashes = Object.fromEntries(Object.entries(partsOf(remote)).map(([n, p]) => [n, hashStr(JSON.stringify(p))])); if (mergeInto(S, remote)) { saveLocal(); App.renderNav(); } }
+    Cloud.db = db; Cloud.uid = uid; Cloud.ready = true; Cloud.status = 'synced'; updateSyncBadge();
+    pushCloud(true);
+  } catch (e) { Cloud.status = 'error'; updateSyncBadge(); }
 }
 function pushCloud(immediate) {
-  if (!Cloud.ref) return;
-  clearTimeout(Cloud.timer);
-  Cloud.timer = setTimeout(async () => {
-    try { Cloud.status = 'saving'; updateSyncBadge(); await Cloud.ref.set({ state: JSON.stringify(S), at: now() }); Cloud.status = 'synced'; }
-    catch (e) { Cloud.status = e?.code === 'invalid_argument' ? 'local' : 'error'; }
-    updateSyncBadge();
-  }, immediate ? 50 : 4000);
+  if (!Cloud.ready) return; Cloud.dirty = true;
+  clearTimeout(Cloud.timer); Cloud.timer = setTimeout(flushCloud, immediate ? 50 : 4000);
+  if (!Cloud.maxTimer) Cloud.maxTimer = setTimeout(flushCloud, 30000); // never postpone forever while someone is busy
 }
-function saveLocal() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) {} }
-function save() { S.updated = now(); saveLocal(); pushCloud(); }
+function flushCloud() {
+  clearTimeout(Cloud.timer); clearTimeout(Cloud.maxTimer); Cloud.maxTimer = 0;
+  if (!Cloud.ready || !Cloud.dirty) return Cloud.chain;
+  Cloud.dirty = false;
+  Cloud.chain = Cloud.chain.then(async () => {
+    try {
+      Cloud.status = 'saving'; updateSyncBadge();
+      const parts = partsOf(S), jobs = [];
+      for (const [name, p] of Object.entries(parts)) { const json = JSON.stringify(p), h = hashStr(json); if (json.length > 200000) throw { code: 'too_large' }; if (Cloud.hashes[name] !== h) jobs.push([name, p, h]); }
+      for (const [name, p, h] of jobs) { await Cloud.db.doc(partPath(Cloud.uid, name)).set(p); Cloud.hashes[name] = h; }
+      Cloud.status = 'synced';
+    } catch (e) { Cloud.status = 'error'; Cloud.dirty = true; }
+    updateSyncBadge();
+  });
+  return Cloud.chain;
+}
+try { document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushCloud(); }); addEventListener('pagehide', flushCloud); } catch (e) {}
 function updateSyncBadge() {
   const b = $('#sync'); if (!b) return;
   const map = { local: ['This device', 'Progress is saved in this browser'], saving: ['Saving…', 'Saving to your account'], synced: ['Synced', 'Progress is saved to your Claude account'], error: ['Sync paused', 'Could not reach the store; saved on this device'] };
@@ -113,15 +196,17 @@ function addXP(n, reason) {
   const pill = $('#xpPill'); if (pill) { pill.textContent = `${S.xp.toLocaleString()} XP`; pill.classList.remove('bump'); void pill.offsetWidth; pill.classList.add('bump'); }
   checkAchievements();
 }
+// Step calendar days from local noon so DST changes can't skip or repeat a day.
+const dayBefore = t => { const d = new Date(t); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() - 1); return d.getTime(); };
 function streak() {
   let n = 0, t = now();
   const kept = k => S.days[k]?.xp > 0 || S.days[k]?.frozen; // a streak freeze covers a missed day
-  if (!kept(dayKey(t))) t -= DAY; // today not done yet: count from yesterday
-  while (kept(dayKey(t))) { n++; t -= DAY; }
+  if (!kept(dayKey(t))) t = dayBefore(t); // today not done yet: count from yesterday
+  while (kept(dayKey(t))) { n++; t = dayBefore(t); }
   return n;
 }
 const LEVEL_XP = l => Math.round(60 * Math.pow(l, 1.6));
-function levelInfo(xp = S.xp) { let l = 1, acc = 0; while (xp >= acc + LEVEL_XP(l)) { acc += LEVEL_XP(l); l++; } return { level: l, into: xp - acc, need: LEVEL_XP(l) }; }
+function levelInfo(xp = S.xp) { let l = 1, acc = 0; xp = numOr(xp, 0, 0, 1e9); while (l < 500 && xp >= acc + LEVEL_XP(l)) { acc += LEVEL_XP(l); l++; } return { level: l, into: xp - acc, need: LEVEL_XP(l) }; }
 
 // ─── FSRS-4.5 scheduler ───────────────────────────────────────────────────
 const FSRS = (() => {
@@ -149,7 +234,7 @@ const FSRS = (() => {
         c.s = Math.max(c.s, w[g - 1] * 0.8); c.st = 2; c.due = t + (g === 2 ? 0.5 : ivl(c.s)) * DAY;
       } else { c.s = sRecall(c.d, c.s, r, g); c.st = 2; c.due = t + ivl(c.s) * DAY; }
     }
-    c.last = t; c.reps++;
+    c.last = t; c.reps++; delete c.placed; // a real review turns a placement guess into a learned card
     return c;
   }
   const retrievability = (c, t = now()) => c && c.st ? R(Math.max(0, (t - c.last) / DAY), c.s) : 0;
@@ -175,8 +260,8 @@ const Voice = {
     load(); speechSynthesis.onvoiceschanged = load;
   },
   get ok() { return 'speechSynthesis' in window || !!Clips.index; },
-  seq: 0, audio: null,
-  stop() { this.seq++; if (this.audio) { this.audio.pause(); this.audio = null; } if ('speechSynthesis' in window) speechSynthesis.cancel(); },
+  seq: 0, audio: null, pending: null,
+  stop() { this.seq++; if (this.audio) { this.audio.pause(); this.audio = null; } if (this.pending) { const p = this.pending; this.pending = null; p(); } if ('speechSynthesis' in window) { try { speechSynthesis.cancel(); } catch (e) {} } },
   // text: the lookup key for recorded audio (exact course text). opts.tts: what the browser voice reads if no recording exists.
   async say(text, opts = {}) {
     if (!text) return;
@@ -187,17 +272,19 @@ const Voice = {
     if (my !== this.seq) return;
     if (url) {
       return new Promise(res => {
-        const a = new Audio(url); this.audio = a;
+        const a = new Audio(url); this.audio = a; this.pending = res;
+        const fin = () => { if (this.audio === a) this.audio = null; if (this.pending === res) this.pending = null; res(); };
+        const fallback = () => { if (this.audio === a) this.audio = null; if (this.pending === res) this.pending = null; if (my === this.seq) this.tts(opts.tts || text, opts).then(res); else res(); };
         a.playbackRate = opts.slow ? 0.72 : (S.settings.clipRate || 1); a.preservesPitch = true;
-        a.onended = a.onerror = () => { if (this.audio === a) this.audio = null; res(); };
-        a.play().catch(() => { this.audio = null; this.tts(opts.tts || text, opts).then(res); });
+        a.onended = fin; a.onerror = fallback; // an undecodable clip falls back to the browser voice
+        a.play().catch(fallback);
       });
     }
     return this.tts(opts.tts || text, opts);
   },
   tts(text, opts = {}) {
     if (!('speechSynthesis' in window)) return Promise.resolve();
-    speechSynthesis.cancel();
+    try { speechSynthesis.cancel(); } catch (e) { return Promise.resolve(); }
     return new Promise(res => {
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'ja-JP'; if (this.ja) u.voice = this.ja;
@@ -210,7 +297,7 @@ const Voice = {
 const Clips = {
   index: null, loading: null, packs: new Map(), urls: new Map(),
   load() {
-    if (!this.loading) this.loading = fetch('audio/index.json').then(r => r.ok ? r.json() : null).catch(() => null).then(j => { this.index = j && j.clips ? j : null; return this.index; });
+    if (!this.loading) this.loading = Promise.race([fetch('audio/index.json').then(r => r.ok ? r.json() : null).catch(() => null), new Promise(r => setTimeout(() => r(null), 2500))]).then(j => { this.index = j && isObj(j.clips) && Array.isArray(j.packs) ? j : null; return this.index; });
     return this.loading;
   },
   has(t) { return !!this.index?.clips?.[t]; },
@@ -228,7 +315,7 @@ const Clips = {
 };
 // speakBtn(key, label, tts): plays the recording for `key`, else reads `tts` (or key) with the browser voice. Right-click / long-press plays slowly.
 function speakBtn(text, label = 'Play audio', tts) {
-  const b = h('button.icon-btn.speak', { type: 'button', 'aria-label': label, title: label + ' (right-click: slow)', onclick: e => { e.stopPropagation(); Voice.say(text, { tts }); }, oncontextmenu: e => { e.preventDefault(); e.stopPropagation(); Voice.say(text, { tts, slow: true }); } }, icon('speaker'));
+  const b = h('button.icon-btn.speak', { type: 'button', 'aria-label': label, title: label + ' (right-click: slow)', onclick: e => { e.stopPropagation(); Voice.say(text, { tts, alt: tts ? [tts] : [] }); }, oncontextmenu: e => { e.preventDefault(); e.stopPropagation(); Voice.say(text, { tts, alt: tts ? [tts] : [], slow: true }); } }, icon('speaker'));
   return b;
 }
 

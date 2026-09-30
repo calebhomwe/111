@@ -103,7 +103,7 @@ const isNeg = s => NEG_RE.test(s.replace(/[よねかだです]+$/, m => m)) || /
 function gradeWriting(it, input) {
   const v = normJa(input); if (!v) return 0;
   const accepted = (it.answers || []).map(normJa);
-  if (accepted.includes(v)) return 1;
+  if (accepted.includes(v) || (it.model?.jp && normJa(it.model.jp) === v)) return 1;
   // Polarity guard: a negative answer to a positive prompt (or the reverse) never earns credit.
   const negs = accepted.map(isNeg); if (negs.every(x => x === negs[0]) && isNeg(v) !== negs[0]) return 0;
   // Partial credit tops out below a pass: it shows the learner is close without inflating their level.
@@ -241,7 +241,7 @@ function buildProfile(r) {
   const pc = id => r[id]?.pct || 0;
   const two = (a, b) => clamp((r[a] ? pc(a) * 3 : 0) + (r[b] ? pc(b) : 0), 0, 4);
   const lv = id => r[id]?.level;
-  return { kana: clamp((pc('hira') + pc('kata')) * 2, 0, 4), vocab: two('v5', 'v4'), grammar: two('g5', 'g4'), kanji: two('j5', 'j4'), reading: lv('reading'), listening: lv('listening'), speaking: lv('speaking'), writing: lv('writing') };
+  return { kana: clamp(pc('hira') + pc('kata'), 0, 2), vocab: two('v5', 'v4'), grammar: two('g5', 'g4'), kanji: two('j5', 'j4'), reading: lv('reading'), listening: lv('listening'), speaking: lv('speaking'), writing: lv('writing') };
 }
 function skillProfileCard(pr) {
   if (!pr) return null;
@@ -251,12 +251,13 @@ function skillProfileCard(pr) {
   let g = '';
   for (let ring = 1; ring <= 4; ring++) g += `<polygon points="${axes.map((_, i) => pt(i, ring).join(',')).join(' ')}" fill="none" stroke="var(--line)" stroke-width="${ring === 4 ? 1.2 : .8}"/>`;
   axes.forEach((_, i) => { const [x, y] = pt(i, 4); g += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--line)" stroke-width=".8"/>`; });
-  const poly = axes.map(([k], i) => pt(i, Math.max(0.15, pr[k])).join(',')).join(' ');
+  const val = k => k === 'kana' ? pr[k] * 2 : pr[k];
+  const poly = axes.map(([k], i) => pt(i, Math.max(0.15, val(k))).join(',')).join(' ');
   g += `<polygon points="${poly}" fill="var(--ai)" fill-opacity=".22" stroke="var(--ai)" stroke-width="2.2" stroke-linejoin="round"/>`;
-  axes.forEach(([k, label], i) => { const [x, y] = pt(i, Math.max(0.15, pr[k])); g += `<circle cx="${x}" cy="${y}" r="3.6" fill="var(--seal)"/>`; const [lx, ly] = pt(i, 4.75); g += `<text x="${lx}" y="${ly + 4}" text-anchor="${Math.abs(lx - cx) < 8 ? 'middle' : lx > cx ? 'start' : 'end'}">${label}</text>`; });
-  const lvName = v => v >= 3.5 ? 'N4' : v >= 2.5 ? 'Solid N5' : v >= 1.5 ? 'Early N5' : v >= 0.75 ? 'Kana' : 'Starting';
+  axes.forEach(([k, label], i) => { const [x, y] = pt(i, Math.max(0.15, val(k))); g += `<circle cx="${x}" cy="${y}" r="3.6" fill="var(--seal)"/>`; const [lx, ly] = pt(i, 4.75); g += `<text x="${lx}" y="${ly + 4}" text-anchor="${Math.abs(lx - cx) < 8 ? 'middle' : lx > cx ? 'start' : 'end'}">${label}</text>`; });
+  const lvName = (v, k) => k === 'kana' ? (v >= 1.6 ? 'Both scripts' : v >= 0.8 ? 'One script' : 'Starting') : v >= 3.5 ? 'N4' : v >= 2.5 ? 'Solid N5' : v >= 1.5 ? 'Early N5' : v >= 0.75 ? 'Kana' : 'Starting';
   return h('div.profile', h('div.radar-wrap', { html: `<svg class="chart radar" viewBox="-40 -10 ${W + 80} 300" role="img" aria-label="Skill profile radar chart">${g}</svg>` }),
-    h('div.profile-list', axes.map(([k, label]) => h('div.row.between', h('span', label), h('span.chip' + (pr[k] >= 2.5 ? '.young' : pr[k] >= 1 ? '.learning' : ''), lvName(pr[k]))))));
+    h('div.profile-list', axes.map(([k, label]) => h('div.row.between', h('span', label), h('span.chip' + ((k === 'kana' ? pr[k] >= 1.6 : pr[k] >= 2.5) ? '.young' : pr[k] >= 0.8 ? '.learning' : ''), lvName(pr[k], k))))));
 }
 function sectionBlurb(id) {
   return {
@@ -270,9 +271,14 @@ function sectionBlurb(id) {
 // Mark known material as done and schedule it to resurface gradually.
 function applyPlacement(r, quick) {
   const ok = id => r[id]?.pct >= PASS, t = now(); const placed = [];
+  // One shared daily capacity so a strong result never dumps 50+ reviews on the first days.
+  const CAP = 22, load = {};
   const seed = (keys, spreadDays) => {
-    spreadDays = Math.max(spreadDays, keys.length / 12); let n = 0; for (const k of keys) if (!S.cards[k]) {
-      const c = FSRS.review(null, 3, t); c.s = Math.max(c.s, 6); c.due = t + (1 + Math.random() * spreadDays) * DAY; S.cards[k] = c; n++;
+    spreadDays = Math.max(spreadDays, 4); let n = 0;
+    for (const k of shuffle(keys)) if (!S.cards[k]) {
+      let d = 1 + Math.floor(Math.random() * spreadDays); while ((load[d] || 0) >= CAP) d++;
+      load[d] = (load[d] || 0) + 1;
+      const c = FSRS.review(null, 3, t); c.s = Math.max(c.s, 6); c.due = t + (d + Math.random() * 0.5) * DAY; c.placed = 1; S.cards[k] = c; n++;
     } return n;
   };
   const markLessons = pred => LESSONS.filter(pred).forEach(l => { if (!S.lessons[l.id]) S.lessons[l.id] = { done: t, best: 1, placed: true }; });
@@ -293,8 +299,9 @@ function applyPlacement(r, quick) {
     n4: ['四', 'N5 complete, heading to N4', 'N5 is solid. Your path now focuses on N4 vocabulary, kanji and grammar.'],
     'n4+': ['四', 'Upper N4', 'Strong across the board. Keep your reviews up, read the N4 stories and push your speaking with Sensei.'],
   }[lvl];
+  const firstTime = !!S.placement && !S.placement.skipped;
   const profile = buildProfile(r);
   S.placement = { at: t, level: lvl, results: Object.fromEntries(Object.entries(r).map(([k, v]) => [k, { right: v.right, n: v.n, pct: v.pct, level: v.level }])), profile }; S.settings.level = lvl;
-  save(); addXP(20); App.renderNav();
+  save(); if (!firstTime) addXP(20); App.renderNav();
   return { glyph: info[0], title: info[1], text: info[2], placed, next: nextLesson() };
 }

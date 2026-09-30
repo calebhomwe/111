@@ -50,7 +50,7 @@ VIEWS.story = ({ id }) => {
     sentEls[i].classList.remove('speaking');
     if (chain && playing && i + 1 < sentEls.length) speakSent(i + 1, true); else { playing = false; playAll.replaceChildren(icon('play'), 'Read aloud'); }
   };
-  const playAll = h('button.btn', { onclick: () => { if (playing) { playing = false; speechSynthesis.cancel(); playAll.replaceChildren(icon('play'), 'Read aloud'); return; } playing = true; playAll.replaceChildren(icon('x'), 'Stop'); speakSent(0, true); } }, icon('play'), 'Read aloud');
+  const playAll = h('button.btn', { onclick: () => { if (playing) { playing = false; Voice.stop(); playAll.replaceChildren(icon('play'), 'Read aloud'); return; } playing = true; playAll.replaceChildren(icon('x'), 'Stop'); speakSent(0, true); } }, icon('play'), 'Read aloud');
   const furiBtn = h('button.btn', { 'aria-pressed': String(furi), onclick: () => { furi = !furi; reader.classList.toggle('nofuri', !furi); furiBtn.setAttribute('aria-pressed', String(furi)); furiBtn.lastChild.textContent = furi ? 'Hide furigana' : 'Show furigana'; } }, icon('eye'), h('span', furi ? 'Hide furigana' : 'Show furigana'));
   const enBtn = h('button.btn', { onclick: () => { showEn = !showEn; reader.querySelectorAll('.en').forEach(e => e.hidden = !showEn); enBtn.lastChild.textContent = showEn ? 'Hide English' : 'Show English'; } }, icon('learn'), h('span', 'Show English'));
   const explain = Sensei.available ? h('button.btn', { onclick: () => explainText(s.sents.map(plain).join(''), `Story: ${s.titleEn}`) }, icon('sparkle'), 'Explain the grammar') : null;

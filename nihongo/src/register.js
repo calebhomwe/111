@@ -132,7 +132,7 @@ VIEWS.styles = () => {
       st.lessons[l.id] ? h('span.hanko.round.done', '済') : null,
       h('div.t', `${i + 1}. ${l.t}`), h('div.muted.small', l.sum)))));
   return h('div',
-    banner('tr-styles', '話し方 · Speech styles', 'Casual, polite, keigo', 'Sound right to everyone you talk to: friends, shop staff, teachers and bosses.'),
+    banner('tr-grammar', '話し方 · Speech styles', 'Casual, polite, keigo', 'Sound right to everyone you talk to: friends, shop staff, teachers and bosses.'),
     intro, drills, lessons, Sensei.available ? regCheckerCard() : null);
 };
 

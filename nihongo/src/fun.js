@@ -7,7 +7,7 @@ const Fun = (() => {
   const hash = s => { let x = 0; for (const c of String(s)) x = (x * 31 + c.charCodeAt(0)) | 0; return Math.abs(x); };
   const MAX_FREEZE = 2, MULT_MIN = 15, MILESTONES = [3, 7, 14, 30, 50, 100];
   const dayOn = k => S.days[k]?.xp > 0 || !!S.days[k]?.frozen;
-  const streakN = () => { let n = 0, t = now(); if (!dayOn(dayKey(t))) t -= DAY; while (dayOn(dayKey(t))) { n++; t -= DAY; } return n; };
+  const streakN = () => { let n = 0, t = now(); if (!dayOn(dayKey(t))) t = dayBefore(t); while (dayOn(dayKey(t))) { n++; t = dayBefore(t); } return n; };
 
   ICONS.snow = '<path d="M12 2v20M4 7l16 10M20 7L4 17M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5" fill="none"/>';
   ICONS.crown = '<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/>';
@@ -80,7 +80,7 @@ const Fun = (() => {
       .map(([id, label, chars]) => ({ id: `row-${s}-${id}`, sec: s === 'h' ? 'hira' : 'kata', kind: 'round', g: chars[0], t: `${s === 'h' ? 'Hiragana' : 'Katakana'} · ${label}`, short: label, hint: 'Keep every character in this row stable for 7+ days', test: () => all(chars, c => S.cards[`${s}:${c}`]?.s >= 7) }));
     const jl = (lv, what, g) => {
       const t = { v: `N${lv} vocabulary`, j: `N${lv} kanji`, g: `N${lv} grammar` }[what];
-      const test = what === 'g' ? () => all(GRAMMAR_POINTS.filter(p => p.lv === lv), p => S.grammar[p.id]) : what === 'v' ? () => all(VOCAB.filter(v => v.lv === lv), v => S.cards['v:' + v.id]) : () => all(KANJI.filter(k => k.lv === lv), k => S.cards['j:' + k.k]);
+      const test = what === 'g' ? () => all(GRAMMAR_POINTS.filter(p => p.lv === lv), p => S.grammar[p.id]) : what === 'v' ? () => all(VOCAB.filter(v => v.lv === lv), v => S.cards['v:' + v.id] && !S.cards['v:' + v.id].placed) : () => all(KANJI.filter(k => k.lv === lv), k => S.cards['j:' + k.k] && !S.cards['j:' + k.k].placed);
       return { id: `jlpt-${what}${lv}`, sec: 'jlpt', kind: 'seal', g, tag: 'N' + lv, t, hint: what === 'g' ? `Complete every ${t} point` : `Learn every ${t} item`, test };
     };
     CAT = [
@@ -90,7 +90,7 @@ const Fun = (() => {
       { id: 'season-tsukimi', sec: 'season', kind: 'ai', g: '月見', t: 'Moon viewing', hint: 'Study between Sept 10 and Oct 10', test: () => { const [m, d] = md(); return studied() && (m === 9 && d >= 10 || m === 10 && d <= 10); } },
       ...MILESTONES.map(n => ({ id: 'streak-' + n, sec: 'streak', kind: 'seal', g: numKanji(n), tag: '日', t: `${n}-day streak`, hint: `Study ${n} days in a row`, test: () => F().bestStreak >= n })),
       jl(5, 'v', '語'), jl(5, 'j', '漢'), jl(5, 'g', '文'), jl(4, 'v', '語'), jl(4, 'j', '漢'), jl(4, 'g', '文'),
-      { id: 'feat-first', sec: 'feat', kind: 'round', g: '初', t: 'First lesson', hint: 'Finish any lesson', test: () => Object.keys(S.lessons).length > 0 },
+      { id: 'feat-first', sec: 'feat', kind: 'round', g: '初', t: 'First lesson', hint: 'Finish any lesson', test: () => Object.values(S.lessons).some(l => !l.placed) },
       { id: 'feat-perfect', sec: 'feat', kind: 'round', g: '満', t: 'Flawless', hint: 'Finish a lesson with no mistakes', test: () => F().perfects > 0 },
       { id: 'feat-c25', sec: 'feat', kind: 'round', g: '連', t: 'Combo 25', hint: 'Answer 25 in a row correctly', test: () => F().maxCombo >= 25 },
       { id: 'feat-c50', sec: 'feat', kind: 'round', g: '極', t: 'Combo 50', hint: 'Answer 50 in a row correctly', test: () => F().maxCombo >= 50 },
@@ -190,7 +190,7 @@ const Fun = (() => {
     if (kind === 'freeze' && f.freezes >= MAX_FREEZE) { kind = 'xp'; note = 'Your freeze slots are full, so it turned into XP.'; }
     if (kind === 'rare') { const [id] = unowned[Math.floor(Math.random() * unowned.length)]; f.stamps['rare-' + id] = now(); f.sinceRare = 0; return { kind, id: 'rare-' + id }; }
     if (kind === 'freeze') { f.freezes++; return { kind }; }
-    const n = note ? 40 : 20 + rand(5) * 10; addXP(n); return { kind, n, note };
+    const base = note ? 40 : 20 + rand(5) * 10, before = S.xp; addXP(base); const n = S.xp - before || base; return { kind, n, note };
   }
   function showChest(auto) {
     const f = F(); if (f.chests <= 0) return pump();
@@ -230,8 +230,8 @@ const Fun = (() => {
   // ── Streak: freezes & milestones ────────────────────────────────────────
   function applyFreezes() {
     const f = F(); if (!f.freezes) return;
-    const missed = []; let t = now() - DAY;
-    while (!dayOn(dayKey(t)) && missed.length <= f.freezes) { missed.push(dayKey(t)); t -= DAY; }
+    const missed = []; let t = dayBefore(now());
+    while (!dayOn(dayKey(t)) && missed.length <= f.freezes) { missed.push(dayKey(t)); t = dayBefore(t); }
     if (!missed.length || missed.length > f.freezes || !dayOn(dayKey(t))) return; // nothing missed, or too many to save
     for (const k of missed) (S.days[k] || (S.days[k] = { xp: 0, rev: 0, new: 0, ok: 0 })).frozen = true;
     f.freezes -= missed.length; save();
@@ -434,7 +434,7 @@ const Fun = (() => {
       MILESTONES.filter(m => streakN() >= m).forEach(m => f.ms[m] = dayKey());
       checkStamps(true); Object.keys(f.stamps).forEach(id => f.seen[id] = 1);
     }
-    rollQuests(); checkStamps(); tickMult(); save();
+    rollQuests(); checkStamps(); tickMult(); saveLocal();
     let day = dayKey();
     setInterval(() => { if (dayKey() !== day) { day = dayKey(); rollQuests(); refresh(); } }, 60000);
     if (f.chests > 0) enqueue(() => showChest(true));

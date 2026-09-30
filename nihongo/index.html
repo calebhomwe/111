@@ -797,6 +797,7 @@ function h(tag, attrs, ...kids) {
 
 // Ruby text: word + reading → <ruby> markup (furigana only over kanji runs when possible).
 function ruby(word, reading) {
+  word = String(word ?? ''); reading = reading == null ? reading : String(reading);
   if (!reading || !hasKanji(word) || reading === word) return esc(word);
   // Split okurigana: match leading/trailing kana shared between word and reading.
   let pre = 0; while (pre < word.length && !hasKanji(word[pre]) && word[pre] === reading[pre]) pre++;
@@ -828,41 +829,123 @@ const DEFAULT_STATE = () => ({
   settings: { romaji: true, furigana: 'auto', goal: 50, rate: 0.9, voice: '', newPerDay: 15, sound: true, theme: 'system', level: 'beginner' },
 });
 let S = DEFAULT_STATE();
-function loadLocal() { try { const raw = localStorage.getItem(LS_KEY); if (raw) return JSON.parse(raw); } catch (e) {} return null; }
-function mergeState(base, extra) { const out = Object.assign(DEFAULT_STATE(), base); out.settings = Object.assign(DEFAULT_STATE().settings, base.settings || {}); return out; }
-{ const l = loadLocal(); if (l) S = mergeState(l); }
 
-// Cloud sync through the artifact's per-viewer db subtree; localStorage stays as the fast mirror.
-const Cloud = { db: null, uid: null, ref: null, status: 'local', timer: 0 };
+// ── Sanitising: anything read from storage, a backup file or the cloud is coerced to the shapes the app expects.
+const isObj = o => !!o && typeof o === 'object' && !Array.isArray(o);
+const numOr = (x, d = 0, lo = -Infinity, hi = Infinity) => Number.isFinite(+x) && x !== null && x !== '' ? Math.min(hi, Math.max(lo, +x)) : d;
+const cleanMap = (src, fn) => { const o = {}; if (isObj(src)) for (const k of Object.keys(src)) { if (k === '__proto__' || k === 'constructor' || k === 'prototype') continue; const v = fn(src[k], k); if (v !== undefined) o[k] = v; } return o; };
+function sanitize(raw) {
+  const out = DEFAULT_STATE(); if (!isObj(raw)) return out;
+  out.created = numOr(raw.created, out.created, 0); out.updated = numOr(raw.updated, 0, 0);
+  out.xp = Math.floor(numOr(raw.xp, 0, 0, 1e9)); out.blitzBest = numOr(raw.blitzBest, 0, 0, 1e6);
+  out.cards = cleanMap(raw.cards, c => {
+    if (!isObj(c)) return undefined;
+    const st = [0, 1, 2].includes(+c.st) ? +c.st : (+c.s > 0 ? 2 : 0), s = numOr(c.s, 0, 0, 36500);
+    const card = { s: st && s <= 0 ? 0.4 : s, d: numOr(c.d, 5, 1, 10), due: numOr(c.due, now(), 0), last: numOr(c.last, 0, 0), reps: numOr(c.reps, 0, 0, 1e6), lapses: numOr(c.lapses, 0, 0, 1e6), st };
+    if (c.placed) card.placed = 1; return card;
+  });
+  out.days = cleanMap(raw.days, (v, k) => /^\d{4}-\d{2}-\d{2}$/.test(k) && isObj(v) ? Object.assign({ xp: numOr(v.xp, 0, 0, 1e7), rev: numOr(v.rev, 0, 0, 1e6), new: numOr(v.new, 0, 0, 1e6), ok: numOr(v.ok, 0, 0, 1e6) }, v.frozen ? { frozen: true } : {}) : undefined);
+  for (const k of ['lessons', 'grammar', 'stories', 'ach']) out[k] = cleanMap(raw[k], v => isObj(v) ? { ...v } : typeof v === 'number' ? v : undefined);
+  out.saved = Array.isArray(raw.saved) ? raw.saved.filter(x => typeof x === 'string').slice(-500) : [];
+  out.aiStories = Array.isArray(raw.aiStories) ? raw.aiStories.filter(x => isObj(x) && typeof x.id === 'string' && Array.isArray(x.sents) && x.sents.length).slice(0, 12) : [];
+  if (isObj(raw.settings)) for (const k of Object.keys(out.settings)) { const v = raw.settings[k]; if (typeof v === typeof out.settings[k] && (typeof v !== 'number' || Number.isFinite(v))) out.settings[k] = v; }
+  if (isObj(raw.settings)) for (const k of ['clipRate', 'senseiReg', 'romajiAuto']) if (raw.settings[k] !== undefined && ['number', 'string', 'boolean'].includes(typeof raw.settings[k])) out.settings[k] = raw.settings[k];
+  for (const k of ['fun', 'register', 'placement']) if (isObj(raw[k])) out[k] = JSON.parse(JSON.stringify(raw[k], (kk, v) => (kk === '__proto__' ? undefined : v)));
+  if (out.fun) for (const k of ['stamps', 'seen', 'ms', 'bests', 'quests', 'opened']) if (out.fun[k] !== undefined && !isObj(out.fun[k]) && typeof out.fun[k] !== 'number') delete out.fun[k];
+  return out;
+}
+const mergeState = sanitize;
+function loadLocal() { try { const raw = localStorage.getItem(LS_KEY); if (raw) return JSON.parse(raw); } catch (e) {} return null; }
+{ const l = loadLocal(); if (l) S = sanitize(l); }
+let storageFull = false;
+function saveLocal() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); storageFull = false; } catch (e) { if (!storageFull && e && /quota/i.test(e.name + e.message)) { storageFull = true; try { toast('This browser is out of storage, so progress is not being saved here', 'bad'); } catch (_) {} } } }
+function save() { S.updated = now(); saveLocal(); pushCloud(); }
+
+// ── Cloud sync. State is split into small documents (meta + 16 card shards + AI stories) so it never nears the
+// 256 KiB document limit, only changed shards are rewritten, and every load MERGES remote into local instead of
+// replacing either side.
+const Cloud = { db: null, uid: null, ready: false, status: 'local', timer: 0, maxTimer: 0, hashes: {}, chain: Promise.resolve(), dirty: false };
+const SHARDS = 16;
+const shardOf = k => { let x = 0; for (let i = 0; i < k.length; i++) x = (x * 31 + k.charCodeAt(i)) >>> 0; return x % SHARDS; };
+const packCard = c => [+c.s.toFixed(3), +c.d.toFixed(3), Math.round(c.due / 6e4), Math.round(c.last / 6e4), c.reps, c.lapses, c.st].concat(c.placed ? [1] : []);
+const unpackCard = a => Array.isArray(a) ? { s: a[0], d: a[1], due: a[2] * 6e4, last: a[3] * 6e4, reps: a[4], lapses: a[5], st: a[6], placed: a[7] } : null;
+function partsOf(st) {
+  const meta = {}; for (const k of Object.keys(st)) if (k !== 'cards' && k !== 'aiStories') meta[k] = st[k];
+  meta.v = 2; meta.shards = SHARDS;
+  const parts = { meta }, shards = Array.from({ length: SHARDS }, () => ({}));
+  for (const k of Object.keys(st.cards)) shards[shardOf(k)][k] = packCard(st.cards[k]);
+  shards.forEach((c, i) => { parts['c' + i] = { c }; });
+  parts.ai = { stories: st.aiStories };
+  return parts;
+}
+const hashStr = s => { let x = 5381; for (let i = 0; i < s.length; i++) x = ((x << 5) + x + s.charCodeAt(i)) | 0; return x + ':' + s.length; };
+const partPath = (uid, name) => name === 'meta' ? `data/users/${uid}/progress` : `data/users/${uid}/progress/parts/${name}`;
+async function readRemote(db, uid) {
+  const snap = await db.doc(partPath(uid, 'meta')).get();
+  if (!snap.exists) return null;
+  const m = snap.data() || {};
+  if (typeof m.state === 'string') return sanitize(JSON.parse(m.state)); // v1 format: one JSON string
+  if (isObj(m.state)) return sanitize(m.state);
+  const st = Object.assign({}, m, { cards: {}, aiStories: [] });
+  const names = Array.from({ length: m.shards || SHARDS }, (_, i) => 'c' + i).concat('ai');
+  const docs = await Promise.all(names.map(n => db.doc(partPath(uid, n)).get()));
+  docs.forEach((d, i) => {
+    const data = d.exists ? d.data() : null; if (!data) return;
+    if (names[i] === 'ai') { if (Array.isArray(data.stories)) st.aiStories = data.stories; }
+    else if (isObj(data.c)) for (const k of Object.keys(data.c)) { const c = unpackCard(data.c[k]); if (c) st.cards[k] = c; }
+  });
+  return sanitize(st);
+}
+// Merge remote into local in place. Returns true if local changed.
+function mergeInto(L, R) {
+  const before = JSON.stringify(L), rNewer = R.updated > L.updated;
+  for (const k of Object.keys(R.cards)) { const a = L.cards[k], b = R.cards[k]; if (!a || b.last > a.last) L.cards[k] = b; }
+  for (const k of Object.keys(R.days)) { const a = L.days[k], b = R.days[k]; if (!a) L.days[k] = b; else { for (const f of ['xp', 'rev', 'new', 'ok']) a[f] = Math.max(a[f] || 0, b[f] || 0); if (b.frozen) a.frozen = true; } }
+  L.xp = Math.max(L.xp, R.xp); L.blitzBest = Math.max(L.blitzBest || 0, R.blitzBest || 0); L.created = Math.min(L.created, R.created || L.created);
+  const better = (a, b) => { const score = v => typeof v === 'number' ? v : Math.max(+v.best || 0, +v.score || 0, +v.done || 0, +v.read || 0); return score(b) > score(a) ? b : a; };
+  for (const g of ['lessons', 'grammar', 'stories']) for (const k of Object.keys(R[g])) L[g][k] = L[g][k] ? better(L[g][k], R[g][k]) : R[g][k];
+  for (const k of Object.keys(R.ach)) L.ach[k] = L.ach[k] ? Math.min(L.ach[k], R.ach[k]) : R.ach[k];
+  L.saved = [...new Set(L.saved.concat(R.saved))].slice(-500);
+  const ids = new Set(L.aiStories.map(s => s.id)); L.aiStories = L.aiStories.concat(R.aiStories.filter(s => !ids.has(s.id))).slice(0, 12);
+  if (rNewer) { L.settings = Object.assign(L.settings, R.settings); for (const k of ['fun', 'register', 'placement']) if (R[k]) L[k] = R[k]; }
+  else for (const k of ['fun', 'register', 'placement']) if (!L[k] && R[k]) L[k] = R[k];
+  L.updated = Math.max(L.updated, R.updated);
+  return JSON.stringify(L) !== before;
+}
 async function initCloud() {
   if (!window.claude?.use) return;
   try {
     const [db, user] = await Promise.all([claude.use('db'), claude.use('user')]);
     if (!db || !user) return;
-    const uid = await user.id();
-    if (!uid) return;
-    Cloud.db = db; Cloud.uid = uid; Cloud.ref = db.doc(`data/users/${uid}/progress`);
-    const snap = await Cloud.ref.get();
-    const remote = snap.exists ? snap.data()?.state : null;
-    if (remote) {
-      const r = typeof remote === 'string' ? JSON.parse(remote) : remote;
-      if ((r.updated || 0) > (S.updated || 0)) { S = mergeState(r); saveLocal(); App.render(); toast('Progress synced from your account'); }
-      else if ((S.updated || 0) > (r.updated || 0)) pushCloud(true);
-    } else if (S.updated) pushCloud(true);
-    Cloud.status = 'synced'; updateSyncBadge();
-  } catch (e) { Cloud.status = 'local'; updateSyncBadge(); }
+    const uid = await user.id(); if (!uid) return;
+    const remote = await readRemote(db, uid); // any failure throws: we never write over a remote we could not read
+    if (remote) { Cloud.hashes = Object.fromEntries(Object.entries(partsOf(remote)).map(([n, p]) => [n, hashStr(JSON.stringify(p))])); if (mergeInto(S, remote)) { saveLocal(); App.renderNav(); } }
+    Cloud.db = db; Cloud.uid = uid; Cloud.ready = true; Cloud.status = 'synced'; updateSyncBadge();
+    pushCloud(true);
+  } catch (e) { Cloud.status = 'error'; updateSyncBadge(); }
 }
 function pushCloud(immediate) {
-  if (!Cloud.ref) return;
-  clearTimeout(Cloud.timer);
-  Cloud.timer = setTimeout(async () => {
-    try { Cloud.status = 'saving'; updateSyncBadge(); await Cloud.ref.set({ state: JSON.stringify(S), at: now() }); Cloud.status = 'synced'; }
-    catch (e) { Cloud.status = e?.code === 'invalid_argument' ? 'local' : 'error'; }
-    updateSyncBadge();
-  }, immediate ? 50 : 4000);
+  if (!Cloud.ready) return; Cloud.dirty = true;
+  clearTimeout(Cloud.timer); Cloud.timer = setTimeout(flushCloud, immediate ? 50 : 4000);
+  if (!Cloud.maxTimer) Cloud.maxTimer = setTimeout(flushCloud, 30000); // never postpone forever while someone is busy
 }
-function saveLocal() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) {} }
-function save() { S.updated = now(); saveLocal(); pushCloud(); }
+function flushCloud() {
+  clearTimeout(Cloud.timer); clearTimeout(Cloud.maxTimer); Cloud.maxTimer = 0;
+  if (!Cloud.ready || !Cloud.dirty) return Cloud.chain;
+  Cloud.dirty = false;
+  Cloud.chain = Cloud.chain.then(async () => {
+    try {
+      Cloud.status = 'saving'; updateSyncBadge();
+      const parts = partsOf(S), jobs = [];
+      for (const [name, p] of Object.entries(parts)) { const json = JSON.stringify(p), h = hashStr(json); if (json.length > 200000) throw { code: 'too_large' }; if (Cloud.hashes[name] !== h) jobs.push([name, p, h]); }
+      for (const [name, p, h] of jobs) { await Cloud.db.doc(partPath(Cloud.uid, name)).set(p); Cloud.hashes[name] = h; }
+      Cloud.status = 'synced';
+    } catch (e) { Cloud.status = 'error'; Cloud.dirty = true; }
+    updateSyncBadge();
+  });
+  return Cloud.chain;
+}
+try { document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushCloud(); }); addEventListener('pagehide', flushCloud); } catch (e) {}
 function updateSyncBadge() {
   const b = $('#sync'); if (!b) return;
   const map = { local: ['This device', 'Progress is saved in this browser'], saving: ['Saving…', 'Saving to your account'], synced: ['Synced', 'Progress is saved to your Claude account'], error: ['Sync paused', 'Could not reach the store; saved on this device'] };
@@ -877,15 +960,17 @@ function addXP(n, reason) {
   const pill = $('#xpPill'); if (pill) { pill.textContent = `${S.xp.toLocaleString()} XP`; pill.classList.remove('bump'); void pill.offsetWidth; pill.classList.add('bump'); }
   checkAchievements();
 }
+// Step calendar days from local noon so DST changes can't skip or repeat a day.
+const dayBefore = t => { const d = new Date(t); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() - 1); return d.getTime(); };
 function streak() {
   let n = 0, t = now();
   const kept = k => S.days[k]?.xp > 0 || S.days[k]?.frozen; // a streak freeze covers a missed day
-  if (!kept(dayKey(t))) t -= DAY; // today not done yet: count from yesterday
-  while (kept(dayKey(t))) { n++; t -= DAY; }
+  if (!kept(dayKey(t))) t = dayBefore(t); // today not done yet: count from yesterday
+  while (kept(dayKey(t))) { n++; t = dayBefore(t); }
   return n;
 }
 const LEVEL_XP = l => Math.round(60 * Math.pow(l, 1.6));
-function levelInfo(xp = S.xp) { let l = 1, acc = 0; while (xp >= acc + LEVEL_XP(l)) { acc += LEVEL_XP(l); l++; } return { level: l, into: xp - acc, need: LEVEL_XP(l) }; }
+function levelInfo(xp = S.xp) { let l = 1, acc = 0; xp = numOr(xp, 0, 0, 1e9); while (l < 500 && xp >= acc + LEVEL_XP(l)) { acc += LEVEL_XP(l); l++; } return { level: l, into: xp - acc, need: LEVEL_XP(l) }; }
 
 // ─── FSRS-4.5 scheduler ───────────────────────────────────────────────────
 const FSRS = (() => {
@@ -913,7 +998,7 @@ const FSRS = (() => {
         c.s = Math.max(c.s, w[g - 1] * 0.8); c.st = 2; c.due = t + (g === 2 ? 0.5 : ivl(c.s)) * DAY;
       } else { c.s = sRecall(c.d, c.s, r, g); c.st = 2; c.due = t + ivl(c.s) * DAY; }
     }
-    c.last = t; c.reps++;
+    c.last = t; c.reps++; delete c.placed; // a real review turns a placement guess into a learned card
     return c;
   }
   const retrievability = (c, t = now()) => c && c.st ? R(Math.max(0, (t - c.last) / DAY), c.s) : 0;
@@ -939,8 +1024,8 @@ const Voice = {
     load(); speechSynthesis.onvoiceschanged = load;
   },
   get ok() { return 'speechSynthesis' in window || !!Clips.index; },
-  seq: 0, audio: null,
-  stop() { this.seq++; if (this.audio) { this.audio.pause(); this.audio = null; } if ('speechSynthesis' in window) speechSynthesis.cancel(); },
+  seq: 0, audio: null, pending: null,
+  stop() { this.seq++; if (this.audio) { this.audio.pause(); this.audio = null; } if (this.pending) { const p = this.pending; this.pending = null; p(); } if ('speechSynthesis' in window) { try { speechSynthesis.cancel(); } catch (e) {} } },
   // text: the lookup key for recorded audio (exact course text). opts.tts: what the browser voice reads if no recording exists.
   async say(text, opts = {}) {
     if (!text) return;
@@ -951,17 +1036,19 @@ const Voice = {
     if (my !== this.seq) return;
     if (url) {
       return new Promise(res => {
-        const a = new Audio(url); this.audio = a;
+        const a = new Audio(url); this.audio = a; this.pending = res;
+        const fin = () => { if (this.audio === a) this.audio = null; if (this.pending === res) this.pending = null; res(); };
+        const fallback = () => { if (this.audio === a) this.audio = null; if (this.pending === res) this.pending = null; if (my === this.seq) this.tts(opts.tts || text, opts).then(res); else res(); };
         a.playbackRate = opts.slow ? 0.72 : (S.settings.clipRate || 1); a.preservesPitch = true;
-        a.onended = a.onerror = () => { if (this.audio === a) this.audio = null; res(); };
-        a.play().catch(() => { this.audio = null; this.tts(opts.tts || text, opts).then(res); });
+        a.onended = fin; a.onerror = fallback; // an undecodable clip falls back to the browser voice
+        a.play().catch(fallback);
       });
     }
     return this.tts(opts.tts || text, opts);
   },
   tts(text, opts = {}) {
     if (!('speechSynthesis' in window)) return Promise.resolve();
-    speechSynthesis.cancel();
+    try { speechSynthesis.cancel(); } catch (e) { return Promise.resolve(); }
     return new Promise(res => {
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'ja-JP'; if (this.ja) u.voice = this.ja;
@@ -974,7 +1061,7 @@ const Voice = {
 const Clips = {
   index: null, loading: null, packs: new Map(), urls: new Map(),
   load() {
-    if (!this.loading) this.loading = fetch('audio/index.json').then(r => r.ok ? r.json() : null).catch(() => null).then(j => { this.index = j && j.clips ? j : null; return this.index; });
+    if (!this.loading) this.loading = Promise.race([fetch('audio/index.json').then(r => r.ok ? r.json() : null).catch(() => null), new Promise(r => setTimeout(() => r(null), 2500))]).then(j => { this.index = j && isObj(j.clips) && Array.isArray(j.packs) ? j : null; return this.index; });
     return this.loading;
   },
   has(t) { return !!this.index?.clips?.[t]; },
@@ -992,7 +1079,7 @@ const Clips = {
 };
 // speakBtn(key, label, tts): plays the recording for `key`, else reads `tts` (or key) with the browser voice. Right-click / long-press plays slowly.
 function speakBtn(text, label = 'Play audio', tts) {
-  const b = h('button.icon-btn.speak', { type: 'button', 'aria-label': label, title: label + ' (right-click: slow)', onclick: e => { e.stopPropagation(); Voice.say(text, { tts }); }, oncontextmenu: e => { e.preventDefault(); e.stopPropagation(); Voice.say(text, { tts, slow: true }); } }, icon('speaker'));
+  const b = h('button.icon-btn.speak', { type: 'button', 'aria-label': label, title: label + ' (right-click: slow)', onclick: e => { e.stopPropagation(); Voice.say(text, { tts, alt: tts ? [tts] : [] }); }, oncontextmenu: e => { e.preventDefault(); e.stopPropagation(); Voice.say(text, { tts, alt: tts ? [tts] : [], slow: true }); } }, icon('speaker'));
   return b;
 }
 
@@ -1085,14 +1172,17 @@ const GRAMMAR_POINTS = GRAMMAR.units.flatMap(u => u.points.map(p => Object.assig
 // ─── Kana ⇄ romaji ─────────────────────────────────────────────────────────
 const toHira = s => s.replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
 const toKata = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+// Loanword sounds written with a small vowel: フォーク → fo-o-ku, ティー → thi-i, チェック → che-kku
+const EXT_ROMA = { 'ふぁ': 'fa', 'ふぃ': 'fi', 'ふぇ': 'fe', 'ふぉ': 'fo', 'てぃ': 'thi', 'でぃ': 'dhi', 'とぅ': 'tu', 'どぅ': 'du', 'ちぇ': 'che', 'しぇ': 'she', 'じぇ': 'je', 'うぃ': 'wi', 'うぇ': 'we', 'うぉ': 'wo', 'つぁ': 'tsa', 'つぃ': 'tsi', 'つぇ': 'tse', 'つぉ': 'tso', 'くぁ': 'kwa', 'ゔぁ': 'va', 'ゔぃ': 'vi', 'ゔぇ': 've', 'ゔぉ': 'vo', 'ゔ': 'vu' };
 const EXTRA_ROMA = { 'ぁ': 'a', 'ぃ': 'i', 'ぅ': 'u', 'ぇ': 'e', 'ぉ': 'o', 'ゔ': 'vu', 'ゎ': 'wa' };
 function kanaToRomaji(s) {
   s = toHira(s); let out = '';
   for (let i = 0; i < s.length; i++) {
     const two = s.slice(i, i + 2), c = s[i];
-    if (c === 'っ') { const nx = s.slice(i + 1, i + 3); const r = KANA_ROMAJI[nx] || KANA_ROMAJI[s[i + 1]] || ''; out += r.startsWith('ch') ? 't' : (r[0] || ''); continue; }
+    if (c === 'っ') { const nx = s.slice(i + 1, i + 3); const r = EXT_ROMA[nx] || KANA_ROMAJI[nx] || KANA_ROMAJI[s[i + 1]] || ''; out += r.startsWith('ch') ? 't' : (r[0] || ''); continue; }
     if (c === 'ー') { out += out.slice(-1); continue; }
     if (c === 'ん') { const nx = KANA_ROMAJI[s[i + 1]] || ''; out += /^[aiueoy]/.test(nx) ? "n'" : 'n'; continue; }
+    if (EXT_ROMA[two]) { out += EXT_ROMA[two]; i++; continue; }
     if (KANA_ROMAJI[two] && two.length === 2) { out += KANA_ROMAJI[two]; i++; continue; }
     out += KANA_ROMAJI[c] || EXTRA_ROMA[c] || c;
   }
@@ -1100,19 +1190,24 @@ function kanaToRomaji(s) {
 }
 // Normalise alternative spellings so "si", "tu", "hu", "zya" all count.
 function normRomaji(s) {
-  return s.toLowerCase().replace(/n['’]|nn(?=[aiueoy])/g, 'N').replace(/[\s'’\-]/g, '')
+  return s.toLowerCase().replace(/ā/g, 'aa').replace(/ī/g, 'ii').replace(/ū/g, 'uu').replace(/ē/g, 'ee').replace(/n['’]/g, 'N').replace(/[\s'’\-]/g, '')
     .replace(/sy([aueo])/g, 'sh$1').replace(/si/g, 'shi').replace(/ty([aueo])/g, 'ch$1').replace(/cy([aueo])/g, 'ch$1').replace(/ti/g, 'chi').replace(/tu/g, 'tsu')
     .replace(/hu/g, 'fu').replace(/z?jy([aueo])/g, 'j$1').replace(/zy([aueo])/g, 'j$1').replace(/zi/g, 'ji').replace(/di/g, 'ji').replace(/du/g, 'zu').replace(/nn(?=[^aiueoyN]|$)/g, 'n')
     .replace(/shhi/g, 'shi').replace(/chhi/g, 'chi');
 }
 function kanaAnswerMatches(input, kana) {
-  const i = input.trim(); if (!i) return false;
+  kana = String(kana).replace(/[〜～]/g, ''); const i = input.trim().replace(/[〜～]/g, ''); if (!i) return false;
   if (/[぀-ヿ]/.test(i)) return toHira(i.replace(/\s/g, '')) === toHira(kana);
   const r = normRomaji(kanaToRomaji(kana)); const n = normRomaji(i);
   if (n === r) return true;
   // particles は/へ are pronounced wa/e (こんにちは → konnichiwa, では → dewa)
-  const alt = r.replace(/ha$/, 'wa').replace(/(de|ni|to)ha/g, '$1wa').replace(/he$/, 'e');
+  // (only real particle spots: は/へ alone, after で/に/と/から/まで, and the greetings)
+  const pk = toHira(kana); let alt = r;
+  if (/(こんにちは|こんばんは)$/.test(pk)) alt = alt.replace(/ha$/, 'wa');
+  else if (/^(は|へ)$/.test(pk)) alt = pk === 'は' ? 'wa' : 'e';
+  else if (/(では|には|とは|へは|からは|までは)$/.test(pk)) alt = alt.replace(/ha$/, 'wa');
   if (n === alt) return true;
+  if (/[āīūēō]/i.test(input)) { const v2 = normRomaji(input.replace(/ō/g, 'ou').replace(/Ō/g, 'ou').replace(/ē/g, 'ei')); if (v2 === r) return true; const v3 = normRomaji(input.replace(/ō/g, 'oo').replace(/ē/g, 'ee')); if (v3 === r) return true; }
   if (kana === 'を' && n === 'o') return true; if (kana === 'ヲ' && n === 'o') return true;
   return false;
 }
@@ -1183,15 +1278,21 @@ function vocabDistractors(v, n = 3) {
   const okX = x => x.id !== v.id && x.m !== v.m && x.w !== v.w && x.r !== v.r;
   const same = VOCAB.filter(x => okX(x) && x.cat === v.cat), pos = VOCAB.filter(x => okX(x) && x.pos === v.pos);
   const pool = same.length >= n ? same : same.concat(shuffle(pos)).length >= n ? same.concat(pos) : VOCAB.filter(okX);
-  const out = [], seenM = new Set([v.m]);
-  for (const x of shuffle(pool)) { if (out.length >= n) break; if (seenM.has(x.m)) continue; seenM.add(x.m); out.push(x); }
+  const out = [];
+  for (const x of shuffle(pool)) { if (out.length >= n) break; if (mClash(x.m, v.m) || out.some(o => mClash(o.m, x.m))) continue; out.push(x); }
+  if (out.length < n) for (const x of shuffle(VOCAB.filter(okX))) { if (out.length >= n) break; if (!mClash(x.m, v.m) && !out.some(o => mClash(o.m, x.m)) && !out.includes(x)) out.push(x); }
   return out;
 }
 function kanjiDistractors(k, n = 3) {
-  const pool = KANJI.filter(x => x.k !== k.k && Math.abs(x.s - k.s) <= 3);
-  return shuffle(pool.length >= n ? pool : KANJI.filter(x => x.k !== k.k)).slice(0, n);
+  const ok = x => x.k !== k.k && !mClash(x.m, k.m);
+  const pick_ = [], pool = shuffle(KANJI.filter(x => ok(x) && Math.abs(x.s - k.s) <= 3)).concat(shuffle(KANJI.filter(ok)));
+  for (const x of pool) { if (pick_.length >= n) break; if (!pick_.includes(x) && !pick_.some(o => mClash(o.m, x.m))) pick_.push(x); }
+  return pick_;
 }
 const shortM = m => m.split(/;\s*/).slice(0, 2).join('; ');
+// Meaning segments ("hello (on the phone); good afternoon" → hello, good afternoon) so near-synonyms never appear as two options.
+const mSegs = m => String(m || '').toLowerCase().replace(/\([^)]*\)/g, '').split(/;\s*/).map(x => x.trim().replace(/^to /, '').replace(/^(a|an|the) /, '')).filter(Boolean);
+const mClash = (a, b) => { const B = mSegs(b); return mSegs(a).some(x => B.includes(x)); };
 
 // ─── Question factory ──────────────────────────────────────────────────────
 // Returns {kind:'mc'|'type', prompt:{big, sub, audio, hint}, opts:[{label, sub, correct}], check(str), answer, reveal}
@@ -1219,7 +1320,7 @@ function makeQuestion(key, forceMode) {
     if (mode === 'a2m') return { key, mode, kind: 'mc', q: 'Listen. What does it mean?', audio: it.r, opts: shuffle([it, ...ds].map(x => ({ label: shortM(x.m), correct: x.id === it.id }))), answer: `${it.w} (${it.r}) — ${it.m}`, say: it.r };
     if (mode === 'm2v') return { key, mode, kind: 'mc', q: 'Which word means…', big: shortM(it.m), bigClass: 'en', opts: shuffle([it, ...ds].map(x => ({ labelHTML: ruby(x.w, x.r), big: true, correct: x.id === it.id }))), answer: `${it.w} (${it.r})`, say: it.r };
     if (mode === 'v2r-type') return { key, mode, kind: 'type', q: 'Type the reading', bigHTML: esc(it.w), bigClass: 'word', hint: shortM(it.m), answer: it.r, kana: it.r, check: s => kanaAnswerMatches(s, it.r), say: it.r, ime: true };
-    return { key, mode: 'm2v-type', kind: 'type', q: 'Say it in Japanese (type the reading)', big: shortM(it.m), bigClass: 'en', hint: CAT_NAME[it.cat] || '', answer: `${it.r}${it.w !== it.r ? ' · ' + it.w : ''}`, kana: it.r, check: s => kanaAnswerMatches(s, it.r) || s.trim() === it.w, say: it.r, ime: true };
+    return { key, mode: 'm2v-type', kind: 'type', q: 'Say it in Japanese (type the reading)', big: shortM(it.m), bigClass: 'en', hint: CAT_NAME[it.cat] || '', answer: `${it.r}${it.w !== it.r ? ' · ' + it.w : ''}`, kana: it.r, check: s => kanaAnswerMatches(s, it.r) || s.trim() === it.w || VOCAB.some(x => x.id !== it.id && x.pos === it.pos && mClash(x.m, it.m) && (kanaAnswerMatches(s, x.r) || s.trim() === x.w)), say: it.r, ime: true };
   }
   if (it.type === 'kanji') {
     const modes = typing ? ['j2m', 'jex', 'm2j', 'jex-type'] : ['j2m', 'j2m', 'jex', 'm2j'];
@@ -1232,7 +1333,7 @@ function makeQuestion(key, forceMode) {
     if (mode === 'jex-type') return { key, mode, kind: 'type', q: 'Type the reading of this word', big: ex[0], bigClass: 'word', hint: ex[2], answer: ex[1], kana: ex[1], check: s => kanaAnswerMatches(s, ex[1]), say: ex[1], ime: true };
     const allEx = KANJI.flatMap(k => k.ex || []).filter(e => e[1] !== ex[1] && e[0] !== ex[0]);
     const share = shuffle(allEx.filter(e => [...ex[0]].some(c => hasKanji(c) && e[0].includes(c)) && Math.abs(e[1].length - ex[1].length) <= 1));
-    const others = [...new Map(share.concat(shuffle(allEx.filter(e => Math.abs(e[1].length - ex[1].length) <= 1))).map(e => [e[1], e])).values()].slice(0, 3);
+    const others = [...new Map(share.concat(shuffle(allEx.filter(e => Math.abs(e[1].length - ex[1].length) <= 1)), shuffle(allEx)).map(e => [e[1], e])).values()].slice(0, 3);
     return { key, mode: 'jex', kind: 'mc', q: 'How is this word read?', big: ex[0], bigClass: 'word', hint: ex[2], opts: shuffle([ex, ...others].map(e => ({ label: e[1], big: true, correct: e[1] === ex[1] }))), answer: `${ex[0]} (${ex[1]}) — ${ex[2]}`, say: ex[1] };
   }
 }
@@ -1276,7 +1377,10 @@ function conjugate(v, form) {
     return m ? b + m : null;
   }
   if (pos === 'v5') {
-    if (HONORIFIC_GODAN.some(x => r.endsWith(x))) return null;
+    if (HONORIFIC_GODAN.some(x => r.endsWith(x))) { // いらっしゃる・おっしゃる・くださる・なさる: the ます stem is い, not り
+      const b = r.slice(0, -1), m = { masu: 'います', masen: 'いません', mashita: 'いました', masendeshita: 'いませんでした', te: 'って', ta: 'った', nai: 'らない', nakatta: 'らなかった', mashou: 'いましょう', imp: 'い' }[form];
+      return m ? b + m : null;
+    }
     const last = r.slice(-1), vt = v.vt || U_TO_VT[last]; if (!vt || !GODAN_ROW[vt]) return null;
     const b = r.slice(0, -1), row = GODAN_ROW[vt];
     const iku = v.ex5 === 'iku' || /^(い|ゆ)く$/.test(r) || r.endsWith('いく') && /行/.test(v.w || '');
@@ -1297,7 +1401,7 @@ function conjugate(v, form) {
     return m || null;
   }
   if (pos === 'adj-i') {
-    const irr = v.irr || r === 'いい' || r.endsWith('いい') && v.w?.endsWith('いい');
+    const irr = v.irr || r === 'いい' || /^かっこいい$/.test(r);
     const b = irr ? r.slice(0, -2) + 'よ' : r.slice(0, -1);
     return { 'a-neg': b + 'くない', 'a-past': b + 'かった', 'a-pastneg': b + 'くなかった', 'a-te': b + 'くて', 'a-adv': b + 'く', 'a-pol': b + 'くないです' }[form] || null;
   }
@@ -1314,8 +1418,8 @@ function conjAccepts(v, form, input) {
   const alts = [ans, ans.replace('じゃ', 'では'), writtenVariant, writtenVariant && writtenVariant.replace('じゃ', 'では')];
   if (form === 'a-pol' && v.pos === 'adj-i') alts.push(ans.replace(/くないです$/, 'くありません'));
   if (form === 'a-pol' && v.pos === 'adj-na') alts.push(ans.replace(/じゃありません$/, 'じゃないです'), ans.replace(/じゃありません$/, 'ではありません'));
-  if (form === 'pot' && v.pos === 'v1') alts.push(ans.replace(/られる$/, 'れる')); // ら抜き is common in speech
-  if (form === 'pot' && v.pos === 'vk') alts.push(ans.replace(/こられる$/, 'これる'));
+  if (form === 'pot' && v.pos === 'v1') alts.push(ans.replace(/られる$/, 'れる'), writtenVariant && writtenVariant.replace(/られる$/, 'れる')); // ら抜き is common in speech
+  if (form === 'pot' && v.pos === 'vk') alts.push(ans.replace(/こられる$/, 'これる'), writtenVariant && writtenVariant.replace(/来られる$/, '来れる'));
   if (!/[぀-ヿ一-龯]/.test(i)) return alts.filter(Boolean).some(a => normRomaji(kanaToRomaji(a)) === normRomaji(i));
   return alts.filter(Boolean).includes(i);
 }
@@ -1332,9 +1436,9 @@ function writtenConj(v, conjReading) {
 }
 const CONJ_VERBS = () => VOCAB.filter(v => ['v1', 'v5', 'vk', 'vsi', 'vs'].includes(v.pos) && conjugate(v, 'te'));
 // Stative verbs whose will/ability/command forms are unnatural; skip them for those drills.
-const NO_WILL = new Set(['ある', 'わかる', 'できる', 'しる', 'いる', 'みえる', 'きこえる', 'こまる', 'ちがう', 'すぎる', 'なる', 'かかる', 'いる']);
+const NO_WILL = new Set(['ある', 'わかる', 'できる', 'しる', 'いる', 'みえる', 'きこえる', 'こまる', 'ちがう', 'すぎる', 'なる', 'かかる', 'ふる', 'さく', 'はれる', 'くもる', 'つかれる', 'こわれる', 'ふえる', 'へる', 'にる', 'はじまる', 'おわる', 'きまる', 'かわる', 'きえる', 'おちる', 'みつかる', 'たりる', 'にあう', 'ひかる', 'ながれる', 'とける', 'なおる', 'あく', 'しまる', 'とどく', 'かれる', 'おこる']);
 const WILL_FORMS = new Set(['pot', 'vol', 'imp', 'pass', 'caus', 'tai', 'mashou']);
-const conjNatural = (v, form) => !(WILL_FORMS.has(form) && (NO_WILL.has(v.r) || /(まる|がる|わる|まる)$/.test(v.r) && v.pos === 'v5' && ['pot', 'vol', 'imp', 'caus'].includes(form)));
+const conjNatural = (v, form) => !(WILL_FORMS.has(form) && NO_WILL.has(v.r));
 const CONJ_ADJS = () => VOCAB.filter(v => ['adj-i', 'adj-na'].includes(v.pos) && conjugate(v, 'a-neg'));
 function conjRule(v, form) {
   const t = { v1: 'Ichidan (る-verb): drop る, add the ending.', v5: 'Godan (う-verb): shift the final kana along its row.', vk: '来る is irregular: く→き/こ.', vsi: 'する is irregular: し/さ/すれ.', vs: 'Noun + する: conjugate する.', 'adj-i': 'い-adjective: drop い, add the ending.', 'adj-na': 'な-adjective: attach the copula.' }[v.pos] || '';
@@ -1392,7 +1496,7 @@ const App = {
   route: 'home', params: {}, cleanup: null,
   go(route, params = {}, push = true) {
     if (this.cleanup) { try { this.cleanup(); } catch (e) {} this.cleanup = null; }
-    Voice.stop(); $$('.pop').forEach(p => p.remove());
+    Voice.stop(); $$('.pop, .modal-back').forEach(p => p.remove());
     this.route = route; this.params = params;
     if (push) { try { history.replaceState(null, '', '#' + route); } catch (e) {} }
     this.render(); window.scrollTo({ top: 0 });
@@ -1405,10 +1509,13 @@ const App = {
       h('button.icon-btn', { 'aria-label': 'Progress', onclick: () => App.go('stats') }, icon('stats')),
       h('button.icon-btn', { 'aria-label': 'Settings', onclick: () => App.go('settings') }, icon('gear'))));
     main.append(top);
-    const fn = VIEWS[this.route] || VIEWS.home;
-    const v = fn(this.params) || h('div');
+    const fn = Object.prototype.hasOwnProperty.call(VIEWS, this.route) ? VIEWS[this.route] : VIEWS.home;
+    let v; try { v = fn(this.params) || h('div'); } catch (e) {
+      console.error(e);
+      v = h('section.card.pad-lg.stack', h('h2', 'Something went wrong on this screen'), h('p.muted', 'Your progress is safe. You can go back to Today, or save a backup and reset if the problem keeps coming back.'), h('div.row', h('button.btn.primary', { onclick: () => App.go('home') }, 'Go to Today'), h('button.btn', { onclick: () => App.go('settings') }, 'Settings and backup')));
+    }
     v.classList.add('view'); main.append(v);
-    this.renderNav();
+    try { this.renderNav(); } catch (e) { console.error(e); }
   },
   renderNav() {
     const nav = $('#nav'); nav.innerHTML = '';
@@ -1807,7 +1914,7 @@ function renderQuestion(host, q, answer, continueFn) {
   const card = h('div.qcard'); let answered = false;
   const big = h('div.qbig' + (q.bigClass === 'kana' || q.bigClass === 'kanji' ? '.gridpaper' : ''));
   if (q.big) big.append(h('div.' + (q.bigClass || 'word'), q.big)); else if (q.bigHTML) big.append(h('div.' + (q.bigClass || 'word'), { html: q.bigHTML }));
-  if (q.audio) { const b = h('button.btn.primary', { style: { width: '84px', height: '84px', borderRadius: '50%' }, 'aria-label': 'Play again', onclick: () => Voice.say(q.audio) }, icon('speaker')); b.querySelector('svg').style.cssText = 'width:34px;height:34px'; big.append(b); setTimeout(() => Voice.say(q.audio), 200); }
+  if (q.audio) { const b = h('button.btn.primary', { style: { width: '84px', height: '84px', borderRadius: '50%' }, 'aria-label': 'Play again', onclick: () => Voice.say(q.audio) }, icon('speaker')); b.querySelector('svg').style.cssText = 'width:34px;height:34px'; big.append(b); const rt = App.route; setTimeout(() => { if (App.route === rt) Voice.say(q.audio); }, 200); }
   if (q.sub) big.append(h('div.hint', q.sub)); if (q.hint) big.append(h('div.hint', q.hint));
   const fb = h('div');
   const finish = (ok, typed) => {
@@ -1865,7 +1972,7 @@ const Fun = (() => {
   const hash = s => { let x = 0; for (const c of String(s)) x = (x * 31 + c.charCodeAt(0)) | 0; return Math.abs(x); };
   const MAX_FREEZE = 2, MULT_MIN = 15, MILESTONES = [3, 7, 14, 30, 50, 100];
   const dayOn = k => S.days[k]?.xp > 0 || !!S.days[k]?.frozen;
-  const streakN = () => { let n = 0, t = now(); if (!dayOn(dayKey(t))) t -= DAY; while (dayOn(dayKey(t))) { n++; t -= DAY; } return n; };
+  const streakN = () => { let n = 0, t = now(); if (!dayOn(dayKey(t))) t = dayBefore(t); while (dayOn(dayKey(t))) { n++; t = dayBefore(t); } return n; };
 
   ICONS.snow = '<path d="M12 2v20M4 7l16 10M20 7L4 17M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5" fill="none"/>';
   ICONS.crown = '<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/>';
@@ -1938,7 +2045,7 @@ const Fun = (() => {
       .map(([id, label, chars]) => ({ id: `row-${s}-${id}`, sec: s === 'h' ? 'hira' : 'kata', kind: 'round', g: chars[0], t: `${s === 'h' ? 'Hiragana' : 'Katakana'} · ${label}`, short: label, hint: 'Keep every character in this row stable for 7+ days', test: () => all(chars, c => S.cards[`${s}:${c}`]?.s >= 7) }));
     const jl = (lv, what, g) => {
       const t = { v: `N${lv} vocabulary`, j: `N${lv} kanji`, g: `N${lv} grammar` }[what];
-      const test = what === 'g' ? () => all(GRAMMAR_POINTS.filter(p => p.lv === lv), p => S.grammar[p.id]) : what === 'v' ? () => all(VOCAB.filter(v => v.lv === lv), v => S.cards['v:' + v.id]) : () => all(KANJI.filter(k => k.lv === lv), k => S.cards['j:' + k.k]);
+      const test = what === 'g' ? () => all(GRAMMAR_POINTS.filter(p => p.lv === lv), p => S.grammar[p.id]) : what === 'v' ? () => all(VOCAB.filter(v => v.lv === lv), v => S.cards['v:' + v.id] && !S.cards['v:' + v.id].placed) : () => all(KANJI.filter(k => k.lv === lv), k => S.cards['j:' + k.k] && !S.cards['j:' + k.k].placed);
       return { id: `jlpt-${what}${lv}`, sec: 'jlpt', kind: 'seal', g, tag: 'N' + lv, t, hint: what === 'g' ? `Complete every ${t} point` : `Learn every ${t} item`, test };
     };
     CAT = [
@@ -1948,7 +2055,7 @@ const Fun = (() => {
       { id: 'season-tsukimi', sec: 'season', kind: 'ai', g: '月見', t: 'Moon viewing', hint: 'Study between Sept 10 and Oct 10', test: () => { const [m, d] = md(); return studied() && (m === 9 && d >= 10 || m === 10 && d <= 10); } },
       ...MILESTONES.map(n => ({ id: 'streak-' + n, sec: 'streak', kind: 'seal', g: numKanji(n), tag: '日', t: `${n}-day streak`, hint: `Study ${n} days in a row`, test: () => F().bestStreak >= n })),
       jl(5, 'v', '語'), jl(5, 'j', '漢'), jl(5, 'g', '文'), jl(4, 'v', '語'), jl(4, 'j', '漢'), jl(4, 'g', '文'),
-      { id: 'feat-first', sec: 'feat', kind: 'round', g: '初', t: 'First lesson', hint: 'Finish any lesson', test: () => Object.keys(S.lessons).length > 0 },
+      { id: 'feat-first', sec: 'feat', kind: 'round', g: '初', t: 'First lesson', hint: 'Finish any lesson', test: () => Object.values(S.lessons).some(l => !l.placed) },
       { id: 'feat-perfect', sec: 'feat', kind: 'round', g: '満', t: 'Flawless', hint: 'Finish a lesson with no mistakes', test: () => F().perfects > 0 },
       { id: 'feat-c25', sec: 'feat', kind: 'round', g: '連', t: 'Combo 25', hint: 'Answer 25 in a row correctly', test: () => F().maxCombo >= 25 },
       { id: 'feat-c50', sec: 'feat', kind: 'round', g: '極', t: 'Combo 50', hint: 'Answer 50 in a row correctly', test: () => F().maxCombo >= 50 },
@@ -2048,7 +2155,7 @@ const Fun = (() => {
     if (kind === 'freeze' && f.freezes >= MAX_FREEZE) { kind = 'xp'; note = 'Your freeze slots are full, so it turned into XP.'; }
     if (kind === 'rare') { const [id] = unowned[Math.floor(Math.random() * unowned.length)]; f.stamps['rare-' + id] = now(); f.sinceRare = 0; return { kind, id: 'rare-' + id }; }
     if (kind === 'freeze') { f.freezes++; return { kind }; }
-    const n = note ? 40 : 20 + rand(5) * 10; addXP(n); return { kind, n, note };
+    const base = note ? 40 : 20 + rand(5) * 10, before = S.xp; addXP(base); const n = S.xp - before || base; return { kind, n, note };
   }
   function showChest(auto) {
     const f = F(); if (f.chests <= 0) return pump();
@@ -2088,8 +2195,8 @@ const Fun = (() => {
   // ── Streak: freezes & milestones ────────────────────────────────────────
   function applyFreezes() {
     const f = F(); if (!f.freezes) return;
-    const missed = []; let t = now() - DAY;
-    while (!dayOn(dayKey(t)) && missed.length <= f.freezes) { missed.push(dayKey(t)); t -= DAY; }
+    const missed = []; let t = dayBefore(now());
+    while (!dayOn(dayKey(t)) && missed.length <= f.freezes) { missed.push(dayKey(t)); t = dayBefore(t); }
     if (!missed.length || missed.length > f.freezes || !dayOn(dayKey(t))) return; // nothing missed, or too many to save
     for (const k of missed) (S.days[k] || (S.days[k] = { xp: 0, rev: 0, new: 0, ok: 0 })).frozen = true;
     f.freezes -= missed.length; save();
@@ -2292,7 +2399,7 @@ const Fun = (() => {
       MILESTONES.filter(m => streakN() >= m).forEach(m => f.ms[m] = dayKey());
       checkStamps(true); Object.keys(f.stamps).forEach(id => f.seen[id] = 1);
     }
-    rollQuests(); checkStamps(); tickMult(); save();
+    rollQuests(); checkStamps(); tickMult(); saveLocal();
     let day = dayKey();
     setInterval(() => { if (dayKey() !== day) { day = dayKey(); rollQuests(); refresh(); } }, 60000);
     if (f.chests > 0) enqueue(() => showChest(true));
@@ -2764,7 +2871,7 @@ VIEWS.styles = () => {
       st.lessons[l.id] ? h('span.hanko.round.done', '済') : null,
       h('div.t', `${i + 1}. ${l.t}`), h('div.muted.small', l.sum)))));
   return h('div',
-    banner('tr-styles', '話し方 · Speech styles', 'Casual, polite, keigo', 'Sound right to everyone you talk to: friends, shop staff, teachers and bosses.'),
+    banner('tr-grammar', '話し方 · Speech styles', 'Casual, polite, keigo', 'Sound right to everyone you talk to: friends, shop staff, teachers and bosses.'),
     intro, drills, lessons, Sensei.available ? regCheckerCard() : null);
 };
 
@@ -3078,7 +3185,7 @@ VIEWS.story = ({ id }) => {
     sentEls[i].classList.remove('speaking');
     if (chain && playing && i + 1 < sentEls.length) speakSent(i + 1, true); else { playing = false; playAll.replaceChildren(icon('play'), 'Read aloud'); }
   };
-  const playAll = h('button.btn', { onclick: () => { if (playing) { playing = false; speechSynthesis.cancel(); playAll.replaceChildren(icon('play'), 'Read aloud'); return; } playing = true; playAll.replaceChildren(icon('x'), 'Stop'); speakSent(0, true); } }, icon('play'), 'Read aloud');
+  const playAll = h('button.btn', { onclick: () => { if (playing) { playing = false; Voice.stop(); playAll.replaceChildren(icon('play'), 'Read aloud'); return; } playing = true; playAll.replaceChildren(icon('x'), 'Stop'); speakSent(0, true); } }, icon('play'), 'Read aloud');
   const furiBtn = h('button.btn', { 'aria-pressed': String(furi), onclick: () => { furi = !furi; reader.classList.toggle('nofuri', !furi); furiBtn.setAttribute('aria-pressed', String(furi)); furiBtn.lastChild.textContent = furi ? 'Hide furigana' : 'Show furigana'; } }, icon('eye'), h('span', furi ? 'Hide furigana' : 'Show furigana'));
   const enBtn = h('button.btn', { onclick: () => { showEn = !showEn; reader.querySelectorAll('.en').forEach(e => e.hidden = !showEn); enBtn.lastChild.textContent = showEn ? 'Hide English' : 'Show English'; } }, icon('learn'), h('span', 'Show English'));
   const explain = Sensei.available ? h('button.btn', { onclick: () => explainText(s.sents.map(plain).join(''), `Story: ${s.titleEn}`) }, icon('sparkle'), 'Explain the grammar') : null;
@@ -3226,7 +3333,7 @@ const Sensei = {
       const s = await claude.use('sample'); if (!s) return;
       this.fn = s; this.available = true;
       try { const lim = await s.limits(); this.images = !!lim?.images; } catch (e) {}
-      if (['read', 'story', 'grammar', 'sensei', 'write', 'styles', 'styleswitch', 'learn'].includes(App.route)) App.render();
+      if (App.route === 'read' || (App.route === 'sensei' && !App.params.scenario)) App.render();
     } catch (e) {}
   },
   errorText(e) {
@@ -3349,7 +3456,10 @@ Reply ONLY with a JSON object: {"jp": "your reply in natural Japanese (kanji all
       const recent = turns.slice(-16);
       const input = [{ role: 'user', content: rulesFor() }, { role: 'assistant', content: JSON.stringify({ jp: sc.open, kana: sc.open, en: '', fix: null, hints: [], hints_en: [] }) }, ...recent];
       if (input[2]?.role === 'assistant') input.splice(2, 1);
-      const r = await Sensei.fn.json(input, { signal: ctl.signal, cache: false, modelTier: 'default' });
+      let r = await Sensei.fn.json(input, { signal: ctl.signal, cache: false, modelTier: 'default' });
+      if (typeof r === 'string') r = { jp: r, kana: r, en: '' };
+      if (!isObj(r) || !String(r.jp || '').trim()) throw { code: 'invalid_json' };
+      r = { jp: String(r.jp), kana: String(r.kana || r.jp), en: typeof r.en === 'string' ? r.en : '', fix: isObj(r.fix) && r.fix.better ? { better: String(r.fix.better), why: String(r.fix.why || '') } : null, hints: Array.isArray(r.hints) ? r.hints.map(String).slice(0, 4) : [], hints_en: Array.isArray(r.hints_en) ? r.hints_en.map(String) : [] };
       typing.remove();
       if (r.fix && r.fix.better) add('ai', h('div.msg.ai', h('div.fix', h('b', '直し · Better: '), h('span.jp', r.fix.better), h('div.small', r.fix.why || '')), h('div.row', speakBtn(r.fix.better))));
       const bubble = aiBubble({ jp: String(r.jp || ''), kana: String(r.kana || r.jp || ''), en: String(r.en || '') }); add('ai', bubble);
@@ -3384,11 +3494,14 @@ function storyWriter() {
 Return ONLY JSON: {"title": "Japanese title", "titleEn": "English title", "sents": [{"en": "English translation", "tok": [{"s": "surface", "r": "hiragana reading, ONLY if s contains kanji", "g": "short English gloss for content words", "p": 1 for particles and grammatical endings (omit g)}]}], "qs": [{"q": "Japanese comprehension question", "qen": "English", "opts": ["4 options in Japanese"], "a": index of correct option}]}
 Tokens: split each sentence into words and particles in order; concatenating every "s" must reproduce the sentence exactly, including punctuation (「」、。 are their own tokens with no g). Conjugated verbs are one token glossed with the conjugated meaning. Exactly 3 questions.`, { modelTier: 'default', cache: false });
       if (!st || !Array.isArray(st.sents) || !st.sents.length) throw { code: 'invalid_json' };
-      st.sents = st.sents.filter(x => Array.isArray(x.tok)).map(x => ({ en: String(x.en || ''), tok: x.tok.filter(t => t && t.s).map(t => ({ s: String(t.s), r: t.r && hasKanji(t.s) ? String(t.r) : undefined, g: t.g ? String(t.g) : undefined, p: t.p ? 1 : undefined })) }));
-      st.qs = (st.qs || []).filter(q => Array.isArray(q.opts) && q.opts.length >= 2 && Number.isInteger(q.a) && q.a < q.opts.length);
+      st.sents = st.sents.filter(x => isObj(x) && Array.isArray(x.tok)).map(x => ({ en: String(x.en || ''), tok: x.tok.filter(t => t && t.s).map(t => ({ s: String(t.s), r: t.r && hasKanji(t.s) ? String(t.r) : undefined, g: t.g ? String(t.g) : undefined, p: t.p ? 1 : undefined })) }));
+      st.qs = (Array.isArray(st.qs) ? st.qs : []).filter(q => isObj(q) && Array.isArray(q.opts) && q.opts.length >= 2 && Number.isInteger(q.a) && q.a >= 0 && q.a < q.opts.length).map(q => ({ q: String(q.q || ''), qen: String(q.qen || ''), opts: q.opts.map(String), a: q.a }));
+      st.sents = st.sents.filter(x => x.tok.length && x.tok.map(t => t.s).join('').trim());
+      st.title = String(st.title || '').trim() || 'Sensei story'; st.titleEn = String(st.titleEn || '');
+      if (st.sents.length < 3) throw { code: 'invalid_json' };
       Object.assign(st, { id: 'ai' + now().toString(36), lv, ai: true, theme: th });
       S.aiStories = [st, ...(S.aiStories || [])].slice(0, 12); save(); addXP(5);
-      App.go('story', { id: st.id });
+      if (App.route === 'sensei') App.go('story', { id: st.id }); else toast('Your Sensei story is ready in Read');
     } catch (e) { out.replaceChildren(h('div.feedback.no', Sensei.errorText(e))); btn.disabled = false; }
   } }, icon('sparkle'), 'Write my story');
   const mine = (S.aiStories || []);
@@ -3519,7 +3632,7 @@ const isNeg = s => NEG_RE.test(s.replace(/[よねかだです]+$/, m => m)) || /
 function gradeWriting(it, input) {
   const v = normJa(input); if (!v) return 0;
   const accepted = (it.answers || []).map(normJa);
-  if (accepted.includes(v)) return 1;
+  if (accepted.includes(v) || (it.model?.jp && normJa(it.model.jp) === v)) return 1;
   // Polarity guard: a negative answer to a positive prompt (or the reverse) never earns credit.
   const negs = accepted.map(isNeg); if (negs.every(x => x === negs[0]) && isNeg(v) !== negs[0]) return 0;
   // Partial credit tops out below a pass: it shows the learner is close without inflating their level.
@@ -3657,7 +3770,7 @@ function buildProfile(r) {
   const pc = id => r[id]?.pct || 0;
   const two = (a, b) => clamp((r[a] ? pc(a) * 3 : 0) + (r[b] ? pc(b) : 0), 0, 4);
   const lv = id => r[id]?.level;
-  return { kana: clamp((pc('hira') + pc('kata')) * 2, 0, 4), vocab: two('v5', 'v4'), grammar: two('g5', 'g4'), kanji: two('j5', 'j4'), reading: lv('reading'), listening: lv('listening'), speaking: lv('speaking'), writing: lv('writing') };
+  return { kana: clamp(pc('hira') + pc('kata'), 0, 2), vocab: two('v5', 'v4'), grammar: two('g5', 'g4'), kanji: two('j5', 'j4'), reading: lv('reading'), listening: lv('listening'), speaking: lv('speaking'), writing: lv('writing') };
 }
 function skillProfileCard(pr) {
   if (!pr) return null;
@@ -3667,12 +3780,13 @@ function skillProfileCard(pr) {
   let g = '';
   for (let ring = 1; ring <= 4; ring++) g += `<polygon points="${axes.map((_, i) => pt(i, ring).join(',')).join(' ')}" fill="none" stroke="var(--line)" stroke-width="${ring === 4 ? 1.2 : .8}"/>`;
   axes.forEach((_, i) => { const [x, y] = pt(i, 4); g += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--line)" stroke-width=".8"/>`; });
-  const poly = axes.map(([k], i) => pt(i, Math.max(0.15, pr[k])).join(',')).join(' ');
+  const val = k => k === 'kana' ? pr[k] * 2 : pr[k];
+  const poly = axes.map(([k], i) => pt(i, Math.max(0.15, val(k))).join(',')).join(' ');
   g += `<polygon points="${poly}" fill="var(--ai)" fill-opacity=".22" stroke="var(--ai)" stroke-width="2.2" stroke-linejoin="round"/>`;
-  axes.forEach(([k, label], i) => { const [x, y] = pt(i, Math.max(0.15, pr[k])); g += `<circle cx="${x}" cy="${y}" r="3.6" fill="var(--seal)"/>`; const [lx, ly] = pt(i, 4.75); g += `<text x="${lx}" y="${ly + 4}" text-anchor="${Math.abs(lx - cx) < 8 ? 'middle' : lx > cx ? 'start' : 'end'}">${label}</text>`; });
-  const lvName = v => v >= 3.5 ? 'N4' : v >= 2.5 ? 'Solid N5' : v >= 1.5 ? 'Early N5' : v >= 0.75 ? 'Kana' : 'Starting';
+  axes.forEach(([k, label], i) => { const [x, y] = pt(i, Math.max(0.15, val(k))); g += `<circle cx="${x}" cy="${y}" r="3.6" fill="var(--seal)"/>`; const [lx, ly] = pt(i, 4.75); g += `<text x="${lx}" y="${ly + 4}" text-anchor="${Math.abs(lx - cx) < 8 ? 'middle' : lx > cx ? 'start' : 'end'}">${label}</text>`; });
+  const lvName = (v, k) => k === 'kana' ? (v >= 1.6 ? 'Both scripts' : v >= 0.8 ? 'One script' : 'Starting') : v >= 3.5 ? 'N4' : v >= 2.5 ? 'Solid N5' : v >= 1.5 ? 'Early N5' : v >= 0.75 ? 'Kana' : 'Starting';
   return h('div.profile', h('div.radar-wrap', { html: `<svg class="chart radar" viewBox="-40 -10 ${W + 80} 300" role="img" aria-label="Skill profile radar chart">${g}</svg>` }),
-    h('div.profile-list', axes.map(([k, label]) => h('div.row.between', h('span', label), h('span.chip' + (pr[k] >= 2.5 ? '.young' : pr[k] >= 1 ? '.learning' : ''), lvName(pr[k]))))));
+    h('div.profile-list', axes.map(([k, label]) => h('div.row.between', h('span', label), h('span.chip' + ((k === 'kana' ? pr[k] >= 1.6 : pr[k] >= 2.5) ? '.young' : pr[k] >= 0.8 ? '.learning' : ''), lvName(pr[k], k))))));
 }
 function sectionBlurb(id) {
   return {
@@ -3686,9 +3800,14 @@ function sectionBlurb(id) {
 // Mark known material as done and schedule it to resurface gradually.
 function applyPlacement(r, quick) {
   const ok = id => r[id]?.pct >= PASS, t = now(); const placed = [];
+  // One shared daily capacity so a strong result never dumps 50+ reviews on the first days.
+  const CAP = 22, load = {};
   const seed = (keys, spreadDays) => {
-    spreadDays = Math.max(spreadDays, keys.length / 12); let n = 0; for (const k of keys) if (!S.cards[k]) {
-      const c = FSRS.review(null, 3, t); c.s = Math.max(c.s, 6); c.due = t + (1 + Math.random() * spreadDays) * DAY; S.cards[k] = c; n++;
+    spreadDays = Math.max(spreadDays, 4); let n = 0;
+    for (const k of shuffle(keys)) if (!S.cards[k]) {
+      let d = 1 + Math.floor(Math.random() * spreadDays); while ((load[d] || 0) >= CAP) d++;
+      load[d] = (load[d] || 0) + 1;
+      const c = FSRS.review(null, 3, t); c.s = Math.max(c.s, 6); c.due = t + (d + Math.random() * 0.5) * DAY; c.placed = 1; S.cards[k] = c; n++;
     } return n;
   };
   const markLessons = pred => LESSONS.filter(pred).forEach(l => { if (!S.lessons[l.id]) S.lessons[l.id] = { done: t, best: 1, placed: true }; });
@@ -3709,9 +3828,10 @@ function applyPlacement(r, quick) {
     n4: ['四', 'N5 complete, heading to N4', 'N5 is solid. Your path now focuses on N4 vocabulary, kanji and grammar.'],
     'n4+': ['四', 'Upper N4', 'Strong across the board. Keep your reviews up, read the N4 stories and push your speaking with Sensei.'],
   }[lvl];
+  const firstTime = !!S.placement && !S.placement.skipped;
   const profile = buildProfile(r);
   S.placement = { at: t, level: lvl, results: Object.fromEntries(Object.entries(r).map(([k, v]) => [k, { right: v.right, n: v.n, pct: v.pct, level: v.level }])), profile }; S.settings.level = lvl;
-  save(); addXP(20); App.renderNav();
+  save(); if (!firstTime) addXP(20); App.renderNav();
   return { glyph: info[0], title: info[1], text: info[2], placed, next: nextLesson() };
 }
 
@@ -3811,7 +3931,7 @@ VIEWS.settings = () => {
   const rate = h('input#rate', { type: 'range', min: '0.6', max: '1.2', step: '0.05', value: String(st.rate), oninput: e => set('rate', +e.target.value), onchange: () => Voice.say('ゆっくり はなして ください。') });
   const importInp = h('input#importFile', { type: 'file', accept: 'application/json,.json', hidden: true, onchange: async e => {
     const f = e.target.files[0]; if (!f) return;
-    try { const data = JSON.parse(await f.text()); if (!data.cards || !data.settings) throw 0; S = mergeState(data); save(); toast('Progress imported'); App.render(); } catch (err) { toast('That file is not a Michi backup', 'bad'); }
+    try { const data = JSON.parse(await f.text()); if (!isObj(data) || !isObj(data.cards) || !isObj(data.settings)) throw 0; S = sanitize(data); S.updated = now(); save(); toast('Progress imported'); App.render(); } catch (err) { toast('That file is not a Michi backup', 'bad'); }
   } });
   let armed = false;
   const reset = h('button.btn.sm', { style: { color: 'var(--bad)' }, onclick: () => { if (!armed) { armed = true; reset.textContent = 'Tap again to erase everything'; setTimeout(() => { armed = false; reset.textContent = 'Reset progress'; }, 4000); return; } S = DEFAULT_STATE(); save(); toast('Progress reset'); App.go('home'); } }, 'Reset progress');
@@ -3847,11 +3967,12 @@ function boot() {
   const start = (hot = {}) => {
     const r = (location.hash || '').slice(1);
     const fresh = !S.placement && !Object.keys(S.cards).length && !S.xp;
-    const route = hot.route || (fresh ? 'welcome' : VIEWS[r] && !['session', 'lesson', 'story', 'grammar', 'placement'].includes(r) ? r : 'home');
+    const route = hot.route || (fresh ? 'welcome' : Object.prototype.hasOwnProperty.call(VIEWS, r) && !['session', 'lesson', 'story', 'grammar', 'placement'].includes(r) ? r : 'home');
     App.go(route, hot.params || {}, false);
     initCloud();
     checkAchievements();
   };
+  addEventListener('hashchange', () => { const r = (location.hash || '').slice(1); if (Object.prototype.hasOwnProperty.call(VIEWS, r) && r !== App.route && !['session', 'lesson', 'story', 'grammar', 'placement', 'style'].includes(r)) App.go(r, {}, false); });
   window.claude?.hot?.snapshot?.(() => ({ route: ['session'].includes(App.route) ? 'review' : App.route, params: App.route === 'session' ? {} : App.params }));
   window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
   // Refresh "due" counts every minute.

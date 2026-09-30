@@ -7,7 +7,7 @@ const Sensei = {
       const s = await claude.use('sample'); if (!s) return;
       this.fn = s; this.available = true;
       try { const lim = await s.limits(); this.images = !!lim?.images; } catch (e) {}
-      if (['read', 'story', 'grammar', 'sensei', 'write', 'styles', 'styleswitch', 'learn'].includes(App.route)) App.render();
+      if (App.route === 'read' || (App.route === 'sensei' && !App.params.scenario)) App.render();
     } catch (e) {}
   },
   errorText(e) {
@@ -130,7 +130,10 @@ Reply ONLY with a JSON object: {"jp": "your reply in natural Japanese (kanji all
       const recent = turns.slice(-16);
       const input = [{ role: 'user', content: rulesFor() }, { role: 'assistant', content: JSON.stringify({ jp: sc.open, kana: sc.open, en: '', fix: null, hints: [], hints_en: [] }) }, ...recent];
       if (input[2]?.role === 'assistant') input.splice(2, 1);
-      const r = await Sensei.fn.json(input, { signal: ctl.signal, cache: false, modelTier: 'default' });
+      let r = await Sensei.fn.json(input, { signal: ctl.signal, cache: false, modelTier: 'default' });
+      if (typeof r === 'string') r = { jp: r, kana: r, en: '' };
+      if (!isObj(r) || !String(r.jp || '').trim()) throw { code: 'invalid_json' };
+      r = { jp: String(r.jp), kana: String(r.kana || r.jp), en: typeof r.en === 'string' ? r.en : '', fix: isObj(r.fix) && r.fix.better ? { better: String(r.fix.better), why: String(r.fix.why || '') } : null, hints: Array.isArray(r.hints) ? r.hints.map(String).slice(0, 4) : [], hints_en: Array.isArray(r.hints_en) ? r.hints_en.map(String) : [] };
       typing.remove();
       if (r.fix && r.fix.better) add('ai', h('div.msg.ai', h('div.fix', h('b', '直し · Better: '), h('span.jp', r.fix.better), h('div.small', r.fix.why || '')), h('div.row', speakBtn(r.fix.better))));
       const bubble = aiBubble({ jp: String(r.jp || ''), kana: String(r.kana || r.jp || ''), en: String(r.en || '') }); add('ai', bubble);
@@ -165,11 +168,14 @@ function storyWriter() {
 Return ONLY JSON: {"title": "Japanese title", "titleEn": "English title", "sents": [{"en": "English translation", "tok": [{"s": "surface", "r": "hiragana reading, ONLY if s contains kanji", "g": "short English gloss for content words", "p": 1 for particles and grammatical endings (omit g)}]}], "qs": [{"q": "Japanese comprehension question", "qen": "English", "opts": ["4 options in Japanese"], "a": index of correct option}]}
 Tokens: split each sentence into words and particles in order; concatenating every "s" must reproduce the sentence exactly, including punctuation (「」、。 are their own tokens with no g). Conjugated verbs are one token glossed with the conjugated meaning. Exactly 3 questions.`, { modelTier: 'default', cache: false });
       if (!st || !Array.isArray(st.sents) || !st.sents.length) throw { code: 'invalid_json' };
-      st.sents = st.sents.filter(x => Array.isArray(x.tok)).map(x => ({ en: String(x.en || ''), tok: x.tok.filter(t => t && t.s).map(t => ({ s: String(t.s), r: t.r && hasKanji(t.s) ? String(t.r) : undefined, g: t.g ? String(t.g) : undefined, p: t.p ? 1 : undefined })) }));
-      st.qs = (st.qs || []).filter(q => Array.isArray(q.opts) && q.opts.length >= 2 && Number.isInteger(q.a) && q.a < q.opts.length);
+      st.sents = st.sents.filter(x => isObj(x) && Array.isArray(x.tok)).map(x => ({ en: String(x.en || ''), tok: x.tok.filter(t => t && t.s).map(t => ({ s: String(t.s), r: t.r && hasKanji(t.s) ? String(t.r) : undefined, g: t.g ? String(t.g) : undefined, p: t.p ? 1 : undefined })) }));
+      st.qs = (Array.isArray(st.qs) ? st.qs : []).filter(q => isObj(q) && Array.isArray(q.opts) && q.opts.length >= 2 && Number.isInteger(q.a) && q.a >= 0 && q.a < q.opts.length).map(q => ({ q: String(q.q || ''), qen: String(q.qen || ''), opts: q.opts.map(String), a: q.a }));
+      st.sents = st.sents.filter(x => x.tok.length && x.tok.map(t => t.s).join('').trim());
+      st.title = String(st.title || '').trim() || 'Sensei story'; st.titleEn = String(st.titleEn || '');
+      if (st.sents.length < 3) throw { code: 'invalid_json' };
       Object.assign(st, { id: 'ai' + now().toString(36), lv, ai: true, theme: th });
       S.aiStories = [st, ...(S.aiStories || [])].slice(0, 12); save(); addXP(5);
-      App.go('story', { id: st.id });
+      if (App.route === 'sensei') App.go('story', { id: st.id }); else toast('Your Sensei story is ready in Read');
     } catch (e) { out.replaceChildren(h('div.feedback.no', Sensei.errorText(e))); btn.disabled = false; }
   } }, icon('sparkle'), 'Write my story');
   const mine = (S.aiStories || []);

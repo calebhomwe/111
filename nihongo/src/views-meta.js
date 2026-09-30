@@ -94,7 +94,7 @@ VIEWS.settings = () => {
   const rate = h('input#rate', { type: 'range', min: '0.6', max: '1.2', step: '0.05', value: String(st.rate), oninput: e => set('rate', +e.target.value), onchange: () => Voice.say('ゆっくり はなして ください。') });
   const importInp = h('input#importFile', { type: 'file', accept: 'application/json,.json', hidden: true, onchange: async e => {
     const f = e.target.files[0]; if (!f) return;
-    try { const data = JSON.parse(await f.text()); if (!data.cards || !data.settings) throw 0; S = mergeState(data); save(); toast('Progress imported'); App.render(); } catch (err) { toast('That file is not a Michi backup', 'bad'); }
+    try { const data = JSON.parse(await f.text()); if (!isObj(data) || !isObj(data.cards) || !isObj(data.settings)) throw 0; S = sanitize(data); S.updated = now(); save(); toast('Progress imported'); App.render(); } catch (err) { toast('That file is not a Michi backup', 'bad'); }
   } });
   let armed = false;
   const reset = h('button.btn.sm', { style: { color: 'var(--bad)' }, onclick: () => { if (!armed) { armed = true; reset.textContent = 'Tap again to erase everything'; setTimeout(() => { armed = false; reset.textContent = 'Reset progress'; }, 4000); return; } S = DEFAULT_STATE(); save(); toast('Progress reset'); App.go('home'); } }, 'Reset progress');
@@ -130,11 +130,12 @@ function boot() {
   const start = (hot = {}) => {
     const r = (location.hash || '').slice(1);
     const fresh = !S.placement && !Object.keys(S.cards).length && !S.xp;
-    const route = hot.route || (fresh ? 'welcome' : VIEWS[r] && !['session', 'lesson', 'story', 'grammar', 'placement'].includes(r) ? r : 'home');
+    const route = hot.route || (fresh ? 'welcome' : Object.prototype.hasOwnProperty.call(VIEWS, r) && !['session', 'lesson', 'story', 'grammar', 'placement'].includes(r) ? r : 'home');
     App.go(route, hot.params || {}, false);
     initCloud();
     checkAchievements();
   };
+  addEventListener('hashchange', () => { const r = (location.hash || '').slice(1); if (Object.prototype.hasOwnProperty.call(VIEWS, r) && r !== App.route && !['session', 'lesson', 'story', 'grammar', 'placement', 'style'].includes(r)) App.go(r, {}, false); });
   window.claude?.hot?.snapshot?.(() => ({ route: ['session'].includes(App.route) ? 'review' : App.route, params: App.route === 'session' ? {} : App.params }));
   window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
   // Refresh "due" counts every minute.

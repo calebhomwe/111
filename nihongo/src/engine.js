@@ -9,14 +9,17 @@ const GRAMMAR_POINTS = GRAMMAR.units.flatMap(u => u.points.map(p => Object.assig
 // ─── Kana ⇄ romaji ─────────────────────────────────────────────────────────
 const toHira = s => s.replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
 const toKata = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+// Loanword sounds written with a small vowel: フォーク → fo-o-ku, ティー → thi-i, チェック → che-kku
+const EXT_ROMA = { 'ふぁ': 'fa', 'ふぃ': 'fi', 'ふぇ': 'fe', 'ふぉ': 'fo', 'てぃ': 'thi', 'でぃ': 'dhi', 'とぅ': 'tu', 'どぅ': 'du', 'ちぇ': 'che', 'しぇ': 'she', 'じぇ': 'je', 'うぃ': 'wi', 'うぇ': 'we', 'うぉ': 'wo', 'つぁ': 'tsa', 'つぃ': 'tsi', 'つぇ': 'tse', 'つぉ': 'tso', 'くぁ': 'kwa', 'ゔぁ': 'va', 'ゔぃ': 'vi', 'ゔぇ': 've', 'ゔぉ': 'vo', 'ゔ': 'vu' };
 const EXTRA_ROMA = { 'ぁ': 'a', 'ぃ': 'i', 'ぅ': 'u', 'ぇ': 'e', 'ぉ': 'o', 'ゔ': 'vu', 'ゎ': 'wa' };
 function kanaToRomaji(s) {
   s = toHira(s); let out = '';
   for (let i = 0; i < s.length; i++) {
     const two = s.slice(i, i + 2), c = s[i];
-    if (c === 'っ') { const nx = s.slice(i + 1, i + 3); const r = KANA_ROMAJI[nx] || KANA_ROMAJI[s[i + 1]] || ''; out += r.startsWith('ch') ? 't' : (r[0] || ''); continue; }
+    if (c === 'っ') { const nx = s.slice(i + 1, i + 3); const r = EXT_ROMA[nx] || KANA_ROMAJI[nx] || KANA_ROMAJI[s[i + 1]] || ''; out += r.startsWith('ch') ? 't' : (r[0] || ''); continue; }
     if (c === 'ー') { out += out.slice(-1); continue; }
     if (c === 'ん') { const nx = KANA_ROMAJI[s[i + 1]] || ''; out += /^[aiueoy]/.test(nx) ? "n'" : 'n'; continue; }
+    if (EXT_ROMA[two]) { out += EXT_ROMA[two]; i++; continue; }
     if (KANA_ROMAJI[two] && two.length === 2) { out += KANA_ROMAJI[two]; i++; continue; }
     out += KANA_ROMAJI[c] || EXTRA_ROMA[c] || c;
   }
@@ -24,19 +27,24 @@ function kanaToRomaji(s) {
 }
 // Normalise alternative spellings so "si", "tu", "hu", "zya" all count.
 function normRomaji(s) {
-  return s.toLowerCase().replace(/n['’]|nn(?=[aiueoy])/g, 'N').replace(/[\s'’\-]/g, '')
+  return s.toLowerCase().replace(/ā/g, 'aa').replace(/ī/g, 'ii').replace(/ū/g, 'uu').replace(/ē/g, 'ee').replace(/n['’]/g, 'N').replace(/[\s'’\-]/g, '')
     .replace(/sy([aueo])/g, 'sh$1').replace(/si/g, 'shi').replace(/ty([aueo])/g, 'ch$1').replace(/cy([aueo])/g, 'ch$1').replace(/ti/g, 'chi').replace(/tu/g, 'tsu')
     .replace(/hu/g, 'fu').replace(/z?jy([aueo])/g, 'j$1').replace(/zy([aueo])/g, 'j$1').replace(/zi/g, 'ji').replace(/di/g, 'ji').replace(/du/g, 'zu').replace(/nn(?=[^aiueoyN]|$)/g, 'n')
     .replace(/shhi/g, 'shi').replace(/chhi/g, 'chi');
 }
 function kanaAnswerMatches(input, kana) {
-  const i = input.trim(); if (!i) return false;
+  kana = String(kana).replace(/[〜～]/g, ''); const i = input.trim().replace(/[〜～]/g, ''); if (!i) return false;
   if (/[぀-ヿ]/.test(i)) return toHira(i.replace(/\s/g, '')) === toHira(kana);
   const r = normRomaji(kanaToRomaji(kana)); const n = normRomaji(i);
   if (n === r) return true;
   // particles は/へ are pronounced wa/e (こんにちは → konnichiwa, では → dewa)
-  const alt = r.replace(/ha$/, 'wa').replace(/(de|ni|to)ha/g, '$1wa').replace(/he$/, 'e');
+  // (only real particle spots: は/へ alone, after で/に/と/から/まで, and the greetings)
+  const pk = toHira(kana); let alt = r;
+  if (/(こんにちは|こんばんは)$/.test(pk)) alt = alt.replace(/ha$/, 'wa');
+  else if (/^(は|へ)$/.test(pk)) alt = pk === 'は' ? 'wa' : 'e';
+  else if (/(では|には|とは|へは|からは|までは)$/.test(pk)) alt = alt.replace(/ha$/, 'wa');
   if (n === alt) return true;
+  if (/[āīūēō]/i.test(input)) { const v2 = normRomaji(input.replace(/ō/g, 'ou').replace(/Ō/g, 'ou').replace(/ē/g, 'ei')); if (v2 === r) return true; const v3 = normRomaji(input.replace(/ō/g, 'oo').replace(/ē/g, 'ee')); if (v3 === r) return true; }
   if (kana === 'を' && n === 'o') return true; if (kana === 'ヲ' && n === 'o') return true;
   return false;
 }
@@ -107,15 +115,21 @@ function vocabDistractors(v, n = 3) {
   const okX = x => x.id !== v.id && x.m !== v.m && x.w !== v.w && x.r !== v.r;
   const same = VOCAB.filter(x => okX(x) && x.cat === v.cat), pos = VOCAB.filter(x => okX(x) && x.pos === v.pos);
   const pool = same.length >= n ? same : same.concat(shuffle(pos)).length >= n ? same.concat(pos) : VOCAB.filter(okX);
-  const out = [], seenM = new Set([v.m]);
-  for (const x of shuffle(pool)) { if (out.length >= n) break; if (seenM.has(x.m)) continue; seenM.add(x.m); out.push(x); }
+  const out = [];
+  for (const x of shuffle(pool)) { if (out.length >= n) break; if (mClash(x.m, v.m) || out.some(o => mClash(o.m, x.m))) continue; out.push(x); }
+  if (out.length < n) for (const x of shuffle(VOCAB.filter(okX))) { if (out.length >= n) break; if (!mClash(x.m, v.m) && !out.some(o => mClash(o.m, x.m)) && !out.includes(x)) out.push(x); }
   return out;
 }
 function kanjiDistractors(k, n = 3) {
-  const pool = KANJI.filter(x => x.k !== k.k && Math.abs(x.s - k.s) <= 3);
-  return shuffle(pool.length >= n ? pool : KANJI.filter(x => x.k !== k.k)).slice(0, n);
+  const ok = x => x.k !== k.k && !mClash(x.m, k.m);
+  const pick_ = [], pool = shuffle(KANJI.filter(x => ok(x) && Math.abs(x.s - k.s) <= 3)).concat(shuffle(KANJI.filter(ok)));
+  for (const x of pool) { if (pick_.length >= n) break; if (!pick_.includes(x) && !pick_.some(o => mClash(o.m, x.m))) pick_.push(x); }
+  return pick_;
 }
 const shortM = m => m.split(/;\s*/).slice(0, 2).join('; ');
+// Meaning segments ("hello (on the phone); good afternoon" → hello, good afternoon) so near-synonyms never appear as two options.
+const mSegs = m => String(m || '').toLowerCase().replace(/\([^)]*\)/g, '').split(/;\s*/).map(x => x.trim().replace(/^to /, '').replace(/^(a|an|the) /, '')).filter(Boolean);
+const mClash = (a, b) => { const B = mSegs(b); return mSegs(a).some(x => B.includes(x)); };
 
 // ─── Question factory ──────────────────────────────────────────────────────
 // Returns {kind:'mc'|'type', prompt:{big, sub, audio, hint}, opts:[{label, sub, correct}], check(str), answer, reveal}
@@ -143,7 +157,7 @@ function makeQuestion(key, forceMode) {
     if (mode === 'a2m') return { key, mode, kind: 'mc', q: 'Listen. What does it mean?', audio: it.r, opts: shuffle([it, ...ds].map(x => ({ label: shortM(x.m), correct: x.id === it.id }))), answer: `${it.w} (${it.r}) — ${it.m}`, say: it.r };
     if (mode === 'm2v') return { key, mode, kind: 'mc', q: 'Which word means…', big: shortM(it.m), bigClass: 'en', opts: shuffle([it, ...ds].map(x => ({ labelHTML: ruby(x.w, x.r), big: true, correct: x.id === it.id }))), answer: `${it.w} (${it.r})`, say: it.r };
     if (mode === 'v2r-type') return { key, mode, kind: 'type', q: 'Type the reading', bigHTML: esc(it.w), bigClass: 'word', hint: shortM(it.m), answer: it.r, kana: it.r, check: s => kanaAnswerMatches(s, it.r), say: it.r, ime: true };
-    return { key, mode: 'm2v-type', kind: 'type', q: 'Say it in Japanese (type the reading)', big: shortM(it.m), bigClass: 'en', hint: CAT_NAME[it.cat] || '', answer: `${it.r}${it.w !== it.r ? ' · ' + it.w : ''}`, kana: it.r, check: s => kanaAnswerMatches(s, it.r) || s.trim() === it.w, say: it.r, ime: true };
+    return { key, mode: 'm2v-type', kind: 'type', q: 'Say it in Japanese (type the reading)', big: shortM(it.m), bigClass: 'en', hint: CAT_NAME[it.cat] || '', answer: `${it.r}${it.w !== it.r ? ' · ' + it.w : ''}`, kana: it.r, check: s => kanaAnswerMatches(s, it.r) || s.trim() === it.w || VOCAB.some(x => x.id !== it.id && x.pos === it.pos && mClash(x.m, it.m) && (kanaAnswerMatches(s, x.r) || s.trim() === x.w)), say: it.r, ime: true };
   }
   if (it.type === 'kanji') {
     const modes = typing ? ['j2m', 'jex', 'm2j', 'jex-type'] : ['j2m', 'j2m', 'jex', 'm2j'];
@@ -156,7 +170,7 @@ function makeQuestion(key, forceMode) {
     if (mode === 'jex-type') return { key, mode, kind: 'type', q: 'Type the reading of this word', big: ex[0], bigClass: 'word', hint: ex[2], answer: ex[1], kana: ex[1], check: s => kanaAnswerMatches(s, ex[1]), say: ex[1], ime: true };
     const allEx = KANJI.flatMap(k => k.ex || []).filter(e => e[1] !== ex[1] && e[0] !== ex[0]);
     const share = shuffle(allEx.filter(e => [...ex[0]].some(c => hasKanji(c) && e[0].includes(c)) && Math.abs(e[1].length - ex[1].length) <= 1));
-    const others = [...new Map(share.concat(shuffle(allEx.filter(e => Math.abs(e[1].length - ex[1].length) <= 1))).map(e => [e[1], e])).values()].slice(0, 3);
+    const others = [...new Map(share.concat(shuffle(allEx.filter(e => Math.abs(e[1].length - ex[1].length) <= 1)), shuffle(allEx)).map(e => [e[1], e])).values()].slice(0, 3);
     return { key, mode: 'jex', kind: 'mc', q: 'How is this word read?', big: ex[0], bigClass: 'word', hint: ex[2], opts: shuffle([ex, ...others].map(e => ({ label: e[1], big: true, correct: e[1] === ex[1] }))), answer: `${ex[0]} (${ex[1]}) — ${ex[2]}`, say: ex[1] };
   }
 }
@@ -200,7 +214,10 @@ function conjugate(v, form) {
     return m ? b + m : null;
   }
   if (pos === 'v5') {
-    if (HONORIFIC_GODAN.some(x => r.endsWith(x))) return null;
+    if (HONORIFIC_GODAN.some(x => r.endsWith(x))) { // いらっしゃる・おっしゃる・くださる・なさる: the ます stem is い, not り
+      const b = r.slice(0, -1), m = { masu: 'います', masen: 'いません', mashita: 'いました', masendeshita: 'いませんでした', te: 'って', ta: 'った', nai: 'らない', nakatta: 'らなかった', mashou: 'いましょう', imp: 'い' }[form];
+      return m ? b + m : null;
+    }
     const last = r.slice(-1), vt = v.vt || U_TO_VT[last]; if (!vt || !GODAN_ROW[vt]) return null;
     const b = r.slice(0, -1), row = GODAN_ROW[vt];
     const iku = v.ex5 === 'iku' || /^(い|ゆ)く$/.test(r) || r.endsWith('いく') && /行/.test(v.w || '');
@@ -221,7 +238,7 @@ function conjugate(v, form) {
     return m || null;
   }
   if (pos === 'adj-i') {
-    const irr = v.irr || r === 'いい' || r.endsWith('いい') && v.w?.endsWith('いい');
+    const irr = v.irr || r === 'いい' || /^かっこいい$/.test(r);
     const b = irr ? r.slice(0, -2) + 'よ' : r.slice(0, -1);
     return { 'a-neg': b + 'くない', 'a-past': b + 'かった', 'a-pastneg': b + 'くなかった', 'a-te': b + 'くて', 'a-adv': b + 'く', 'a-pol': b + 'くないです' }[form] || null;
   }
@@ -238,8 +255,8 @@ function conjAccepts(v, form, input) {
   const alts = [ans, ans.replace('じゃ', 'では'), writtenVariant, writtenVariant && writtenVariant.replace('じゃ', 'では')];
   if (form === 'a-pol' && v.pos === 'adj-i') alts.push(ans.replace(/くないです$/, 'くありません'));
   if (form === 'a-pol' && v.pos === 'adj-na') alts.push(ans.replace(/じゃありません$/, 'じゃないです'), ans.replace(/じゃありません$/, 'ではありません'));
-  if (form === 'pot' && v.pos === 'v1') alts.push(ans.replace(/られる$/, 'れる')); // ら抜き is common in speech
-  if (form === 'pot' && v.pos === 'vk') alts.push(ans.replace(/こられる$/, 'これる'));
+  if (form === 'pot' && v.pos === 'v1') alts.push(ans.replace(/られる$/, 'れる'), writtenVariant && writtenVariant.replace(/られる$/, 'れる')); // ら抜き is common in speech
+  if (form === 'pot' && v.pos === 'vk') alts.push(ans.replace(/こられる$/, 'これる'), writtenVariant && writtenVariant.replace(/来られる$/, '来れる'));
   if (!/[぀-ヿ一-龯]/.test(i)) return alts.filter(Boolean).some(a => normRomaji(kanaToRomaji(a)) === normRomaji(i));
   return alts.filter(Boolean).includes(i);
 }
@@ -256,9 +273,9 @@ function writtenConj(v, conjReading) {
 }
 const CONJ_VERBS = () => VOCAB.filter(v => ['v1', 'v5', 'vk', 'vsi', 'vs'].includes(v.pos) && conjugate(v, 'te'));
 // Stative verbs whose will/ability/command forms are unnatural; skip them for those drills.
-const NO_WILL = new Set(['ある', 'わかる', 'できる', 'しる', 'いる', 'みえる', 'きこえる', 'こまる', 'ちがう', 'すぎる', 'なる', 'かかる', 'いる']);
+const NO_WILL = new Set(['ある', 'わかる', 'できる', 'しる', 'いる', 'みえる', 'きこえる', 'こまる', 'ちがう', 'すぎる', 'なる', 'かかる', 'ふる', 'さく', 'はれる', 'くもる', 'つかれる', 'こわれる', 'ふえる', 'へる', 'にる', 'はじまる', 'おわる', 'きまる', 'かわる', 'きえる', 'おちる', 'みつかる', 'たりる', 'にあう', 'ひかる', 'ながれる', 'とける', 'なおる', 'あく', 'しまる', 'とどく', 'かれる', 'おこる']);
 const WILL_FORMS = new Set(['pot', 'vol', 'imp', 'pass', 'caus', 'tai', 'mashou']);
-const conjNatural = (v, form) => !(WILL_FORMS.has(form) && (NO_WILL.has(v.r) || /(まる|がる|わる|まる)$/.test(v.r) && v.pos === 'v5' && ['pot', 'vol', 'imp', 'caus'].includes(form)));
+const conjNatural = (v, form) => !(WILL_FORMS.has(form) && NO_WILL.has(v.r));
 const CONJ_ADJS = () => VOCAB.filter(v => ['adj-i', 'adj-na'].includes(v.pos) && conjugate(v, 'a-neg'));
 function conjRule(v, form) {
   const t = { v1: 'Ichidan (る-verb): drop る, add the ending.', v5: 'Godan (う-verb): shift the final kana along its row.', vk: '来る is irregular: く→き/こ.', vsi: 'する is irregular: し/さ/すれ.', vs: 'Noun + する: conjugate する.', 'adj-i': 'い-adjective: drop い, add the ending.', 'adj-na': 'な-adjective: attach the copula.' }[v.pos] || '';
