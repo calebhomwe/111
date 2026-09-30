@@ -623,7 +623,7 @@
     [
      "explanation",
      "行くのです",
-     "行くんです / 行くんだ",
+     "行くんだ / 行くの",
      "の → ん"
     ],
     [
@@ -748,7 +748,7 @@
    "id": "rg-voice",
    "t": "Who's talking: 俺, 僕, あたし, ぞ, ぜ, わ",
    "sum": "Gendered and rough speech: recognise it, use it carefully",
-   "exp": "Japanese often shows who is speaking through pronouns and particles.\n**私** (わたし) is neutral and safe for everyone, and **わたくし** is very formal. **僕** is used by boys and men; it's soft and friendly, and fine in everyday polite speech. **俺** is masculine, casual and confident: fine with friends, but rude with a boss. **あたし** is casual and feminine.\n**ぞ** and **ぜ** are rough, masculine emphasis (行くぞ！ \"Let's go!\") that you'll hear a lot in anime. A soft rising **わ** is feminine in older and fictional speech, but in Kansai everyone uses わ.\nDon't use **お前** or **あんた** for \"you\": they can sound rude. Using people's names with さん is safest. So recognise all of these, but default to 私 and plain よ/ね.",
+   "exp": "Japanese often shows who is speaking through pronouns and particles.\n**私** (わたし) is neutral and safe for everyone, and **わたくし** is very formal. **僕** is used by boys and men; it's soft and friendly, and fine in everyday polite speech. **俺** is masculine, casual and confident: fine with friends, but rude with a boss. **あたし** is casual and feminine.\n**ぞ** and **ぜ** are rough, masculine emphasis (行くぞ！ \"Let's go!\") that you'll hear a lot in anime. A soft rising **わ** is feminine in older and fictional speech, but in in Kansai わ is a gender-neutral sentence-ender.\nDon't use **お前** or **あんた** for \"you\": they can sound rude. Using people's names with さん is safest. So recognise all of these, but default to 私 and plain よ/ね.",
    "cols": [
     "",
     "Safe / neutral",
@@ -983,7 +983,7 @@
       "水を飲む",
       "みずをのむ"
      ],
-     "en": "Do you want some water?"
+     "en": "Are you going to drink water?"
     },
     {
      "type": "switch",
@@ -1607,10 +1607,6 @@
       "てつだってくれますか",
       "手伝ってもらえますか",
       "てつだってもらえますか",
-      "手伝っていただけますか",
-      "てつだっていただけますか",
-      "手伝っていただけませんか",
-      "てつだっていただけませんか",
       "手伝ってくれませんか",
       "てつだってくれませんか",
       "手伝ってもらえませんか",
@@ -3489,8 +3485,7 @@
      "わたしがします"
     ],
     "keigo": [
-     "わたしがいたします",
-     "私がやらせていただきます"
+     "わたしがいたします"
     ]
    }
   },
@@ -4364,9 +4359,8 @@
      "マジで"
     ],
     "polite": [
-     "本当ですか",
      "ほんとですか",
-     "本当にですか"
+     "そうなんですか"
     ]
    }
   },
@@ -4677,8 +4671,8 @@
     "fu": "パーティーにこられますか。"
    },
    "keigo": {
-    "jp": "パーティーにいらっしゃいますか。",
-    "fu": "パーティーにいらっしゃいますか。"
+    "jp": "パーティーにお越しいただけますか。",
+    "fu": "パーティーにおこしいただけますか。"
    },
    "ctx": "Casual speech often uses これる (ら-less).",
    "alt": {
@@ -4697,9 +4691,9 @@
      "パーティーにこれますか"
     ],
     "keigo": [
-     "パーティーにいらっしゃいませんか",
-     "パーティーにお越しになりますか",
-     "パーティーにおこしになりますか"
+     "パーティーにいらっしゃれますか",
+     "パーティーにお越しいただけませんか",
+     "パーティーにおこしいただけませんか"
     ]
    }
   },
@@ -5685,8 +5679,8 @@
      "why": "Blunt and casual: rude to a boss."
     },
     {
-     "jp": "行けません。",
-     "fu": "いけません。",
+     "jp": "出られません。",
+     "fu": "でられません。",
      "verdict": "ok",
      "why": "Polite form, but a bare refusal sounds blunt."
     }
@@ -5825,7 +5819,7 @@
      "jp": "悪い。",
      "fu": "わるい。",
      "verdict": "off",
-     "why": "Rough \"my bad\": only between close male friends."
+     "why": "Rough 'my bad': casual, used mostly by men, among close friends."
     }
    ]
   },
@@ -6065,8 +6059,8 @@
      "why": "Apology + 休ませてください (\"please let me be absent\")."
     },
     {
-     "jp": "明日、休みます。",
-     "fu": "あした、やすみます。",
+     "jp": "明日は熱があるので、休みます。",
+     "fu": "あしたはねつがあるので、やすみます。",
      "verdict": "ok",
      "why": "Polite, but announces it rather than asking."
     },
@@ -6237,8 +6231,8 @@
     {
      "jp": "また来てね！",
      "fu": "またきてね！",
-     "verdict": "ok",
-     "why": "Friendly local shops say this; too casual in a department store."
+     "verdict": "off",
+     "why": "Fine in a friendly local shop, but too casual for department-store staff."
     },
     {
      "jp": "もう帰るの？",

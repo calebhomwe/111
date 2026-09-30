@@ -5607,7 +5607,7 @@
     ]
    },
    {
-    "en": "Mom said \"Oh my!\" and laughed.",
+    "en": "Mom said \"Oh dear\" and laughed.",
     "tok": [
      {
       "s": "おかあさん",
@@ -5630,6 +5630,14 @@
      {
       "s": "と",
       "p": 1
+     },
+     {
+      "s": "言って",
+      "r": "いって",
+      "g": "said and"
+     },
+     {
+      "s": "、"
      },
      {
       "s": "わらいました",
@@ -7738,8 +7746,16 @@
     ]
    },
    {
-    "en": "\"Your cat photo is cute.\"",
+    "en": "The note said, \"Your cat photo is cute.\"",
     "tok": [
+     {
+      "s": "メモ",
+      "g": "note"
+     },
+     {
+      "s": "には",
+      "p": 1
+     },
      {
       "s": "「"
      },
@@ -7772,6 +7788,22 @@
      },
      {
       "s": "」"
+     },
+     {
+      "s": "と",
+      "p": 1
+     },
+     {
+      "s": "書いて",
+      "r": "かいて",
+      "g": "written"
+     },
+     {
+      "s": "ありました",
+      "p": 1
+     },
+     {
+      "s": "。"
      }
     ]
    },
@@ -9012,12 +9044,12 @@
     ]
    },
    {
-    "en": "The owner is a man of about sixty who doesn't talk much.",
+    "en": "The manager is a man of about sixty who doesn't talk much.",
     "tok": [
      {
       "s": "店長",
       "r": "てんちょう",
-      "g": "shop manager"
+      "g": "manager"
      },
      {
       "s": "は",
@@ -9144,12 +9176,13 @@
     ]
    },
    {
-    "en": "The owner comes to the shop at five every morning and makes the soup.",
+    "en": "The manager comes to the shop at five every morning and makes the soup.",
     "tok": [
      {
       "s": "店長",
       "r": "てんちょう",
-      "p": 1
+      "p": 1,
+      "g": "manager"
      },
      {
       "s": "は",
@@ -9250,7 +9283,7 @@
     ]
    },
    {
-    "en": "After the shop closed, the owner always made ramen for me.",
+    "en": "After the shop closed, the manager always made ramen for me.",
     "tok": [
      {
       "s": "店",
@@ -9277,7 +9310,8 @@
      {
       "s": "店長",
       "r": "てんちょう",
-      "p": 1
+      "p": 1,
+      "g": "manager"
      },
      {
       "s": "は",
@@ -9387,7 +9421,7 @@
     ]
    },
    {
-    "en": "One night, after three months had passed, the owner said, \"Today, you try making it.\"",
+    "en": "One night, after three months had passed, the manager said, \"Today, you try making it.\"",
     "tok": [
      {
       "s": "三か月",
@@ -9417,7 +9451,8 @@
      {
       "s": "店長",
       "r": "てんちょう",
-      "p": 1
+      "p": 1,
+      "g": "manager"
      },
      {
       "s": "が",
@@ -9533,12 +9568,13 @@
     ]
    },
    {
-    "en": "Without saying a word, the owner began to eat the ramen.",
+    "en": "Without saying a word, the manager began to eat the ramen.",
     "tok": [
      {
       "s": "店長",
       "r": "てんちょう",
-      "p": 1
+      "p": 1,
+      "g": "manager"
      },
      {
       "s": "は",
@@ -9596,7 +9632,8 @@
      {
       "s": "店長",
       "r": "てんちょう",
-      "p": 1
+      "p": 1,
+      "g": "manager"
      },
      {
       "s": "の",
@@ -9622,12 +9659,13 @@
     ]
    },
    {
-    "en": "After drinking all of the soup, the owner said, \"Still a long way to go.\"",
+    "en": "After drinking all of the soup, the manager said, \"Still a long way to go.\"",
     "tok": [
      {
       "s": "店長",
       "r": "てんちょう",
-      "p": 1
+      "p": 1,
+      "g": "manager"
      },
      {
       "s": "は",
@@ -9686,7 +9724,7 @@
     ]
    },
    {
-    "en": "As I was feeling disappointed, the owner smiled a little and said:",
+    "en": "As I was feeling disappointed, the manager smiled a little and said:",
     "tok": [
      {
       "s": "わたし",
@@ -9706,7 +9744,8 @@
      {
       "s": "店長",
       "r": "てんちょう",
-      "p": 1
+      "p": 1,
+      "g": "manager"
      },
      {
       "s": "は",

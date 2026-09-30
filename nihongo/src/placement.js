@@ -98,11 +98,17 @@ function skillValue(log) { // log: [{lv, score}] → 0..4
   const fails = log.filter(e => e.score === 0 && e.lv + 1 <= best).length;
   return clamp(best - fails * 0.5, 0, 4);
 }
+const NEG_RE = /(ない|ません|なかった|なくて|じゃない|ず)$|(ない|ません|なかった)(ん|の)?(です|だ|よ|ね|か)?$/;
+const isNeg = s => NEG_RE.test(s.replace(/[よねかだです]+$/, m => m)) || /(ません|ない|なかった)(でした|です|だ|よ|ね)?$/.test(s);
 function gradeWriting(it, input) {
   const v = normJa(input); if (!v) return 0;
-  if ((it.answers || []).some(a => normJa(a) === v)) return 1;
+  const accepted = (it.answers || []).map(normJa);
+  if (accepted.includes(v)) return 1;
+  // Polarity guard: a negative answer to a positive prompt (or the reverse) never earns credit.
+  const negs = accepted.map(isNeg); if (negs.every(x => x === negs[0]) && isNeg(v) !== negs[0]) return 0;
+  // Partial credit tops out below a pass: it shows the learner is close without inflating their level.
   const keys = (it.keys || []).map(normJa); const hit = keys.filter(k => v.includes(k)).length;
-  return keys.length && hit === keys.length ? 0.75 : hit / Math.max(1, keys.length) >= 0.5 ? 0.4 : 0;
+  return keys.length && hit === keys.length ? 0.5 : hit / Math.max(1, keys.length) >= 0.5 ? 0.3 : 0;
 }
 
 VIEWS.placement = (p) => {
