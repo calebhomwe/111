@@ -17,8 +17,9 @@ const App = {
     if (this.cleanup) { try { this.cleanup(); } catch (e) {} this.cleanup = null; }
     Voice.stop(); $$('.pop, .modal-back').forEach(p => p.remove());
     this.route = route; this.params = params;
-    if (push) { try { history.replaceState(null, '', '#' + route); } catch (e) {} }
+    if (push) { try { if (('#' + route) !== location.hash) history.pushState(null, '', '#' + route); } catch (e) {} }
     this.render(); window.scrollTo({ top: 0 });
+    if (push !== false) { const hd = $('main .view h1, main .view h2'); if (hd) { hd.tabIndex = -1; hd.focus({ preventScroll: true }); } }
   },
   render() {
     const main = $('#main'); main.innerHTML = '';
@@ -35,6 +36,8 @@ const App = {
     }
     v.classList.add('view'); main.append(v);
     try { this.renderNav(); } catch (e) { console.error(e); }
+    $$('.tabs').forEach(t => { t.setAttribute('role', 'tablist'); t.querySelectorAll('button').forEach(b => { if (b.hasAttribute('aria-selected')) b.setAttribute('role', 'tab'); }); });
+    $$('.jp, ruby, .qbig .kana, .qbig .kanji, .qbig .word, .tok').forEach(el => { if (!el.lang) el.lang = 'ja'; });
   },
   renderNav() {
     const nav = $('#nav'); nav.innerHTML = '';
@@ -44,6 +47,7 @@ const App = {
       nav.append(h('button' + (n.more ? '.more-only' : ''), { 'aria-current': tabRoute === n.id ? 'page' : null, onclick: () => App.go(n.id) }, icon(n.icon), h('span', n.label), c ? h('span.count', c > 99 ? '99+' : String(c)) : null));
     }
     $('#streakPill').replaceChildren(icon('flame'), `${streak()} day streak`);
+    $$('.topbar .pill.fire').forEach(p => p.replaceChildren(icon('flame'), String(streak())));
     $('#xpPill').textContent = `${S.xp.toLocaleString()} XP`;
   },
 };
@@ -119,7 +123,7 @@ function strokeSVG(ch, { animate = true, numbers = false, speed = 0.55, cls = 's
   const paths = STROKES[ch]; if (!paths) return null;
   const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
   svg.setAttribute('viewBox', '0 0 109 109'); svg.setAttribute('class', cls); svg.setAttribute('aria-hidden', 'true');
-  let t = 0;
+  let t = 0; if (matchMedia('(prefers-reduced-motion: reduce)').matches) animate = false;
   paths.forEach((d, i) => {
     const p = document.createElementNS(ns, 'path');
     p.setAttribute('d', d); p.setAttribute('pathLength', '1');
@@ -163,7 +167,7 @@ VIEWS.home = () => {
   const heroArt = art('hero', '.scene'); if (heroArt) { heroArt.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:.42'; hero.prepend(heroArt); } else hero.prepend(hs);
 
   const learned = Object.keys(S.cards).length;
-  const vocabN = Object.keys(S.cards).filter(k => k[0] === 'v').length, kanjiN = Object.keys(S.cards).filter(k => k[0] === 'j').length, kanaN = Object.keys(S.cards).filter(k => k[0] === 'h' || k[0] === 'k').length;
+  const vocabN = Object.keys(S.cards).filter(k => k[0] === 'v').length, kanjiN = Object.keys(S.cards).filter(k => k[0] === 'j').length, kanaN = Object.keys(S.cards).filter(k => (k[0] === 'h' && HIRA.includes(k.slice(2))) || (k[0] === 'k' && KATA.includes(k.slice(2)))).length;
   const tiles = h('section.stat-tiles',
     h('div.tile', h('b', String(streak())), h('span', 'day streak')),
     h('div.tile', h('b', `Lv ${lv.level}`), h('div.bar', { style: { margin: '6px 0 2px' } }, h('i', { style: { width: `${lv.into / lv.need * 100}%` } })), h('span', `${lv.need - lv.into} XP to next`)),
@@ -190,7 +194,7 @@ VIEWS.home = () => {
   const gp = GRAMMAR_POINTS.find(p => !S.grammar[p.id]);
   const extra = h('div.grid.g2',
     gp ? h('button.card.scenario', { onclick: () => App.go('grammar', { id: gp.id }) }, h('div.eyebrow', 'Next grammar point'), h('div.jp', { style: { fontSize: '1.3rem' } }, gp.t), h('div.muted', gp.sum)) : null,
-    h('button.card.scenario', { onclick: () => App.go('sensei') }, h('div.eyebrow', 'Talk it out'), h('div', { style: { fontWeight: 700 } }, 'Practise a real conversation with Sensei'), h('div.muted', 'Order at a café, ask for directions, introduce yourself. Your sentences get corrected as you go.')));
+    h('button.card.scenario', { onclick: () => App.go('sensei') }, h('div.eyebrow', 'Talk it out'), h('div', { style: { fontWeight: 700 } }, 'Practice a real conversation with Sensei'), h('div.muted', 'Order at a café, ask for directions, introduce yourself. Your sentences get corrected as you go.')));
 
   const fun = window.Fun ? [Fun.streakBanner(), h('div.grid.g2', Fun.questsCard(), Fun.weekCard())] : [];
   return h('div', fun[0] || null, hero, fun[1] || null, tiles, wotdCard, h('section.grid.g3', tracks), extra, heatmapCard());
@@ -258,7 +262,7 @@ function teachCard(key) {
   const it = item(key); const wrap = h('div.teach');
   if (it.type === 'kana') {
     const { box, replay } = strokeBox(it.ch);
-    const exWord = VOCAB.find(v => toHira(v.r).startsWith(toHira(it.ch)) && v.lv === 5 && (it.script === 'k' ? /[゠-ヿ]/.test(v.w) : true));
+    const exWord = VOCAB.find(v => toHira(v.r).startsWith(toHira(it.ch)) && v.lv === 5 && !hasKanji(v.w) && (it.script === 'k' ? /[゠-ヿ]/.test(v.w) : true));
     wrap.append(h('div.teach-hero', h('div.stack', { style: { justifyItems: 'center' } }, box, replay),
       h('div.stack',
         h('div.row', h('span', { style: { font: '400 3rem/1 var(--f-display)' } }, it.romaji), speakBtn(it.ch)),
@@ -324,7 +328,7 @@ VIEWS.lesson = ({ id }) => {
           h('div.row', { style: { justifyContent: 'center' } }, ([...new Set(keys)].map(k => h('span.chip', { html: esc(itemLabel(item(k))) })))),
           h('div.row', { style: { justifyContent: 'center' } },
             nx ? h('button.btn.primary', { onclick: () => App.go('lesson', { id: nx.id }) }, `Next: ${nx.title}`) : null,
-            l.track === 'kana' || l.track === 'kanji' ? h('button.btn', { onclick: () => App.go('write', { chars: keys.map(k => k.slice(2)).join('') }) }, icon('brush'), 'Practise writing') : null,
+            l.track === 'kana' || l.track === 'kanji' ? h('button.btn', { onclick: () => App.go('write', { chars: keys.map(k => k.slice(2)).join('') }) }, icon('brush'), 'Practice writing') : null,
             h('button.btn', { onclick: () => App.go('learn', { track: l.track }) }, 'Back to path')))));
         checkAchievements(); window.Fun?.event?.('lesson', { id, perfect: res.correct === res.total });
       },
@@ -347,13 +351,13 @@ VIEWS.review = () => {
   return h('div',
     h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', 'Spaced repetition · FSRS'), h('h1', 'Reviews')),
     h('section.card.pad-lg.row.between',
-      h('div.stack', { style: { gap: '4px' } }, h('div', { style: { font: '400 3rem/1 var(--f-display)' } }, String(due.length)), h('div.muted', due.length ? 'cards due now' : nextDue ? `Next review in ${fmtIvl(nextDue - now())}` : 'Learn a lesson to start reviewing'), soon ? h('div.muted.small', `${soon} more due in the next 24 hours`) : null),
+      h('div.stack', { style: { gap: '4px' } }, h('div', { style: { font: '400 3rem/1 var(--f-display)' } }, String(due.length)), h('div.muted', due.length ? 'cards due now' : nextDue ? `Next review in ${fmtIvl(nextDue - now())}` : 'Learn a lesson to start reviewing'), !all.length ? h('button.btn.primary', { style: { justifySelf: 'start' }, onclick: () => App.go('learn') }, 'Start a lesson') : null, soon ? h('div.muted.small', `${soon} more due in the next 24 hours`) : null),
       h('div.row', due.length ? h('button.btn.primary', { onclick: () => startReview() }, icon('play'), due.length > 50 ? 'Review 50' : 'Start review') : null,
         all.length ? h('button.btn', { onclick: () => startReview({ cram: true }) }, icon('bolt'), 'Extra practice') : null)),
     h('section.stat-tiles', Object.entries(byStage).map(([s, n]) => h('div.tile', h('b', String(n)), h('span.chip.' + s, s)))),
     weak.length ? h('section.card.stack', h('div.row.between', h('h3', 'Leeches'), h('button.btn.sm', { onclick: () => startReview({ keys: weak.slice(0, 20) }) }, 'Drill these')), h('p.muted.small', 'Items you have forgotten two or more times. A focused drill helps them stick.'),
       h('div.row', weak.slice(0, 24).map(k => h('span.chip.seal', { html: `${esc(itemLabel(item(k) || { type: 'kana', ch: '?' }))} ×${S.cards[k].lapses}` })))) : null,
-    h('section.card.stack', h('h3', 'How reviews work'), h('p.muted', 'Michi schedules each card with FSRS, a memory model that predicts when you are about to forget. Answer quickly and correctly and the gap grows (days, weeks, months). Miss one and it comes back in minutes. Early cards are multiple choice; once a card is stable you type the answer, so you practise recall as well as recognition.')));
+    h('section.card.stack', h('h3', 'How reviews work'), h('p.muted', 'Michi schedules each card with FSRS, a memory model that predicts when you are about to forget. Answer quickly and correctly and the gap grows (days, weeks, months). Miss one and it comes back in minutes. Early cards are multiple choice; once a card is stable you type the answer, so you practice recall as well as recognition.')));
 };
 function startReview(opts = {}) {
   let keys = opts.keys || (opts.cram ? shuffle(Object.keys(S.cards)).sort((a, b) => FSRS.retrievability(S.cards[a]) - FSRS.retrievability(S.cards[b])).slice(0, 20) : dueCards().slice(0, 50));
@@ -433,9 +437,9 @@ function renderQuestion(host, q, answer, continueFn) {
   const card = h('div.qcard'); let answered = false;
   const big = h('div.qbig' + (q.bigClass === 'kana' || q.bigClass === 'kanji' ? '.gridpaper' : ''));
   if (q.big) big.append(h('div.' + (q.bigClass || 'word'), q.big)); else if (q.bigHTML) big.append(h('div.' + (q.bigClass || 'word'), { html: q.bigHTML }));
-  if (q.audio) { const b = h('button.btn.primary', { style: { width: '84px', height: '84px', borderRadius: '50%' }, 'aria-label': 'Play again', onclick: () => Voice.say(q.audio) }, icon('speaker')); b.querySelector('svg').style.cssText = 'width:34px;height:34px'; big.append(b); const rt = App.route; setTimeout(() => { if (App.route === rt) Voice.say(q.audio); }, 200); }
+  if (q.audio) { const b = h('button.btn.primary', { style: { width: '84px', height: '84px', borderRadius: '50%' }, 'aria-label': 'Play again', onclick: () => Voice.say(q.audio) }, icon('speaker')); b.querySelector('svg').style.cssText = 'width:34px;height:34px'; big.append(b); const showTxt = h('button.btn.sm.ghost', { type: 'button', onclick: e => { e.currentTarget.replaceWith(h('div.hint.jp', q.audio)); } }, 'Can\'t listen now? Show the text'); big.append(showTxt); const rt = App.route; setTimeout(() => { if (App.route === rt) Voice.say(q.audio); }, 200); }
   if (q.sub) big.append(h('div.hint', q.sub)); if (q.hint) big.append(h('div.hint', q.hint));
-  const fb = h('div');
+  const fb = h('div', { role: 'status', 'aria-live': 'polite' });
   const finish = (ok, typed) => {
     if (answered) return; answered = true; ok ? Sfx.ok() : Sfx.bad(); answer(ok, typed);
     if (q.say && !q.audio) Voice.say(q.say);
@@ -445,7 +449,7 @@ function renderQuestion(host, q, answer, continueFn) {
     const it = !ok && q.key ? item(q.key) : null; const lapses = it ? (S.cards[q.key]?.lapses || 0) : 0;
     const aid = it && lapses >= 2 ? (it.type === 'kana' ? KANA_MN[it.ch] : it.type === 'kanji' ? it.mn : it.ex ? `${it.ex} — ${it.exm}` : '') : '';
     fb.replaceChildren(h('div.feedback.' + (ok ? 'ok' : 'no'), h('div.row.between', h('strong', ok ? pick(['正解！ Correct', 'いいね！ Nice', 'すごい！ Great', 'その通り！ Exactly']) : 'Not quite'), h('div.row', q.say ? speakBtn(q.say) : null)), h('div.ans', { html: esc(q.answer) }), aid ? h('div.mnemonic', { style: { color: 'var(--ink)' } }, h('b', `Tricky one (missed ${lapses}×): `), aid) : null, h('div.row.between', h('div', extra), cont)));
-    setTimeout(() => { cont.focus({ preventScroll: true }); fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 30);
+    setTimeout(() => { cont.focus({ preventScroll: true }); cont.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 30);
   };
   const answeredOverride = () => { answer(true, true, true); continueFn(); };
   if (q.kind === 'mc') {

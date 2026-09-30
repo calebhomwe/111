@@ -13,7 +13,7 @@
 /* Layout: a study desk — slim ink sidebar (bottom tabs on phones), content column on manuscript-grid paper; red hanko seals mark achievement. */
 :root {
   --bg: #eef0f4; --paper: #ffffff; --paper-2: #e5e8ef; --ink: #17202e; --muted: #586176; --line: #d3d8e2; --grid: #e3e7ee;
-  --ai: #274a8a; --hero: #274a8a; --ai-soft: #dde6f6; --ai-ink: #ffffff; --seal: #c1333f; --seal-soft: #f8e0e2; --ok: #237a55; --ok-soft: #dcf1e7; --bad: #b8323e; --bad-soft: #f9e1e3; --gold: #b7791f; --gold-soft: #f7ecd6;
+  --ai: #274a8a; --hero: #274a8a; --ai-soft: #dde6f6; --ai-ink: #ffffff; --seal: #c1333f; --seal-soft: #f8e0e2; --ok: #237a55; --ok-soft: #dcf1e7; --bad: #b8323e; --bad-soft: #f9e1e3; --gold: #8a5a0c; --gold-soft: #f7ecd6; --on-seal: #ffffff;
   --shadow: 0 1px 2px rgb(23 32 46 / .06), 0 6px 24px -8px rgb(23 32 46 / .14);
   --f-jp-hand: "Klee One", "Hiragino Maru Gothic ProN", "Yu Gothic", system-ui, sans-serif;
   --f-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
@@ -22,14 +22,15 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #0e1218; --paper: #161b24; --paper-2: #1e2430; --ink: #e7eaf1; --muted: #98a1b4; --line: #2a3140; --grid: #20262f;
-  --ai: #8eaef0; --hero: #1d3563; --ai-soft: #1f2b44; --ai-ink: #0e1218; --seal: #f06873; --seal-soft: #3a1d22; --ok: #5ec596; --ok-soft: #15301f; --bad: #f07a84; --bad-soft: #3a1b20; --gold: #f0bf55; --gold-soft: #33290f;
+  --ai: #8eaef0; --hero: #1d3563; --ai-soft: #1f2b44; --ai-ink: #0e1218; --seal: #f06873; --seal-soft: #3a1d22; --ok: #5ec596; --ok-soft: #15301f; --bad: #f07a84; --bad-soft: #3a1b20; --gold: #f0bf55; --gold-soft: #33290f; --on-seal: #10131a;
   --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 8px 28px -10px rgb(0 0 0 / .6); color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #0e1218; --paper: #161b24; --paper-2: #1e2430; --ink: #e7eaf1; --muted: #98a1b4; --line: #2a3140; --grid: #20262f;
-  --ai: #8eaef0; --hero: #1d3563; --ai-soft: #1f2b44; --ai-ink: #0e1218; --seal: #f06873; --seal-soft: #3a1d22; --ok: #5ec596; --ok-soft: #15301f; --bad: #f07a84; --bad-soft: #3a1b20; --gold: #f0bf55; --gold-soft: #33290f;
+  --ai: #8eaef0; --hero: #1d3563; --ai-soft: #1f2b44; --ai-ink: #0e1218; --seal: #f06873; --seal-soft: #3a1d22; --ok: #5ec596; --ok-soft: #15301f; --bad: #f07a84; --bad-soft: #3a1b20; --gold: #f0bf55; --gold-soft: #33290f; --on-seal: #10131a;
   --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 8px 28px -10px rgb(0 0 0 / .6); color-scheme: dark; }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { height: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
 button, input, select, textarea { font: inherit; color: inherit; }
@@ -52,14 +53,14 @@ ruby rt { font-size: .5em; color: var(--muted); font-weight: 500; }
 .app { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100%; }
 .side { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 4px; padding: 20px 14px; border-right: 1px solid var(--line); background: var(--paper); }
 .brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 18px; }
-.brand .mark { width: 38px; height: 38px; border-radius: 9px; background: var(--seal); color: #fff; display: grid; place-items: center; font: 400 22px/1 var(--f-display); transform: rotate(-4deg); box-shadow: inset 0 0 0 2px rgb(255 255 255 / .35); }
+.brand .mark { width: 38px; height: 38px; border-radius: 9px; background: var(--seal); color: var(--on-seal); display: grid; place-items: center; font: 400 22px/1 var(--f-display); transform: rotate(-4deg); box-shadow: inset 0 0 0 2px rgb(255 255 255 / .35); }
 .brand b { font: 400 1.25rem/1 var(--f-display); letter-spacing: .02em; }
 .brand small { display: block; color: var(--muted); font-size: .72rem; letter-spacing: .1em; }
 .nav { display: flex; flex-direction: column; gap: 2px; }
 .nav button { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 0; background: none; border-radius: 10px; color: var(--muted); font-weight: 500; text-align: left; position: relative; }
 .nav button:hover { background: var(--paper-2); color: var(--ink); }
 .nav button[aria-current="page"] { background: var(--ai-soft); color: var(--ai); font-weight: 700; }
-.nav .count { margin-left: auto; min-width: 22px; padding: 0 7px; border-radius: 99px; background: var(--seal); color: #fff; font-size: .75rem; font-weight: 700; text-align: center; line-height: 20px; }
+.nav .count { margin-left: auto; min-width: 22px; padding: 0 7px; border-radius: 99px; background: var(--seal); color: var(--on-seal); font-size: .75rem; font-weight: 700; text-align: center; line-height: 20px; }
 .side-foot { margin-top: auto; display: grid; gap: 10px; padding: 12px 8px 0; border-top: 1px solid var(--line); }
 .side-stats { display: flex; gap: 8px; flex-wrap: wrap; }
 .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; background: var(--paper-2); font-size: .8rem; font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -89,15 +90,15 @@ main { min-width: 0; padding: 28px clamp(16px, 4vw, 48px) 96px; }
 .btn:active { transform: translateY(1px); }
 .btn.primary { background: var(--ai); border-color: var(--ai); color: var(--ai-ink); }
 .btn.primary:hover { filter: brightness(1.08); }
-.btn.seal { background: var(--seal); border-color: var(--seal); color: #fff; }
+.btn.seal { background: var(--seal); border-color: var(--seal); color: var(--on-seal); }
 .btn.ghost { background: none; border-color: transparent; }
-.btn.sm { padding: 6px 12px; min-height: 34px; font-size: .88rem; border-radius: 9px; }
+.btn.sm { padding: 6px 12px; min-height: 40px; font-size: .88rem; border-radius: 9px; }
 .btn[disabled] { opacity: .45; pointer-events: none; }
 .icon-btn { width: 40px; height: 40px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); background: var(--paper); color: var(--ai); }
 .icon-btn:hover { background: var(--ai-soft); }
 .tabs { display: flex; gap: 4px; padding: 4px; background: var(--paper-2); border-radius: 12px; width: max-content; max-width: 100%; overflow-x: auto; justify-self: start; }
 .teach-glyph .under { position: absolute; inset: 0; display: grid; place-items: center; font: 400 7rem/1 var(--f-jp-hand); opacity: .07; pointer-events: none; }
-.tabs button { border: 0; background: none; padding: 7px 14px; border-radius: 9px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.tabs button { border: 0; background: none; min-height: 40px; padding: 7px 14px; border-radius: 9px; font-weight: 700; color: var(--muted); white-space: nowrap; }
 .tabs button[aria-selected="true"] { background: var(--paper); color: var(--ink); box-shadow: var(--shadow); }
 .bar { height: 8px; border-radius: 99px; background: var(--paper-2); overflow: hidden; }
 .bar > i { display: block; height: 100%; background: var(--ai); border-radius: inherit; transition: width .4s ease; }
@@ -106,7 +107,7 @@ main { min-width: 0; padding: 28px clamp(16px, 4vw, 48px) 96px; }
 .chip.new { background: var(--ai-soft); color: var(--ai); } .chip.learning { background: var(--gold-soft); color: var(--gold); } .chip.young { background: var(--ok-soft); color: var(--ok); } .chip.mature, .chip.mastered { background: var(--ok); color: var(--paper); }
 .chip.seal { background: var(--seal-soft); color: var(--seal); }
 input[type="text"], input[type="search"], select, textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--line); border-radius: 11px; background: var(--paper); min-height: 44px; }
-input:focus, select:focus, textarea:focus { border-color: var(--ai); outline: none; }
+input:focus, select:focus, textarea:focus { border-color: var(--ai); }
 .empty { text-align: center; padding: 32px 16px; color: var(--muted); }
 
 /* Hanko seal */
@@ -331,8 +332,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--ai); outline: no
 .radar text { font-size: 12px; font-weight: 700; }
 .profile-list { display: grid; gap: 6px; }
 @media (max-width: 560px) { .profile { grid-template-columns: minmax(0, 1fr); } }
+input[type="checkbox"] { width: 22px; height: 22px; }
+summary { min-height: 32px; display: list-item; }
+.result-hero > * { min-width: 0; max-width: 100%; }
 @media (max-width: 760px) { .gram-grid { grid-template-columns: minmax(0, 1fr) !important; } }
 @media (max-width: 900px) {
+  .feedback, .qcard .btn.primary, .qcard form { scroll-margin-bottom: 110px; }
+  #toasts { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
   .app { grid-template-columns: minmax(0, 1fr); }
   .side { position: fixed; top: auto; bottom: 0; left: 0; right: 0; height: auto; z-index: 40; flex-direction: row; padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px)); border-right: 0; border-top: 1px solid var(--line); }
   .brand, .side-foot, .nav .more-only { display: none; }
@@ -796,8 +802,9 @@ function h(tag, attrs, ...kids) {
 }
 
 // Ruby text: word + reading → <ruby> markup (furigana only over kanji runs when possible).
-function ruby(word, reading) {
+function ruby(word, reading, force) {
   word = String(word ?? ''); reading = reading == null ? reading : String(reading);
+  if (!force && S.settings.furigana === 'never') return esc(word);
   if (!reading || !hasKanji(word) || reading === word) return esc(word);
   // Split okurigana: match leading/trailing kana shared between word and reading.
   let pre = 0; while (pre < word.length && !hasKanji(word[pre]) && word[pre] === reading[pre]) pre++;
@@ -1080,6 +1087,9 @@ const Clips = {
 // speakBtn(key, label, tts): plays the recording for `key`, else reads `tts` (or key) with the browser voice. Right-click / long-press plays slowly.
 function speakBtn(text, label = 'Play audio', tts) {
   const b = h('button.icon-btn.speak', { type: 'button', 'aria-label': label, title: label + ' (right-click: slow)', onclick: e => { e.stopPropagation(); Voice.say(text, { tts, alt: tts ? [tts] : [] }); }, oncontextmenu: e => { e.preventDefault(); e.stopPropagation(); Voice.say(text, { tts, alt: tts ? [tts] : [], slow: true }); } }, icon('speaker'));
+  let lp = 0; b.addEventListener('pointerdown', e => { if (e.pointerType === 'touch') lp = setTimeout(() => { lp = -1; Voice.say(text, { tts, alt: tts ? [tts] : [], slow: true }); }, 500); });
+  const cancelLp = () => clearTimeout(lp); b.addEventListener('pointerup', cancelLp); b.addEventListener('pointerleave', cancelLp); b.addEventListener('pointercancel', cancelLp);
+  b.addEventListener('click', e => { if (lp === -1) { lp = 0; e.stopImmediatePropagation(); } }, true);
   return b;
 }
 
@@ -1498,8 +1508,9 @@ const App = {
     if (this.cleanup) { try { this.cleanup(); } catch (e) {} this.cleanup = null; }
     Voice.stop(); $$('.pop, .modal-back').forEach(p => p.remove());
     this.route = route; this.params = params;
-    if (push) { try { history.replaceState(null, '', '#' + route); } catch (e) {} }
+    if (push) { try { if (('#' + route) !== location.hash) history.pushState(null, '', '#' + route); } catch (e) {} }
     this.render(); window.scrollTo({ top: 0 });
+    if (push !== false) { const hd = $('main .view h1, main .view h2'); if (hd) { hd.tabIndex = -1; hd.focus({ preventScroll: true }); } }
   },
   render() {
     const main = $('#main'); main.innerHTML = '';
@@ -1516,6 +1527,8 @@ const App = {
     }
     v.classList.add('view'); main.append(v);
     try { this.renderNav(); } catch (e) { console.error(e); }
+    $$('.tabs').forEach(t => { t.setAttribute('role', 'tablist'); t.querySelectorAll('button').forEach(b => { if (b.hasAttribute('aria-selected')) b.setAttribute('role', 'tab'); }); });
+    $$('.jp, ruby, .qbig .kana, .qbig .kanji, .qbig .word, .tok').forEach(el => { if (!el.lang) el.lang = 'ja'; });
   },
   renderNav() {
     const nav = $('#nav'); nav.innerHTML = '';
@@ -1525,6 +1538,7 @@ const App = {
       nav.append(h('button' + (n.more ? '.more-only' : ''), { 'aria-current': tabRoute === n.id ? 'page' : null, onclick: () => App.go(n.id) }, icon(n.icon), h('span', n.label), c ? h('span.count', c > 99 ? '99+' : String(c)) : null));
     }
     $('#streakPill').replaceChildren(icon('flame'), `${streak()} day streak`);
+    $$('.topbar .pill.fire').forEach(p => p.replaceChildren(icon('flame'), String(streak())));
     $('#xpPill').textContent = `${S.xp.toLocaleString()} XP`;
   },
 };
@@ -1600,7 +1614,7 @@ function strokeSVG(ch, { animate = true, numbers = false, speed = 0.55, cls = 's
   const paths = STROKES[ch]; if (!paths) return null;
   const ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg');
   svg.setAttribute('viewBox', '0 0 109 109'); svg.setAttribute('class', cls); svg.setAttribute('aria-hidden', 'true');
-  let t = 0;
+  let t = 0; if (matchMedia('(prefers-reduced-motion: reduce)').matches) animate = false;
   paths.forEach((d, i) => {
     const p = document.createElementNS(ns, 'path');
     p.setAttribute('d', d); p.setAttribute('pathLength', '1');
@@ -1644,7 +1658,7 @@ VIEWS.home = () => {
   const heroArt = art('hero', '.scene'); if (heroArt) { heroArt.style.cssText = 'width:100%;height:100%;object-fit:cover;opacity:.42'; hero.prepend(heroArt); } else hero.prepend(hs);
 
   const learned = Object.keys(S.cards).length;
-  const vocabN = Object.keys(S.cards).filter(k => k[0] === 'v').length, kanjiN = Object.keys(S.cards).filter(k => k[0] === 'j').length, kanaN = Object.keys(S.cards).filter(k => k[0] === 'h' || k[0] === 'k').length;
+  const vocabN = Object.keys(S.cards).filter(k => k[0] === 'v').length, kanjiN = Object.keys(S.cards).filter(k => k[0] === 'j').length, kanaN = Object.keys(S.cards).filter(k => (k[0] === 'h' && HIRA.includes(k.slice(2))) || (k[0] === 'k' && KATA.includes(k.slice(2)))).length;
   const tiles = h('section.stat-tiles',
     h('div.tile', h('b', String(streak())), h('span', 'day streak')),
     h('div.tile', h('b', `Lv ${lv.level}`), h('div.bar', { style: { margin: '6px 0 2px' } }, h('i', { style: { width: `${lv.into / lv.need * 100}%` } })), h('span', `${lv.need - lv.into} XP to next`)),
@@ -1671,7 +1685,7 @@ VIEWS.home = () => {
   const gp = GRAMMAR_POINTS.find(p => !S.grammar[p.id]);
   const extra = h('div.grid.g2',
     gp ? h('button.card.scenario', { onclick: () => App.go('grammar', { id: gp.id }) }, h('div.eyebrow', 'Next grammar point'), h('div.jp', { style: { fontSize: '1.3rem' } }, gp.t), h('div.muted', gp.sum)) : null,
-    h('button.card.scenario', { onclick: () => App.go('sensei') }, h('div.eyebrow', 'Talk it out'), h('div', { style: { fontWeight: 700 } }, 'Practise a real conversation with Sensei'), h('div.muted', 'Order at a café, ask for directions, introduce yourself. Your sentences get corrected as you go.')));
+    h('button.card.scenario', { onclick: () => App.go('sensei') }, h('div.eyebrow', 'Talk it out'), h('div', { style: { fontWeight: 700 } }, 'Practice a real conversation with Sensei'), h('div.muted', 'Order at a café, ask for directions, introduce yourself. Your sentences get corrected as you go.')));
 
   const fun = window.Fun ? [Fun.streakBanner(), h('div.grid.g2', Fun.questsCard(), Fun.weekCard())] : [];
   return h('div', fun[0] || null, hero, fun[1] || null, tiles, wotdCard, h('section.grid.g3', tracks), extra, heatmapCard());
@@ -1739,7 +1753,7 @@ function teachCard(key) {
   const it = item(key); const wrap = h('div.teach');
   if (it.type === 'kana') {
     const { box, replay } = strokeBox(it.ch);
-    const exWord = VOCAB.find(v => toHira(v.r).startsWith(toHira(it.ch)) && v.lv === 5 && (it.script === 'k' ? /[゠-ヿ]/.test(v.w) : true));
+    const exWord = VOCAB.find(v => toHira(v.r).startsWith(toHira(it.ch)) && v.lv === 5 && !hasKanji(v.w) && (it.script === 'k' ? /[゠-ヿ]/.test(v.w) : true));
     wrap.append(h('div.teach-hero', h('div.stack', { style: { justifyItems: 'center' } }, box, replay),
       h('div.stack',
         h('div.row', h('span', { style: { font: '400 3rem/1 var(--f-display)' } }, it.romaji), speakBtn(it.ch)),
@@ -1805,7 +1819,7 @@ VIEWS.lesson = ({ id }) => {
           h('div.row', { style: { justifyContent: 'center' } }, ([...new Set(keys)].map(k => h('span.chip', { html: esc(itemLabel(item(k))) })))),
           h('div.row', { style: { justifyContent: 'center' } },
             nx ? h('button.btn.primary', { onclick: () => App.go('lesson', { id: nx.id }) }, `Next: ${nx.title}`) : null,
-            l.track === 'kana' || l.track === 'kanji' ? h('button.btn', { onclick: () => App.go('write', { chars: keys.map(k => k.slice(2)).join('') }) }, icon('brush'), 'Practise writing') : null,
+            l.track === 'kana' || l.track === 'kanji' ? h('button.btn', { onclick: () => App.go('write', { chars: keys.map(k => k.slice(2)).join('') }) }, icon('brush'), 'Practice writing') : null,
             h('button.btn', { onclick: () => App.go('learn', { track: l.track }) }, 'Back to path')))));
         checkAchievements(); window.Fun?.event?.('lesson', { id, perfect: res.correct === res.total });
       },
@@ -1828,13 +1842,13 @@ VIEWS.review = () => {
   return h('div',
     h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', 'Spaced repetition · FSRS'), h('h1', 'Reviews')),
     h('section.card.pad-lg.row.between',
-      h('div.stack', { style: { gap: '4px' } }, h('div', { style: { font: '400 3rem/1 var(--f-display)' } }, String(due.length)), h('div.muted', due.length ? 'cards due now' : nextDue ? `Next review in ${fmtIvl(nextDue - now())}` : 'Learn a lesson to start reviewing'), soon ? h('div.muted.small', `${soon} more due in the next 24 hours`) : null),
+      h('div.stack', { style: { gap: '4px' } }, h('div', { style: { font: '400 3rem/1 var(--f-display)' } }, String(due.length)), h('div.muted', due.length ? 'cards due now' : nextDue ? `Next review in ${fmtIvl(nextDue - now())}` : 'Learn a lesson to start reviewing'), !all.length ? h('button.btn.primary', { style: { justifySelf: 'start' }, onclick: () => App.go('learn') }, 'Start a lesson') : null, soon ? h('div.muted.small', `${soon} more due in the next 24 hours`) : null),
       h('div.row', due.length ? h('button.btn.primary', { onclick: () => startReview() }, icon('play'), due.length > 50 ? 'Review 50' : 'Start review') : null,
         all.length ? h('button.btn', { onclick: () => startReview({ cram: true }) }, icon('bolt'), 'Extra practice') : null)),
     h('section.stat-tiles', Object.entries(byStage).map(([s, n]) => h('div.tile', h('b', String(n)), h('span.chip.' + s, s)))),
     weak.length ? h('section.card.stack', h('div.row.between', h('h3', 'Leeches'), h('button.btn.sm', { onclick: () => startReview({ keys: weak.slice(0, 20) }) }, 'Drill these')), h('p.muted.small', 'Items you have forgotten two or more times. A focused drill helps them stick.'),
       h('div.row', weak.slice(0, 24).map(k => h('span.chip.seal', { html: `${esc(itemLabel(item(k) || { type: 'kana', ch: '?' }))} ×${S.cards[k].lapses}` })))) : null,
-    h('section.card.stack', h('h3', 'How reviews work'), h('p.muted', 'Michi schedules each card with FSRS, a memory model that predicts when you are about to forget. Answer quickly and correctly and the gap grows (days, weeks, months). Miss one and it comes back in minutes. Early cards are multiple choice; once a card is stable you type the answer, so you practise recall as well as recognition.')));
+    h('section.card.stack', h('h3', 'How reviews work'), h('p.muted', 'Michi schedules each card with FSRS, a memory model that predicts when you are about to forget. Answer quickly and correctly and the gap grows (days, weeks, months). Miss one and it comes back in minutes. Early cards are multiple choice; once a card is stable you type the answer, so you practice recall as well as recognition.')));
 };
 function startReview(opts = {}) {
   let keys = opts.keys || (opts.cram ? shuffle(Object.keys(S.cards)).sort((a, b) => FSRS.retrievability(S.cards[a]) - FSRS.retrievability(S.cards[b])).slice(0, 20) : dueCards().slice(0, 50));
@@ -1914,9 +1928,9 @@ function renderQuestion(host, q, answer, continueFn) {
   const card = h('div.qcard'); let answered = false;
   const big = h('div.qbig' + (q.bigClass === 'kana' || q.bigClass === 'kanji' ? '.gridpaper' : ''));
   if (q.big) big.append(h('div.' + (q.bigClass || 'word'), q.big)); else if (q.bigHTML) big.append(h('div.' + (q.bigClass || 'word'), { html: q.bigHTML }));
-  if (q.audio) { const b = h('button.btn.primary', { style: { width: '84px', height: '84px', borderRadius: '50%' }, 'aria-label': 'Play again', onclick: () => Voice.say(q.audio) }, icon('speaker')); b.querySelector('svg').style.cssText = 'width:34px;height:34px'; big.append(b); const rt = App.route; setTimeout(() => { if (App.route === rt) Voice.say(q.audio); }, 200); }
+  if (q.audio) { const b = h('button.btn.primary', { style: { width: '84px', height: '84px', borderRadius: '50%' }, 'aria-label': 'Play again', onclick: () => Voice.say(q.audio) }, icon('speaker')); b.querySelector('svg').style.cssText = 'width:34px;height:34px'; big.append(b); const showTxt = h('button.btn.sm.ghost', { type: 'button', onclick: e => { e.currentTarget.replaceWith(h('div.hint.jp', q.audio)); } }, 'Can\'t listen now? Show the text'); big.append(showTxt); const rt = App.route; setTimeout(() => { if (App.route === rt) Voice.say(q.audio); }, 200); }
   if (q.sub) big.append(h('div.hint', q.sub)); if (q.hint) big.append(h('div.hint', q.hint));
-  const fb = h('div');
+  const fb = h('div', { role: 'status', 'aria-live': 'polite' });
   const finish = (ok, typed) => {
     if (answered) return; answered = true; ok ? Sfx.ok() : Sfx.bad(); answer(ok, typed);
     if (q.say && !q.audio) Voice.say(q.say);
@@ -1926,7 +1940,7 @@ function renderQuestion(host, q, answer, continueFn) {
     const it = !ok && q.key ? item(q.key) : null; const lapses = it ? (S.cards[q.key]?.lapses || 0) : 0;
     const aid = it && lapses >= 2 ? (it.type === 'kana' ? KANA_MN[it.ch] : it.type === 'kanji' ? it.mn : it.ex ? `${it.ex} — ${it.exm}` : '') : '';
     fb.replaceChildren(h('div.feedback.' + (ok ? 'ok' : 'no'), h('div.row.between', h('strong', ok ? pick(['正解！ Correct', 'いいね！ Nice', 'すごい！ Great', 'その通り！ Exactly']) : 'Not quite'), h('div.row', q.say ? speakBtn(q.say) : null)), h('div.ans', { html: esc(q.answer) }), aid ? h('div.mnemonic', { style: { color: 'var(--ink)' } }, h('b', `Tricky one (missed ${lapses}×): `), aid) : null, h('div.row.between', h('div', extra), cont)));
-    setTimeout(() => { cont.focus({ preventScroll: true }); fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 30);
+    setTimeout(() => { cont.focus({ preventScroll: true }); cont.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 30);
   };
   const answeredOverride = () => { answer(true, true, true); continueFn(); };
   if (q.kind === 'mc') {
@@ -2565,9 +2579,10 @@ function writingPad(ch, mode, onUpdate) {
     const okN = results.filter(Boolean).length;
     onUpdate({ strokes: refs.map((_, i) => results[i] ?? null), complete, score: complete ? okN / Math.max(refs.length, strokes.length) : 0, extra: strokes.length > refs.length ? `You drew ${strokes.length} strokes; ${ch} has ${refs.length}.` : '' });
   };
-  cv.addEventListener('pointerdown', e => { if (strokes.length >= refs.length + 2) return; cv.setPointerCapture(e.pointerId); cur = [toUnit(e)]; redraw(); });
-  cv.addEventListener('pointermove', e => { if (!cur) return; const pts = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; pts.forEach(pe => cur.push(toUnit(pe))); redraw(); });
-  const end = () => { if (!cur) return; if (cur.length < 2) cur.push([cur[0][0] + .5, cur[0][1] + .5]); strokes.push(cur); cur = null; const i = strokes.length - 1; results[i] = i < refs.length ? judge(i) : false; redraw(); report(); };
+  let pid = null;
+  cv.addEventListener('pointerdown', e => { if (cur || strokes.length >= refs.length + 2) return; pid = e.pointerId; cv.setPointerCapture(e.pointerId); cur = [toUnit(e)]; redraw(); });
+  cv.addEventListener('pointermove', e => { if (!cur || e.pointerId !== pid) return; const pts = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; pts.forEach(pe => cur.push(toUnit(pe))); redraw(); });
+  const end = e => { if (!cur || (e && e.pointerId !== pid)) return; if (cur.length < 2) cur.push([cur[0][0] + .5, cur[0][1] + .5]); strokes.push(cur); cur = null; const i = strokes.length - 1; results[i] = i < refs.length ? judge(i) : false; redraw(); report(); };
   cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
   const ro = new ResizeObserver(size); ro.observe(el);
   return {
@@ -3163,7 +3178,7 @@ function storyCard(s) {
   const st = S.stories[s.id]; const kn = Object.keys(S.cards).some(k => k[0] === 'v') ? storyKnown(s) : null;
   return h('button.story-card', { onclick: () => App.go('story', { id: s.id }) },
     h('div.art', storyArt(s, { w: 480, h: 190 })),
-    h('div.meta', h('div.row.between', h('span.chip' + (st ? '.young' : ''), st ? `Read · ${st.score != null ? st.score + '/' + (s.qs || []).length : ''}` : s.lv === 'kana' ? 'Kana' : s.lv), s.ai ? h('span.chip.seal', 'Sensei') : null),
+    h('div.meta', h('div.row.between', h('span.chip' + (st ? '.young' : ''), st ? (st.score != null ? `Read · ${st.score}/${(s.qs || []).length}` : 'Read') : s.lv === 'kana' ? 'Kana' : s.lv), s.ai ? h('span.chip.seal', 'Sensei') : null),
       h('b', s.title), h('span.muted.small', s.titleEn), h('span.muted.small', `${(s.sents || []).length} sentences${kn != null ? ` · you know ${kn}% of the words` : ''}`)));
 }
 VIEWS.story = ({ id }) => {
@@ -3176,7 +3191,7 @@ VIEWS.story = ({ id }) => {
     const toks = sent.tok.map(t => {
       if (t.p || (!t.g && !t.r)) return h('span', { html: t.r ? ruby(t.s, t.r) : esc(t.s) });
       const saved = (S.saved || []).includes(t.s);
-      return h('span.tok' + (saved ? '.saved' : ''), { 'data-s': t.s, tabindex: '0', role: 'button', html: t.r ? ruby(t.s, t.r) : esc(t.s), onclick: e => wordPop(e.currentTarget, t, sent), onkeydown: e => { if (e.key === 'Enter') wordPop(e.currentTarget, t, sent); } });
+      return h('span.tok' + (saved ? '.saved' : ''), { 'data-s': t.s, tabindex: '0', role: 'button', html: t.r ? ruby(t.s, t.r) : esc(t.s), onclick: e => wordPop(e.currentTarget, t, sent), onkeydown: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); wordPop(e.currentTarget, t, sent); } } });
     });
     el.append(en, ...toks, ' ');
     const play = h('button.icon-btn.speak', { style: { width: '30px', height: '30px', verticalAlign: 'middle', marginLeft: '6px' }, 'aria-label': 'Play sentence', onclick: () => speakSent(si) }, icon('speaker'));
@@ -3230,8 +3245,8 @@ function wordPop(el, t, sent) {
   // look for a dictionary match to offer "add to reviews"
   const dictHit = VOCAB.find(v => v.w === t.s || v.r === toHira(t.s)) || VOCAB.find(v => t.s.startsWith(v.w.replace(/[るうくぐすつぬぶむい]$/, '')) && hasKanji(v.w) && v.w.length > 1);
   const saved = (S.saved || []).includes(t.s);
-  const pop = h('div.pop', { role: 'dialog' },
-    h('div.row.between', h('span.w', { html: ruby(t.s, t.r) }), speakBtn(reading)),
+  const pop = h('div.pop', { role: 'dialog', 'aria-label': `${t.s}: word details`, tabindex: '-1' },
+    h('div.row.between', h('span.w', { html: ruby(t.s, t.r, true) }), speakBtn(reading)),
     showRomaji() ? h('div.muted.small', kanaToRomaji(reading)) : null,
     h('div', t.g || ''),
     dictHit && dictHit.w !== t.s ? h('div.muted.small', { html: `Dictionary form: ${ruby(dictHit.w, dictHit.r)} — ${esc(dictHit.m)}` }) : null,
@@ -3239,7 +3254,8 @@ function wordPop(el, t, sent) {
     h('div.row',
       dictHit ? h('button.btn.sm' + (S.cards['v:' + dictHit.id] ? '' : '.primary'), { disabled: S.cards['v:' + dictHit.id] ? true : null, onclick: e => { addCardsFromKeys(['v:' + dictHit.id]); e.currentTarget.disabled = true; e.currentTarget.textContent = 'In reviews'; toast(`${dictHit.w} added to reviews`); App.renderNav(); } }, S.cards['v:' + dictHit.id] ? 'In reviews' : 'Add to reviews') : null,
       h('button.btn.sm', { onclick: () => { S.saved = S.saved || []; if (saved) S.saved = S.saved.filter(x => x !== t.s); else S.saved.push(t.s); save(); $$('.tok').forEach(x => { if (x.dataset.s === t.s) x.classList.toggle('saved', !saved); }); toast(saved ? 'Removed from saved words' : 'Saved'); pop.remove(); } }, icon('bookmark'), saved ? 'Unsave' : 'Save word')));
-  document.body.append(pop);
+  document.body.append(pop); pop.focus({ preventScroll: true });
+  pop.addEventListener('keydown', e => { if (e.key === 'Escape') { pop.remove(); el.classList.remove('sel'); el.focus({ preventScroll: true }); } });
   const r = el.getBoundingClientRect(); const pw = pop.offsetWidth, ph = pop.offsetHeight;
   let left = clamp(r.left + r.width / 2 - pw / 2, 16, innerWidth - pw - 16), top = r.bottom + 8; if (top + ph > innerHeight - 16) top = r.top - ph - 8;
   pop.style.left = left + 'px'; pop.style.top = Math.max(8, top) + 'px';
@@ -3416,7 +3432,7 @@ const SCENARIOS = [
 VIEWS.sensei = (p) => {
   const tab = p.tab || 'talk';
   const tabs = h('div.tabs', [['talk', 'Conversation'], ['story', 'Story writer'], ['ask', 'Ask anything']].map(([id, l]) => h('button', { 'aria-selected': tab === id ? 'true' : 'false', onclick: () => App.go('sensei', { tab: id }) }, l)));
-  const head = h('div.stack', h('div.sensei-head', art('sensei', '.avatar-lg', 'Sensei'), h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '先生 · Sensei'), h('h1', 'Practise with Sensei'), h('p.muted', { style: { maxWidth: '62ch' } }, 'Sensei is Claude, set up as your Japanese tutor. It adapts to what you have learned in Michi, corrects your sentences (including speech style: casual vs polite) and suggests what to say next.'))), tabs);
+  const head = h('div.stack', h('div.sensei-head', art('sensei', '.avatar-lg', 'Sensei'), h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '先生 · Sensei'), h('h1', 'Practice with Sensei'), h('p.muted', { style: { maxWidth: '62ch' } }, 'Sensei is Claude, set up as your Japanese tutor. It adapts to what you have learned in Michi, corrects your sentences (including speech style: casual vs polite) and suggests what to say next.'))), tabs);
   if (!Sensei.available) return h('div', head, h('section.card.pad-lg.empty.stack', { style: { justifyItems: 'center' } }, h('span.hanko', '先'), h('h3', 'Sensei is waking up…'), h('p.muted', { style: { maxWidth: '52ch' } }, 'Sensei runs on your Claude account and only works while Michi is open in Claude. If this message stays, AI features are not available in this view. Lessons, reviews, writing and reading all work without it.')));
   if (tab === 'story') return h('div', head, storyWriter());
   if (tab === 'ask') return h('div', head, askAnything());
@@ -3430,7 +3446,7 @@ function chatView(sc) {
   let reg = sc.id === 'weekend' ? 'casual' : ['free', 'intro'].includes(sc.id) ? (S.settings.senseiReg || 'polite') : 'polite';
   const prof = Sensei.learnerProfile();
   const regRule = () => reg === 'casual' ? 'This is a casual relationship (friends/peers). Speak natural casual Japanese: plain forms, contractions like 〜てる/〜ちゃう, sentence-final よ/ね/じゃん where natural, dropped particles as friends do. The learner should also speak casually.' : sc.id === 'free' ? 'Speak polite です/ます Japanese as a friendly teacher would.' : 'Speak the way this role really speaks in Japan: staff and service workers use polite speech and set keigo phrases (いらっしゃいませ, かしこまりました, 〜でございます, 少々お待ちください); strangers and doctors use です/ます. The learner should use です/ます.';
-  const rulesFor = () => `You are role-playing as ${sc.role} to help an English-speaking learner practise Japanese. The learner is a ${prof.level}. Words they have studied include: ${prof.known.slice(0, 80).join('、') || '(mostly kana so far)'}. Kanji they know: ${prof.kanjiKnown || 'none yet'}.
+  const rulesFor = () => `You are role-playing as ${sc.role} to help an English-speaking learner practice Japanese. The learner is a ${prof.level}. Words they have studied include: ${prof.known.slice(0, 80).join('、') || '(mostly kana so far)'}. Kanji they know: ${prof.kanjiKnown || 'none yet'}.
 Rules:
 - Stay in character and keep the conversation moving with ONE short reply (1–2 sentences) that ends with something the learner can respond to.
 - Use Japanese the learner can handle: ${prof.vocab < 80 ? 'very simple words, mostly hiragana' : 'N5–N4 grammar and vocabulary'}.
@@ -3577,7 +3593,7 @@ function placementItems(sec) {
     const pool = shuffle(VOCAB.filter(v => v.lv === lv && !v.w.startsWith('〜') && v.cat !== 'greet'));
     const seenCat = new Set(), pickd = [];
     for (const v of pool) { if (pickd.length >= n) break; if (seenCat.has(v.cat) && pickd.length < 8) continue; seenCat.add(v.cat); pickd.push(v); }
-    return pickd.map(v => ({ q: 'What does this mean?', bigHTML: ruby(v.w, v.r), cls: 'word', opts: shuffle([v, ...vocabDistractors(v)].map(x => shortM(x.m))), a: shortM(v.m), say: v.r, reveal: `${v.w}（${v.r}）` }));
+    return pickd.map(v => ({ q: 'What does this mean?', bigHTML: ruby(v.w, v.r, true), cls: 'word', opts: shuffle([v, ...vocabDistractors(v)].map(x => shortM(x.m))), a: shortM(v.m), say: v.r, reveal: `${v.w}（${v.r}）` }));
   }
   if (sec.id === 'j5' || sec.id === 'j4') {
     const lv = sec.id === 'j5' ? 5 : 4;
@@ -3777,9 +3793,9 @@ VIEWS.placement = (p) => {
 const PROFILE_AXES = [['kana', 'Kana'], ['vocab', 'Vocabulary'], ['grammar', 'Grammar'], ['kanji', 'Kanji'], ['reading', 'Reading'], ['listening', 'Listening'], ['speaking', 'Speaking'], ['writing', 'Writing']];
 function buildProfile(r) {
   const pc = id => r[id]?.pct || 0;
-  const two = (a, b) => clamp((r[a] ? pc(a) * 3 : 0) + (r[b] ? pc(b) : 0), 0, 4);
+  const two = (a, b) => (!r[a] && !r[b]) ? null : clamp((r[a] ? pc(a) * 3 : 0) + (r[b] ? pc(b) : 0), 0, 4);
   const lv = id => r[id]?.level;
-  return { kana: clamp(pc('hira') + pc('kata'), 0, 2), vocab: two('v5', 'v4'), grammar: two('g5', 'g4'), kanji: two('j5', 'j4'), reading: lv('reading'), listening: lv('listening'), speaking: lv('speaking'), writing: lv('writing') };
+  return { kana: (!r.hira && !r.kata) ? null : clamp(pc('hira') + pc('kata'), 0, 2), vocab: two('v5', 'v4'), grammar: two('g5', 'g4'), kanji: two('j5', 'j4'), reading: lv('reading'), listening: lv('listening'), speaking: lv('speaking'), writing: lv('writing') };
 }
 function skillProfileCard(pr) {
   if (!pr) return null;
@@ -3838,7 +3854,7 @@ function applyPlacement(r, quick) {
     'n4+': ['四', 'Upper N4', 'Strong across the board. Keep your reviews up, read the N4 stories and push your speaking with Sensei.'],
   }[lvl];
   const firstTime = !!S.placement && !S.placement.skipped;
-  const profile = buildProfile(r);
+  const fresh = buildProfile(r), profile = Object.assign({}, S.placement?.profile || {}, Object.fromEntries(Object.entries(fresh).filter(([, v]) => v != null)));
   S.placement = { at: t, level: lvl, results: Object.fromEntries(Object.entries(r).map(([k, v]) => [k, { right: v.right, n: v.n, pct: v.pct, level: v.level }])), profile }; S.settings.level = lvl;
   save(); if (!firstTime) addXP(20); App.renderNav();
   return { glyph: info[0], title: info[1], text: info[2], placed, next: nextLesson() };
@@ -3943,7 +3959,7 @@ VIEWS.settings = () => {
     try { const data = JSON.parse(await f.text()); if (!isObj(data) || !isObj(data.cards) || !isObj(data.settings)) throw 0; S = sanitize(data); S.updated = now(); save(); toast('Progress imported'); App.render(); } catch (err) { toast('That file is not a Michi backup', 'bad'); }
   } });
   let armed = false;
-  const reset = h('button.btn.sm', { style: { color: 'var(--bad)' }, onclick: () => { if (!armed) { armed = true; reset.textContent = 'Tap again to erase everything'; setTimeout(() => { armed = false; reset.textContent = 'Reset progress'; }, 4000); return; } S = DEFAULT_STATE(); save(); toast('Progress reset'); App.go('home'); } }, 'Reset progress');
+  const reset = h('button.btn.sm', { style: { color: 'var(--bad)' }, onclick: () => { if (!armed) { armed = true; reset.textContent = 'Tap again to erase everything'; setTimeout(() => { armed = false; reset.textContent = 'Reset progress'; }, 4000); return; } S = DEFAULT_STATE(); save(); toast('Progress reset'); App.go('welcome'); } }, 'Reset progress');
   const exportBtn = h('button.btn.sm', { onclick: async () => {
     const data = JSON.stringify(S); const name = `michi-progress-${dayKey()}.json`;
     const dl = window.claude?.use ? await claude.use('downloads').catch(() => null) : null;
@@ -3981,7 +3997,7 @@ function boot() {
     initCloud();
     checkAchievements();
   };
-  addEventListener('hashchange', () => { const r = (location.hash || '').slice(1); if (Object.prototype.hasOwnProperty.call(VIEWS, r) && r !== App.route && !['session', 'lesson', 'story', 'grammar', 'placement', 'style'].includes(r)) App.go(r, {}, false); });
+  addEventListener('popstate', () => { const r = (location.hash || '').slice(1); if (Object.prototype.hasOwnProperty.call(VIEWS, r) && r !== App.route && !['session', 'lesson', 'story', 'grammar', 'placement', 'style'].includes(r)) App.go(r, {}, false); });
   window.claude?.hot?.snapshot?.(() => ({ route: ['session'].includes(App.route) ? 'review' : App.route, params: App.route === 'session' ? {} : App.params }));
   window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
   // Refresh "due" counts every minute.

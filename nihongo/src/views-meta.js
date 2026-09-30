@@ -97,7 +97,7 @@ VIEWS.settings = () => {
     try { const data = JSON.parse(await f.text()); if (!isObj(data) || !isObj(data.cards) || !isObj(data.settings)) throw 0; S = sanitize(data); S.updated = now(); save(); toast('Progress imported'); App.render(); } catch (err) { toast('That file is not a Michi backup', 'bad'); }
   } });
   let armed = false;
-  const reset = h('button.btn.sm', { style: { color: 'var(--bad)' }, onclick: () => { if (!armed) { armed = true; reset.textContent = 'Tap again to erase everything'; setTimeout(() => { armed = false; reset.textContent = 'Reset progress'; }, 4000); return; } S = DEFAULT_STATE(); save(); toast('Progress reset'); App.go('home'); } }, 'Reset progress');
+  const reset = h('button.btn.sm', { style: { color: 'var(--bad)' }, onclick: () => { if (!armed) { armed = true; reset.textContent = 'Tap again to erase everything'; setTimeout(() => { armed = false; reset.textContent = 'Reset progress'; }, 4000); return; } S = DEFAULT_STATE(); save(); toast('Progress reset'); App.go('welcome'); } }, 'Reset progress');
   const exportBtn = h('button.btn.sm', { onclick: async () => {
     const data = JSON.stringify(S); const name = `michi-progress-${dayKey()}.json`;
     const dl = window.claude?.use ? await claude.use('downloads').catch(() => null) : null;
@@ -135,7 +135,7 @@ function boot() {
     initCloud();
     checkAchievements();
   };
-  addEventListener('hashchange', () => { const r = (location.hash || '').slice(1); if (Object.prototype.hasOwnProperty.call(VIEWS, r) && r !== App.route && !['session', 'lesson', 'story', 'grammar', 'placement', 'style'].includes(r)) App.go(r, {}, false); });
+  addEventListener('popstate', () => { const r = (location.hash || '').slice(1); if (Object.prototype.hasOwnProperty.call(VIEWS, r) && r !== App.route && !['session', 'lesson', 'story', 'grammar', 'placement', 'style'].includes(r)) App.go(r, {}, false); });
   window.claude?.hot?.snapshot?.(() => ({ route: ['session'].includes(App.route) ? 'review' : App.route, params: App.route === 'session' ? {} : App.params }));
   window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
   // Refresh "due" counts every minute.

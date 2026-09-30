@@ -81,7 +81,7 @@ const SCENARIOS = [
 VIEWS.sensei = (p) => {
   const tab = p.tab || 'talk';
   const tabs = h('div.tabs', [['talk', 'Conversation'], ['story', 'Story writer'], ['ask', 'Ask anything']].map(([id, l]) => h('button', { 'aria-selected': tab === id ? 'true' : 'false', onclick: () => App.go('sensei', { tab: id }) }, l)));
-  const head = h('div.stack', h('div.sensei-head', art('sensei', '.avatar-lg', 'Sensei'), h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '先生 · Sensei'), h('h1', 'Practise with Sensei'), h('p.muted', { style: { maxWidth: '62ch' } }, 'Sensei is Claude, set up as your Japanese tutor. It adapts to what you have learned in Michi, corrects your sentences (including speech style: casual vs polite) and suggests what to say next.'))), tabs);
+  const head = h('div.stack', h('div.sensei-head', art('sensei', '.avatar-lg', 'Sensei'), h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '先生 · Sensei'), h('h1', 'Practice with Sensei'), h('p.muted', { style: { maxWidth: '62ch' } }, 'Sensei is Claude, set up as your Japanese tutor. It adapts to what you have learned in Michi, corrects your sentences (including speech style: casual vs polite) and suggests what to say next.'))), tabs);
   if (!Sensei.available) return h('div', head, h('section.card.pad-lg.empty.stack', { style: { justifyItems: 'center' } }, h('span.hanko', '先'), h('h3', 'Sensei is waking up…'), h('p.muted', { style: { maxWidth: '52ch' } }, 'Sensei runs on your Claude account and only works while Michi is open in Claude. If this message stays, AI features are not available in this view. Lessons, reviews, writing and reading all work without it.')));
   if (tab === 'story') return h('div', head, storyWriter());
   if (tab === 'ask') return h('div', head, askAnything());
@@ -95,7 +95,7 @@ function chatView(sc) {
   let reg = sc.id === 'weekend' ? 'casual' : ['free', 'intro'].includes(sc.id) ? (S.settings.senseiReg || 'polite') : 'polite';
   const prof = Sensei.learnerProfile();
   const regRule = () => reg === 'casual' ? 'This is a casual relationship (friends/peers). Speak natural casual Japanese: plain forms, contractions like 〜てる/〜ちゃう, sentence-final よ/ね/じゃん where natural, dropped particles as friends do. The learner should also speak casually.' : sc.id === 'free' ? 'Speak polite です/ます Japanese as a friendly teacher would.' : 'Speak the way this role really speaks in Japan: staff and service workers use polite speech and set keigo phrases (いらっしゃいませ, かしこまりました, 〜でございます, 少々お待ちください); strangers and doctors use です/ます. The learner should use です/ます.';
-  const rulesFor = () => `You are role-playing as ${sc.role} to help an English-speaking learner practise Japanese. The learner is a ${prof.level}. Words they have studied include: ${prof.known.slice(0, 80).join('、') || '(mostly kana so far)'}. Kanji they know: ${prof.kanjiKnown || 'none yet'}.
+  const rulesFor = () => `You are role-playing as ${sc.role} to help an English-speaking learner practice Japanese. The learner is a ${prof.level}. Words they have studied include: ${prof.known.slice(0, 80).join('、') || '(mostly kana so far)'}. Kanji they know: ${prof.kanjiKnown || 'none yet'}.
 Rules:
 - Stay in character and keep the conversation moving with ONE short reply (1–2 sentences) that ends with something the learner can respond to.
 - Use Japanese the learner can handle: ${prof.vocab < 80 ? 'very simple words, mostly hiragana' : 'N5–N4 grammar and vocabulary'}.

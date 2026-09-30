@@ -149,9 +149,10 @@ function writingPad(ch, mode, onUpdate) {
     const okN = results.filter(Boolean).length;
     onUpdate({ strokes: refs.map((_, i) => results[i] ?? null), complete, score: complete ? okN / Math.max(refs.length, strokes.length) : 0, extra: strokes.length > refs.length ? `You drew ${strokes.length} strokes; ${ch} has ${refs.length}.` : '' });
   };
-  cv.addEventListener('pointerdown', e => { if (strokes.length >= refs.length + 2) return; cv.setPointerCapture(e.pointerId); cur = [toUnit(e)]; redraw(); });
-  cv.addEventListener('pointermove', e => { if (!cur) return; const pts = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; pts.forEach(pe => cur.push(toUnit(pe))); redraw(); });
-  const end = () => { if (!cur) return; if (cur.length < 2) cur.push([cur[0][0] + .5, cur[0][1] + .5]); strokes.push(cur); cur = null; const i = strokes.length - 1; results[i] = i < refs.length ? judge(i) : false; redraw(); report(); };
+  let pid = null;
+  cv.addEventListener('pointerdown', e => { if (cur || strokes.length >= refs.length + 2) return; pid = e.pointerId; cv.setPointerCapture(e.pointerId); cur = [toUnit(e)]; redraw(); });
+  cv.addEventListener('pointermove', e => { if (!cur || e.pointerId !== pid) return; const pts = e.getCoalescedEvents ? e.getCoalescedEvents() : [e]; pts.forEach(pe => cur.push(toUnit(pe))); redraw(); });
+  const end = e => { if (!cur || (e && e.pointerId !== pid)) return; if (cur.length < 2) cur.push([cur[0][0] + .5, cur[0][1] + .5]); strokes.push(cur); cur = null; const i = strokes.length - 1; results[i] = i < refs.length ? judge(i) : false; redraw(); report(); };
   cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
   const ro = new ResizeObserver(size); ro.observe(el);
   return {

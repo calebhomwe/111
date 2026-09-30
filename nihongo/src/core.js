@@ -32,8 +32,9 @@ function h(tag, attrs, ...kids) {
 }
 
 // Ruby text: word + reading → <ruby> markup (furigana only over kanji runs when possible).
-function ruby(word, reading) {
+function ruby(word, reading, force) {
   word = String(word ?? ''); reading = reading == null ? reading : String(reading);
+  if (!force && S.settings.furigana === 'never') return esc(word);
   if (!reading || !hasKanji(word) || reading === word) return esc(word);
   // Split okurigana: match leading/trailing kana shared between word and reading.
   let pre = 0; while (pre < word.length && !hasKanji(word[pre]) && word[pre] === reading[pre]) pre++;
@@ -316,6 +317,9 @@ const Clips = {
 // speakBtn(key, label, tts): plays the recording for `key`, else reads `tts` (or key) with the browser voice. Right-click / long-press plays slowly.
 function speakBtn(text, label = 'Play audio', tts) {
   const b = h('button.icon-btn.speak', { type: 'button', 'aria-label': label, title: label + ' (right-click: slow)', onclick: e => { e.stopPropagation(); Voice.say(text, { tts, alt: tts ? [tts] : [] }); }, oncontextmenu: e => { e.preventDefault(); e.stopPropagation(); Voice.say(text, { tts, alt: tts ? [tts] : [], slow: true }); } }, icon('speaker'));
+  let lp = 0; b.addEventListener('pointerdown', e => { if (e.pointerType === 'touch') lp = setTimeout(() => { lp = -1; Voice.say(text, { tts, alt: tts ? [tts] : [], slow: true }); }, 500); });
+  const cancelLp = () => clearTimeout(lp); b.addEventListener('pointerup', cancelLp); b.addEventListener('pointerleave', cancelLp); b.addEventListener('pointercancel', cancelLp);
+  b.addEventListener('click', e => { if (lp === -1) { lp = 0; e.stopImmediatePropagation(); } }, true);
   return b;
 }
 

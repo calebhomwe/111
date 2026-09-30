@@ -19,7 +19,7 @@ function storyCard(s) {
   const st = S.stories[s.id]; const kn = Object.keys(S.cards).some(k => k[0] === 'v') ? storyKnown(s) : null;
   return h('button.story-card', { onclick: () => App.go('story', { id: s.id }) },
     h('div.art', storyArt(s, { w: 480, h: 190 })),
-    h('div.meta', h('div.row.between', h('span.chip' + (st ? '.young' : ''), st ? `Read · ${st.score != null ? st.score + '/' + (s.qs || []).length : ''}` : s.lv === 'kana' ? 'Kana' : s.lv), s.ai ? h('span.chip.seal', 'Sensei') : null),
+    h('div.meta', h('div.row.between', h('span.chip' + (st ? '.young' : ''), st ? (st.score != null ? `Read · ${st.score}/${(s.qs || []).length}` : 'Read') : s.lv === 'kana' ? 'Kana' : s.lv), s.ai ? h('span.chip.seal', 'Sensei') : null),
       h('b', s.title), h('span.muted.small', s.titleEn), h('span.muted.small', `${(s.sents || []).length} sentences${kn != null ? ` · you know ${kn}% of the words` : ''}`)));
 }
 VIEWS.story = ({ id }) => {
@@ -32,7 +32,7 @@ VIEWS.story = ({ id }) => {
     const toks = sent.tok.map(t => {
       if (t.p || (!t.g && !t.r)) return h('span', { html: t.r ? ruby(t.s, t.r) : esc(t.s) });
       const saved = (S.saved || []).includes(t.s);
-      return h('span.tok' + (saved ? '.saved' : ''), { 'data-s': t.s, tabindex: '0', role: 'button', html: t.r ? ruby(t.s, t.r) : esc(t.s), onclick: e => wordPop(e.currentTarget, t, sent), onkeydown: e => { if (e.key === 'Enter') wordPop(e.currentTarget, t, sent); } });
+      return h('span.tok' + (saved ? '.saved' : ''), { 'data-s': t.s, tabindex: '0', role: 'button', html: t.r ? ruby(t.s, t.r) : esc(t.s), onclick: e => wordPop(e.currentTarget, t, sent), onkeydown: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); wordPop(e.currentTarget, t, sent); } } });
     });
     el.append(en, ...toks, ' ');
     const play = h('button.icon-btn.speak', { style: { width: '30px', height: '30px', verticalAlign: 'middle', marginLeft: '6px' }, 'aria-label': 'Play sentence', onclick: () => speakSent(si) }, icon('speaker'));
@@ -86,8 +86,8 @@ function wordPop(el, t, sent) {
   // look for a dictionary match to offer "add to reviews"
   const dictHit = VOCAB.find(v => v.w === t.s || v.r === toHira(t.s)) || VOCAB.find(v => t.s.startsWith(v.w.replace(/[るうくぐすつぬぶむい]$/, '')) && hasKanji(v.w) && v.w.length > 1);
   const saved = (S.saved || []).includes(t.s);
-  const pop = h('div.pop', { role: 'dialog' },
-    h('div.row.between', h('span.w', { html: ruby(t.s, t.r) }), speakBtn(reading)),
+  const pop = h('div.pop', { role: 'dialog', 'aria-label': `${t.s}: word details`, tabindex: '-1' },
+    h('div.row.between', h('span.w', { html: ruby(t.s, t.r, true) }), speakBtn(reading)),
     showRomaji() ? h('div.muted.small', kanaToRomaji(reading)) : null,
     h('div', t.g || ''),
     dictHit && dictHit.w !== t.s ? h('div.muted.small', { html: `Dictionary form: ${ruby(dictHit.w, dictHit.r)} — ${esc(dictHit.m)}` }) : null,
@@ -95,7 +95,8 @@ function wordPop(el, t, sent) {
     h('div.row',
       dictHit ? h('button.btn.sm' + (S.cards['v:' + dictHit.id] ? '' : '.primary'), { disabled: S.cards['v:' + dictHit.id] ? true : null, onclick: e => { addCardsFromKeys(['v:' + dictHit.id]); e.currentTarget.disabled = true; e.currentTarget.textContent = 'In reviews'; toast(`${dictHit.w} added to reviews`); App.renderNav(); } }, S.cards['v:' + dictHit.id] ? 'In reviews' : 'Add to reviews') : null,
       h('button.btn.sm', { onclick: () => { S.saved = S.saved || []; if (saved) S.saved = S.saved.filter(x => x !== t.s); else S.saved.push(t.s); save(); $$('.tok').forEach(x => { if (x.dataset.s === t.s) x.classList.toggle('saved', !saved); }); toast(saved ? 'Removed from saved words' : 'Saved'); pop.remove(); } }, icon('bookmark'), saved ? 'Unsave' : 'Save word')));
-  document.body.append(pop);
+  document.body.append(pop); pop.focus({ preventScroll: true });
+  pop.addEventListener('keydown', e => { if (e.key === 'Escape') { pop.remove(); el.classList.remove('sel'); el.focus({ preventScroll: true }); } });
   const r = el.getBoundingClientRect(); const pw = pop.offsetWidth, ph = pop.offsetHeight;
   let left = clamp(r.left + r.width / 2 - pw / 2, 16, innerWidth - pw - 16), top = r.bottom + 8; if (top + ph > innerHeight - 16) top = r.top - ph - 8;
   pop.style.left = left + 'px'; pop.style.top = Math.max(8, top) + 'px';

@@ -39,7 +39,7 @@ function placementItems(sec) {
     const pool = shuffle(VOCAB.filter(v => v.lv === lv && !v.w.startsWith('〜') && v.cat !== 'greet'));
     const seenCat = new Set(), pickd = [];
     for (const v of pool) { if (pickd.length >= n) break; if (seenCat.has(v.cat) && pickd.length < 8) continue; seenCat.add(v.cat); pickd.push(v); }
-    return pickd.map(v => ({ q: 'What does this mean?', bigHTML: ruby(v.w, v.r), cls: 'word', opts: shuffle([v, ...vocabDistractors(v)].map(x => shortM(x.m))), a: shortM(v.m), say: v.r, reveal: `${v.w}（${v.r}）` }));
+    return pickd.map(v => ({ q: 'What does this mean?', bigHTML: ruby(v.w, v.r, true), cls: 'word', opts: shuffle([v, ...vocabDistractors(v)].map(x => shortM(x.m))), a: shortM(v.m), say: v.r, reveal: `${v.w}（${v.r}）` }));
   }
   if (sec.id === 'j5' || sec.id === 'j4') {
     const lv = sec.id === 'j5' ? 5 : 4;
@@ -239,9 +239,9 @@ VIEWS.placement = (p) => {
 const PROFILE_AXES = [['kana', 'Kana'], ['vocab', 'Vocabulary'], ['grammar', 'Grammar'], ['kanji', 'Kanji'], ['reading', 'Reading'], ['listening', 'Listening'], ['speaking', 'Speaking'], ['writing', 'Writing']];
 function buildProfile(r) {
   const pc = id => r[id]?.pct || 0;
-  const two = (a, b) => clamp((r[a] ? pc(a) * 3 : 0) + (r[b] ? pc(b) : 0), 0, 4);
+  const two = (a, b) => (!r[a] && !r[b]) ? null : clamp((r[a] ? pc(a) * 3 : 0) + (r[b] ? pc(b) : 0), 0, 4);
   const lv = id => r[id]?.level;
-  return { kana: clamp(pc('hira') + pc('kata'), 0, 2), vocab: two('v5', 'v4'), grammar: two('g5', 'g4'), kanji: two('j5', 'j4'), reading: lv('reading'), listening: lv('listening'), speaking: lv('speaking'), writing: lv('writing') };
+  return { kana: (!r.hira && !r.kata) ? null : clamp(pc('hira') + pc('kata'), 0, 2), vocab: two('v5', 'v4'), grammar: two('g5', 'g4'), kanji: two('j5', 'j4'), reading: lv('reading'), listening: lv('listening'), speaking: lv('speaking'), writing: lv('writing') };
 }
 function skillProfileCard(pr) {
   if (!pr) return null;
@@ -300,7 +300,7 @@ function applyPlacement(r, quick) {
     'n4+': ['四', 'Upper N4', 'Strong across the board. Keep your reviews up, read the N4 stories and push your speaking with Sensei.'],
   }[lvl];
   const firstTime = !!S.placement && !S.placement.skipped;
-  const profile = buildProfile(r);
+  const fresh = buildProfile(r), profile = Object.assign({}, S.placement?.profile || {}, Object.fromEntries(Object.entries(fresh).filter(([, v]) => v != null)));
   S.placement = { at: t, level: lvl, results: Object.fromEntries(Object.entries(r).map(([k, v]) => [k, { right: v.right, n: v.n, pct: v.pct, level: v.level }])), profile }; S.settings.level = lvl;
   save(); if (!firstTime) addXP(20); App.renderNav();
   return { glyph: info[0], title: info[1], text: info[2], placed, next: nextLesson() };
