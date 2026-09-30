@@ -170,6 +170,10 @@ def collect():
             d = json.loads(f.read_text(encoding='utf8'))
             for key, part in (d.items() if isinstance(d, dict) else [('all', d)]):
                 walk(part, f'{name}:{key}')
+    # Extra spoken readings (counters, prices, conjugated forms, story word popups): data/audio_extra.json, a list of kana strings
+    f = DATA / 'audio_extra.json'
+    if f.exists():
+        for t in json.loads(f.read_text(encoding='utf8')): add(t, t, 'extra')
     # Sensei's scene openers
     for line in re.findall(r"open: '([^']+)'", (SRC / 'views-ai.js').read_text(encoding='utf8')):
         add(line, None, 'sensei')

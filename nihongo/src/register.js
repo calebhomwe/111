@@ -24,7 +24,13 @@ const regFuri = () => S.settings.furigana !== 'never';
 const regNorm = s => String(s || '').normalize('NFKC').replace(/[\s。、，,．.？?！!…‥・「」『』()（）〜~"'“”]/g, '');
 const regEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 function regMatch(input, jp, fu) {
-  const a = regNorm(input); if (!a) return false;
+  const a0 = regNorm(input); if (!a0) return false;
+  if (regMatch1(a0, jp, fu)) return true;
+  const idx = [...a0].map((c, i) => c === 'わ' ? i : -1).filter(i => i >= 0).slice(0, 3); // particle は typed as わ
+  for (let m = 1; m < (1 << idx.length); m++) { const ch = [...a0]; idx.forEach((i, b) => { if (m & (1 << b)) ch[i] = 'は'; }); if (regMatch1(ch.join(''), jp, fu)) return true; }
+  return false;
+}
+function regMatch1(a, jp, fu) {
   const J = regNorm(jp), F = toHira(regNorm(fu || jp));
   const ah = toHira(a);
   if (a === J || ah === F || ah === toHira(J)) return true;
@@ -267,7 +273,10 @@ VIEWS.styleswitch = () => {
       const sim = o => [...new Set(regNorm(o[to].jp))].filter(c => chars.has(c)).length + Math.random();
       const near = P.filter(o => o.id !== p.id && o[to] && o[to].jp !== tgt.jp).map(o => [sim(o), o]).sort((a, b) => b[0] - a[0]).slice(0, 5).map(x => x[1]);
       for (const o of shuffle(near)) { if (pool.length >= 3) break; pool.push({ x: o[to], note: 'other' }); }
-      const opts = shuffle([{ x: tgt, correct: true }, ...pool.slice(0, 3)]);
+      const sig = x => String(x.jp || '').normalize('NFKC').replace(/[\s、，,．.。！!…‥・「」『』()（）〜~"'“”]/g, '').replace(/\?/g, '？');
+      const seen = new Set([sig(tgt)]), uniq = [];
+      for (const o of pool) { const k = sig(o.x); if (!seen.has(k)) { seen.add(k); uniq.push(o); } }
+      const opts = shuffle([{ x: tgt, correct: true }, ...uniq.slice(0, 3)]);
       const box = h('div.opts.rg-opts', opts.map((o, k) => {
         const b = h('button.opt.rg-jpopt', { type: 'button', onclick: () => {
           if (answered) return; b.classList.add(o.correct ? 'right' : 'wrong');

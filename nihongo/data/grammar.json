@@ -990,9 +990,9 @@
        "a": "や",
        "opts": [
         "や",
-        "と",
         "を",
-        "で"
+        "で",
+        "へ"
        ],
        "en": "I went to Kyoto, Nara, and other places."
       },
@@ -2940,7 +2940,7 @@
        "opts": [
         "から",
         "まで",
-        "ので",
+        "より",
         "けど"
        ],
        "en": "A: Why didn't you come? B: Because I caught a cold."
@@ -3170,7 +3170,7 @@
       },
       {
        "type": "mc",
-       "q": "にほんに ___とき、カメラを かいました。",
+       "q": "にほんへ ___とき、カメラを かいました。",
        "a": "いった",
        "opts": [
         "いった",
@@ -3178,7 +3178,7 @@
         "いって",
         "いき"
        ],
-       "en": "When I was in Japan, I bought a camera."
+       "en": "When I went to Japan, I bought a camera."
       },
       {
        "type": "order",
