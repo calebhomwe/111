@@ -1,0 +1,106 @@
+/* Speech styles (register.js). Register colours: casual = gold, polite = ai blue, keigo = seal red. */
+.reg-chip { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 99px; font-size: .74rem; font-weight: 700; white-space: nowrap; border: 1.5px solid currentColor; }
+.reg-chip[data-reg="casual"] { color: var(--gold); background: var(--gold-soft); }
+.reg-chip[data-reg="polite"] { color: var(--ai); background: var(--ai-soft); }
+.reg-chip[data-reg="keigo"] { color: var(--seal); background: var(--seal-soft); }
+
+/* Ladder: three steps rising left to right */
+.rg-ladder { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: end; }
+.rg-step { --c: var(--ai); --soft: var(--ai-soft); display: grid; gap: 6px; align-content: start; padding: 14px 16px; border-radius: 14px; border: 1.5px solid var(--c); border-top-width: 5px; background: color-mix(in srgb, var(--soft) 55%, var(--paper)); min-height: calc(150px + var(--i) * 34px); }
+.rg-step[data-reg="casual"] { --c: var(--gold); --soft: var(--gold-soft); }
+.rg-step[data-reg="keigo"] { --c: var(--seal); --soft: var(--seal-soft); }
+.rg-step b { font: 400 1.25rem/1.2 var(--f-display); color: var(--c); }
+.rg-step-jp { font: 600 .95rem/1 var(--f-jp-hand); color: var(--muted); }
+.rg-step-n { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: .75rem; font-weight: 700; background: var(--c); color: var(--paper); }
+.rg-step-ex { font-size: 1.3rem; line-height: 1.5; overflow-wrap: anywhere; }
+.rg-step .speak { width: 34px; height: 34px; flex: none; }
+.rg-axis { display: flex; align-items: center; gap: 10px; font-size: .75rem; font-weight: 700; color: var(--muted); letter-spacing: .04em; }
+.rg-axis i { flex: 1; height: 2px; background: linear-gradient(90deg, var(--gold), var(--ai), var(--seal)); border-radius: 2px; position: relative; }
+.rg-axis i::after { content: ""; position: absolute; right: -2px; top: -4px; border: 5px solid transparent; border-left: 7px solid var(--seal); border-right: 0; }
+
+/* Sentences */
+.rg-sent .jp { font-size: 1.25rem; line-height: 1.7; }
+.rg-sent.big .jp { font: 600 clamp(1.5rem, 5vw, 2.1rem)/1.5 var(--f-jp-hand); }
+.rg-sent.big { text-align: center; }
+.rg-fu, .example .rg-fu.jp, .rg-sent.big .rg-fu.jp, .rg-choice-body > .rg-fu.jp { color: var(--muted); font: 400 .9rem/1.5 var(--f-jp-hand); }
+.rg-sent.big .rg-fu.jp { font-size: 1rem; }
+.rg-qbig { min-height: 120px; gap: 8px; }
+.rg-q { text-align: center; font-weight: 700; font-size: 1.05rem; }
+.rg-blank { color: var(--ai); font-family: var(--f-jp-hand); }
+.opt.rg-jpopt { font: 600 1.15rem/1.5 var(--f-jp-hand); padding: 14px 14px 14px 28px; }
+.rg-ctx { color: var(--ink); padding: 8px 12px; border-left: 3px solid var(--gold); background: color-mix(in srgb, var(--gold-soft) 70%, var(--paper)); border-radius: 0 8px 8px 0; }
+
+/* Three-register comparison */
+.rg-compare { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; color: var(--ink); }
+.rg-col { --c: var(--ai); display: grid; gap: 4px; align-content: start; padding: 10px 12px; border-radius: 12px; background: var(--paper); border: 1.5px solid var(--line); font-weight: 400; }
+.rg-col[data-reg="casual"] { --c: var(--gold); } .rg-col[data-reg="keigo"] { --c: var(--seal); }
+.rg-col.hi { border-color: var(--c); box-shadow: inset 0 0 0 1.5px var(--c); }
+.rg-col.none { opacity: .7; }
+.rg-col .speak { width: 32px; height: 32px; }
+.rg-cjp { font-size: 1.15rem; line-height: 1.6; overflow-wrap: anywhere; }
+
+/* Lesson table: real table on wide screens, stacked cards on phones */
+.rg-table-wrap { overflow-x: auto; }
+.rg-table { width: 100%; border-collapse: collapse; }
+.rg-table th, .rg-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.rg-table thead th { font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.rg-table td.jp { font-size: 1.15rem; line-height: 1.6; }
+.rg-table .rg-rowlabel { font-weight: 700; font-size: .9rem; }
+.rg-table tbody tr:last-child > * { border-bottom: 0; }
+.rg-ex { border-left: 3px solid var(--ai); }
+.rg-ex[data-reg="casual"] { border-left-color: var(--gold); } .rg-ex[data-reg="keigo"] { border-left-color: var(--seal); }
+.rg-exp p + p { margin-top: .6em; }
+
+/* Read the Room */
+.rg-scene { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: center; padding: 16px; border-radius: 14px; background: var(--bg); border: 1px dashed var(--line); }
+.rg-scene-t { font-size: 1.1rem; font-weight: 700; line-height: 1.45; }
+.hanko.rg-who { width: 60px; height: 60px; font-size: 1.8rem; }
+.hanko.rg-who.sm { width: 32px; height: 32px; font-size: .95rem; border-width: 2px; }
+.rg-bubble { position: relative; justify-self: start; max-width: 100%; padding: 12px 16px; border-radius: 16px; border-top-left-radius: 4px; background: var(--ai-soft); margin-left: 28px; }
+.rg-bubble .jp { font-size: 1.3rem; line-height: 1.6; }
+.rg-bubble .speak { width: 34px; height: 34px; flex: none; }
+.rg-choices { display: grid; gap: 10px; }
+.rg-choice { position: relative; display: block; width: 100%; text-align: left; padding: 12px 14px 12px 34px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper); }
+.rg-choice .k { position: absolute; left: 12px; top: 12px; font-size: .72rem; font-weight: 700; color: var(--muted); }
+.rg-choice:hover:not(.revealed) { border-color: var(--ai); background: var(--ai-soft); }
+.rg-choice-body { display: grid; gap: 2px; }
+.rg-choice-body > .jp:not(.rg-fu) { font: 600 1.2rem/1.55 var(--f-jp-hand); }
+.rg-choice.revealed { cursor: default; }
+.rg-choice.revealed[data-v="best"] { border-color: var(--ok); background: var(--ok-soft); }
+.rg-choice.revealed[data-v="ok"] { border-color: var(--gold); }
+.rg-choice.revealed[data-v="off"] { opacity: .85; }
+.rg-choice.picked { box-shadow: 0 0 0 3px color-mix(in srgb, var(--ai) 35%, transparent); }
+.rg-choice.picked[data-v="off"] { border-color: var(--bad); background: var(--bad-soft); opacity: 1; animation: shake .35s; }
+.rg-why { display: flex; gap: 8px; align-items: baseline; margin-top: 6px; font-size: .88rem; color: var(--ink); }
+.rg-verdict { flex: none; padding: 1px 8px; border-radius: 99px; font-size: .7rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.rg-verdict[data-v="best"] { background: var(--ok); color: var(--paper); }
+.rg-verdict[data-v="ok"] { background: var(--gold); color: var(--paper); }
+.rg-verdict[data-v="off"] { background: var(--bad); color: var(--paper); }
+.feedback.meh { background: var(--gold-soft); color: var(--gold); }
+
+/* Results + Sensei checker */
+.rg-miss { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; align-items: center; text-align: left; padding: 8px 12px; border-radius: 10px; background: var(--bg); }
+.rg-miss > .small { grid-column: 1 / -1; }
+.rg-miss .jp { font-size: 1.1rem; }
+.rg-checker-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 190px) auto; gap: 10px; }
+.rg-checker-row input { font-family: var(--f-jp-hand); font-size: 1.1rem; }
+.rg-checker-card { margin-top: 4px; }
+
+@media (max-width: 760px) {
+  .rg-ladder { grid-template-columns: minmax(0, 1fr); }
+  .rg-step { min-height: 0; margin-left: calc(var(--i) * 14px); }
+  .rg-compare { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .rg-table thead { display: none; }
+  .rg-table, .rg-table tbody, .rg-table tr, .rg-table th, .rg-table td { display: block; width: 100%; }
+  .rg-table tr { padding: 10px 12px; margin-bottom: 8px; border: 1px solid var(--line); border-radius: 12px; }
+  .rg-table th, .rg-table td { border: 0; padding: 2px 0; }
+  .rg-table td:empty { display: none; }
+  .rg-table td[data-label]:not([data-label=""])::before { content: attr(data-label) " · "; font: 700 .7rem/1 var(--f-body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .rg-scene { grid-template-columns: minmax(0, 1fr); justify-items: start; gap: 10px; }
+  .hanko.rg-who { width: 48px; height: 48px; font-size: 1.4rem; }
+  .rg-bubble { margin-left: 0; }
+  .rg-checker-row { grid-template-columns: minmax(0, 1fr); }
+  .rg-dirtabs button { padding: 6px 8px; font-size: .85rem; }
+}

@@ -7,7 +7,7 @@ const Sensei = {
       const s = await claude.use('sample'); if (!s) return;
       this.fn = s; this.available = true;
       try { const lim = await s.limits(); this.images = !!lim?.images; } catch (e) {}
-      if (['read', 'story', 'grammar', 'sensei', 'write'].includes(App.route)) App.render();
+      if (['read', 'story', 'grammar', 'sensei', 'write', 'styles', 'styleswitch', 'learn'].includes(App.route)) App.render();
     } catch (e) {}
   },
   errorText(e) {
@@ -100,7 +100,7 @@ Rules:
 - Stay in character and keep the conversation moving with ONE short reply (1–2 sentences) that ends with something the learner can respond to.
 - Use Japanese the learner can handle: ${prof.vocab < 80 ? 'very simple words, mostly hiragana' : 'N5–N4 grammar and vocabulary'}.
 - SPEECH STYLE: ${regRule()}
-- Register mistakes count as mistakes: if the learner is too casual for the situation (plain form or 〜てる/じゃん to a clerk, doctor or stranger) or oddly stiff with a close friend, put the natural version in "fix" and say who talks that way.${window.REGISTER_SCENARIO_HINT ? '\n- ' + window.REGISTER_SCENARIO_HINT : ''}
+- Register mistakes count as mistakes: if the learner is too casual for the situation (plain form or 〜てる/じゃん to a clerk, doctor or stranger) or oddly stiff with a close friend, put the natural version in "fix" and say who talks that way.${typeof REGISTER_SCENARIO_HINT === 'string' ? '\n- ' + REGISTER_SCENARIO_HINT : ''}
 - If the learner writes in English or mixes English, gently give them the Japanese way to say it in "fix".
 - If the learner's Japanese has a mistake (particle, conjugation, word choice, politeness), set "fix" with the corrected sentence and a one-sentence English reason. If it is natural and correct, set "fix" to null.
 Reply ONLY with a JSON object: {"jp": "your reply in natural Japanese (kanji allowed only if common)", "kana": "the same reply written entirely in hiragana/katakana", "en": "English translation of your reply", "fix": null or {"better": "corrected Japanese", "why": "short English reason"}, "hints": ["2 or 3 short Japanese replies the learner could say next"], "hints_en": ["their English meanings"]}`;

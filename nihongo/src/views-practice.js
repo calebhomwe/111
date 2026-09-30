@@ -6,6 +6,8 @@ VIEWS.practice = () => {
     ['blitz', '速', 'Kana Blitz', '60 seconds, as many kana as you can read. Chase your high score.'],
     ['conj', '変', 'Conjugation Gym', 'Verbs and adjectives into て, ない, た, potential, passive and more, with the rule when you slip.'],
     ['numbers', '数', 'Numbers & counters', 'Big numbers, prices, dates, times and the counters that change their sounds: 一本, 三匹, 六杯.'],
+    ['styleswitch', '替', 'Style Switch', 'Say the same sentence casually, politely or in keigo, then hear all three.'],
+    ['readroom', '場', 'Read the Room', 'Pick the reply that fits a boss, a clerk, a friend or a child. Sound natural, never rude.'],
     ['listen', '聞', 'Listening drill', 'Hear a word or a number, answer what you heard. Trains your ear without the kanji crutch.'],
   ];
   const hs = S.blitzBest || 0;

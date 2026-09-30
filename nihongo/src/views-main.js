@@ -206,15 +206,17 @@ function heatmapCard() {
 // ─── Learn: the path ───────────────────────────────────────────────────────
 VIEWS.learn = (p) => {
   const track = p.track || sessionStorageGet('learnTrack') || 'kana';
-  const tabs = h('div.tabs', { role: 'tablist' }, [['kana', 'Kana'], ['vocab', 'Vocabulary'], ['kanji', 'Kanji'], ['grammar', 'Grammar']].map(([id, label]) =>
+  const tabs = h('div.tabs', { role: 'tablist' }, [['kana', 'Kana'], ['vocab', 'Vocabulary'], ['kanji', 'Kanji'], ['grammar', 'Grammar'], ['styles', 'Speech styles']].map(([id, label]) =>
     h('button', { role: 'tab', 'aria-selected': track === id ? 'true' : 'false', onclick: () => { sessionStorageSet('learnTrack', id); App.go('learn', { track: id }); } }, label)));
   const intro = {
     kana: ['Hiragana & katakana', 'The two phonetic scripts. Every lesson teaches one row with stroke order, a memory trick and audio, then drills it.'],
     vocab: ['Vocabulary', 'JLPT N5 then N4 words, grouped by theme. Each word comes with a natural example sentence.'],
     kanji: ['Kanji', 'N5 then N4 kanji with animated stroke order, readings, example words and a memory trick for each.'],
+    styles: ['Speech styles', 'Casual, polite and keigo: who gets which, and how to switch without sounding rude or robotic.'],
     grammar: ['Grammar', 'From です to the passive. Short explanations, patterns, examples you can hear, and a quick check for each point.'],
   }[track];
-  const head = h('div.stack', banner('tr-' + track, 'Learn', intro[0], intro[1]), tabs);
+  const head = h('div.stack', banner('tr-' + (track === 'styles' ? 'grammar' : track), 'Learn', intro[0], intro[1]), tabs);
+  if (track === 'styles') return h('div', h('div.stack', h('div.eyebrow', 'Learn'), tabs), VIEWS.styles()); // the hub brings its own header
   if (track === 'grammar') return h('div', head, grammarList());
   const list = LESSONS.filter(l => l.track === track);
   const groups = {};
