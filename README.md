@@ -58,7 +58,7 @@ npm test frame         # one suite: app | health | regressions | security |
                        #            accessibility | typography | frame
 ```
 
-The tests drive the real app in Chromium — 152 assertions covering the logging
+The tests drive the real app in Chromium — 153 assertions covering the logging
 flows, the theme contract and its contrast floors, the type pairings, layout at
 phone width, file import, the native bridge under five different conditions,
 every defect found in review, the stored-XSS payload, and behaviour inside a

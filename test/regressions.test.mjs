@@ -115,6 +115,19 @@ export default async function run() {
 
     check("no console errors", [...page.errors], []);
     await page.close();
+
+    // A fresh install shows the no-streak label; at 390px it was clipped mid-word
+    // ("Log a meal to start a stre") because flex containers ignore text-overflow.
+    const fresh = await openApp(browser, { viewport: { width: 390, height: 844 } });
+    await fresh.evaluate(() => { localStorage.clear(); });
+    await fresh.reload();
+    await fresh.waitForTimeout(300);
+    check("the empty streak label fits at phone width",
+      await fresh.evaluate(() => {
+        const el = $("#streakLabel");
+        return { text: el.textContent, clipped: el.scrollWidth > el.clientWidth };
+      }), { text: "Start a streak", clipped: false });
+    await fresh.close();
   });
   return report();
 }
