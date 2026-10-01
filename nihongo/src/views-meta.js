@@ -135,7 +135,8 @@ function applyTheme() { const t = S.settings.theme; if (t === 'light' || t === '
 
 // ─── Boot ──────────────────────────────────────────────────────────────────
 function boot() {
-  applyTheme(); Voice.init(); Clips.load(); window.Fun?.init?.();
+  applyTheme(); Voice.init(); Clips.load();
+  { const unlockOnce = () => { Voice.unlock(); if (Voice.unlocked) ['pointerdown', 'touchend', 'click', 'keydown'].forEach(ev => removeEventListener(ev, unlockOnce, true)); }; ['pointerdown', 'touchend', 'click', 'keydown'].forEach(ev => addEventListener(ev, unlockOnce, true)); } window.Fun?.init?.();
   const start = (hot = {}) => {
     const r = (location.hash || '').slice(1);
     const fresh = !S.placement && !Object.keys(S.cards).length && !S.xp;
