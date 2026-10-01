@@ -4,7 +4,8 @@ import { dirname, resolve } from "node:path";
 import { existsSync } from "node:fs";
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-export const APP = "file://" + resolve(ROOT, "index.html");
+// FITTRACK_APP points the suites at another build, e.g. to prove a new test fails on the old one.
+export const APP = "file://" + resolve(process.env.FITTRACK_APP ?? resolve(ROOT, "index.html"));
 export const FIXTURES = resolve(ROOT, "test", "fixtures");
 
 // The sandbox ships a pinned Chromium; fall back to Playwright's own download.

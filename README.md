@@ -16,7 +16,7 @@ Apple Health and Health Connect sync.
 | --- | --- |
 | **Today** | Log food across four meals, water, exercise and weight. Quick-add repeats your most-logged foods into the meal matching the time of day. |
 | **Trends** | Seven-day calories against goal, macro split, and a 30-day weight line. Averages cover completed days, so a half-logged today doesn't drag them down. |
-| **Settings** | Goals (with a Mifflin–St Jeor calculator), units, ten themes, device pairing, import and export. |
+| **Settings** | Goals (with a Mifflin–St Jeor calculator), units, ten themes, six type pairings, device pairing, import and export. |
 
 Keyboard: `a` adds food, `w` adds water, `←` / `→` change day.
 
@@ -54,13 +54,15 @@ arrives either through the export file or through the native build. See
 ```sh
 npm install
 npm test               # all suites
-npm test security      # one suite: app | health | regressions | security
+npm test frame         # one suite: app | health | regressions | security |
+                       #            accessibility | typography | frame
 ```
 
-The tests drive the real app in Chromium — 64 assertions covering the logging
-flows, the theme contract and its contrast floors, layout at phone width, file
-import, the native bridge under five different conditions, every defect found in
-review, and the stored-XSS payload. Any console error fails the run.
+The tests drive the real app in Chromium — 152 assertions covering the logging
+flows, the theme contract and its contrast floors, the type pairings, layout at
+phone width, file import, the native bridge under five different conditions,
+every defect found in review, the stored-XSS payload, and behaviour inside a
+hosted frame. Any console error fails the run.
 
 Worth running under a few timezones, since several past bugs only appeared away
 from UTC:
@@ -84,6 +86,17 @@ npx cap open android   # needs Android Studio
 `@capacitor/cli → xcode → uuid`, which is a dev dependency used to manipulate
 the Xcode project; `npm audit --omit=dev` reports zero. Nothing ships.
 
+### Hosted preview
+
+`index.html` also runs inside a claude.ai artifact, whose frame answers
+`confirm()` with "no", blocks any download the page starts itself, and may
+withhold storage. The app copes with each: destructive actions ask in an in-page
+dialog, export goes through the host's `downloads` capability when
+`window.claude` offers one, and with storage unavailable the session runs from
+memory and says so once. `test/frame.test.mjs` covers all three, including inside
+a real `sandbox="allow-scripts"` iframe. Bluetooth is unavailable in a frame, and
+adding to the home screen needs the page served top-level.
+
 ## Layout
 
 ```
@@ -97,10 +110,13 @@ NOTES-native-health.md      why a browser can't read a watch, and what can
 
 ## Design
 
-Instrument Serif for display, Inter for everything functional — the serif never
-appears below 32px or in body copy, navigation or buttons. Radii are 8 and 12.
-Motion is 120/180/280ms. One accent per theme, with macros drawn from a tonal
-ramp rather than competing hues.
+Six type pairings, chosen in Settings. Instrument Serif is the default, with
+Space Grotesk, Fraunces and JetBrains Mono as alternatives for the large figures
+and sheet titles, plus Inter throughout and the system stack. Each pairing sets a
+family, a weight and a tracking value through the same three variables, so
+nothing downstream names a font, and Inter carries everything functional. Radii
+are 8 and 12. Motion is 120/180/280ms. One accent per theme, with macros drawn
+from a tonal ramp rather than competing hues.
 
 The Figma file carries the tokens as variables with `var(--x)` code syntax, the
 type specimen, the four-mode colour sheet and the screens.
