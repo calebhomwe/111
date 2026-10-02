@@ -1,0 +1,6721 @@
+{
+ "lessons": [
+  {
+   "id": "rg-basics",
+   "t": "Two styles for every sentence",
+   "sum": "です/ます (polite) vs the plain form (casual)",
+   "exp": "Every Japanese sentence picks a speech style, and the choice sits at the **end of the sentence**. The polite style (丁寧語, teineigo) ends in **です** or **ます**. The casual style (タメ口, tameguchi) uses the **plain form**, the same form you find in the dictionary.\nThe meaning doesn't change, only the relationship: 行きます and 行く both mean \"I'll go\", but one keeps a respectful distance and the other sounds close and relaxed.\nIn casual speech, nouns and な-adjectives usually drop だ at the end of a sentence, or soften it with よ or ね: **学生だよ**. A bare だ can sound blunt. Pick one style per conversation and stick to it: switching back and forth sounds odd.",
+   "cols": [
+    "",
+    "Polite",
+    "Casual",
+    "Note"
+   ],
+   "table": [
+    [
+     "Verb",
+     "行きます",
+     "行く",
+     "dictionary form"
+    ],
+    [
+     "Negative",
+     "行きません",
+     "行かない",
+     ""
+    ],
+    [
+     "Past",
+     "行きました",
+     "行った",
+     ""
+    ],
+    [
+     "Past negative",
+     "行きませんでした",
+     "行かなかった",
+     ""
+    ],
+    [
+     "い-adjective",
+     "高いです",
+     "高い",
+     "just drop です"
+    ],
+    [
+     "い-adj. negative",
+     "高くないです",
+     "高くない",
+     ""
+    ],
+    [
+     "Noun",
+     "学生です",
+     "学生（だ）",
+     "だ is often dropped or softened: 学生だよ"
+    ],
+    [
+     "Noun negative",
+     "学生じゃありません",
+     "学生じゃない",
+     ""
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "明日、行きますか。",
+     "fu": "あした、いきますか。",
+     "en": "Are you going tomorrow?",
+     "reg": "polite",
+     "who": "to a coworker"
+    },
+    {
+     "jp": "明日、行く？",
+     "fu": "あした、いく？",
+     "en": "Are you going tomorrow?",
+     "reg": "casual",
+     "who": "to a friend"
+    },
+    {
+     "jp": "昨日は忙しかったです。",
+     "fu": "きのうはいそがしかったです。",
+     "en": "I was busy yesterday.",
+     "reg": "polite",
+     "who": "to a teacher"
+    },
+    {
+     "jp": "昨日、忙しかった。",
+     "fu": "きのう、いそがしかった。",
+     "en": "I was busy yesterday.",
+     "reg": "casual",
+     "who": "to your sister"
+    },
+    {
+     "jp": "今日は休みだよ。",
+     "fu": "きょうはやすみだよ。",
+     "en": "I'm off today.",
+     "reg": "casual",
+     "who": "to a friend"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "mc",
+     "q": "Which form of 食べる is polite?",
+     "a": "食べます",
+     "opts": [
+      "食べます",
+      "食べた",
+      "食べない",
+      "食べよう"
+     ]
+    },
+    {
+     "type": "switch",
+     "from": "polite",
+     "to": "casual",
+     "src": {
+      "jp": "毎日コーヒーを飲みます。",
+      "fu": "まいにちコーヒーをのみます。"
+     },
+     "answers": [
+      "毎日コーヒーを飲む",
+      "まいにちコーヒーをのむ",
+      "毎日コーヒー飲む",
+      "まいにちコーヒーのむ",
+      "毎日コーヒーを飲むよ",
+      "毎日コーヒー飲むよ"
+     ],
+     "en": "I drink coffee every day."
+    },
+    {
+     "type": "switch",
+     "from": "casual",
+     "to": "polite",
+     "src": {
+      "jp": "昨日は寒かった。",
+      "fu": "きのうはさむかった。"
+     },
+     "answers": [
+      "昨日は寒かったです",
+      "きのうはさむかったです",
+      "昨日寒かったです",
+      "きのうさむかったです"
+     ],
+     "en": "It was cold yesterday."
+    },
+    {
+     "type": "mc",
+     "q": "Your friend asks 「明日ひま？」 Which reply matches their style?",
+     "a": "うん、ひまだよ。",
+     "opts": [
+      "うん、ひまだよ。",
+      "はい、ひまです。",
+      "はい、ひまでございます。",
+      "ひまでした。"
+     ],
+     "en": "Are you free tomorrow? / Yeah, I am."
+    }
+   ]
+  },
+  {
+   "id": "rg-who",
+   "t": "Who gets which style",
+   "sum": "Friends and family vs strangers, staff, teachers and bosses",
+   "exp": "The style you use depends on **relationship**, not just age. **Casual** is for people in your inner circle: close friends, family, partners, children, and classmates once you've become friends.\n**Polite** です/ます is the safe default for everyone else: people you've just met, coworkers, teachers, shop staff, and older people you're not close to. When in doubt, be polite.\n**Keigo** (honorific language) is for customers and clients, very senior people, and formal speeches and emails.\nMoving down to casual is usually the other person's call, especially if they're older or senior. Wait for them to switch, or for 「タメ口でいいよ」 (\"you can talk casually\"). Getting it wrong goes both ways: casual with a stranger sounds rude, and polite with a close friend sounds cold, as if you're upset with them.",
+   "cols": [
+    "Talking to",
+    "Style",
+    "Say \"Are you going?\"",
+    "Why"
+   ],
+   "table": [
+    [
+     "Close friend, sibling",
+     "Casual",
+     "行く？",
+     "closeness"
+    ],
+    [
+     "Your child, a pet",
+     "Casual",
+     "行く？",
+     "adults talk down gently"
+    ],
+    [
+     "Classmate you just met",
+     "Polite",
+     "行きますか。",
+     "until you become friends"
+    ],
+    [
+     "Coworker, teacher",
+     "Polite",
+     "行きますか。",
+     "the safe default"
+    ],
+    [
+     "Shop clerk, stranger",
+     "Polite",
+     "行きますか。",
+     "distance = respect"
+    ],
+    [
+     "Boss (formal setting), client",
+     "Keigo",
+     "いらっしゃいますか。",
+     "raises the listener"
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "タメ口でいいよ。",
+     "fu": "タメぐちでいいよ。",
+     "en": "You can talk casually with me.",
+     "reg": "casual",
+     "who": "a new friend, inviting you"
+    },
+    {
+     "jp": "敬語じゃなくていいですよ。",
+     "fu": "けいごじゃなくていいですよ。",
+     "en": "You don't need to use keigo.",
+     "reg": "polite",
+     "who": "an older colleague"
+    },
+    {
+     "jp": "お母さん、今日遅くなる。",
+     "fu": "おかあさん、きょうおそくなる。",
+     "en": "Mum, I'll be late today.",
+     "reg": "casual",
+     "who": "to your mother"
+    },
+    {
+     "jp": "すみません、今日は遅くなります。",
+     "fu": "すみません、きょうはおそくなります。",
+     "en": "Sorry, I'll be late today.",
+     "reg": "polite",
+     "who": "to your manager"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "mc",
+     "q": "You meet a friend of a friend at a party. They are your age. Which style do you start with?",
+     "a": "Polite (です/ます) until they switch",
+     "opts": [
+      "Polite (です/ます) until they switch",
+      "Casual straight away",
+      "Keigo",
+      "It does not matter"
+     ]
+    },
+    {
+     "type": "mc",
+     "q": "Your best friend suddenly starts using です/ます with you. How might that sound?",
+     "a": "Cold, as if they are upset",
+     "opts": [
+      "Cold, as if they are upset",
+      "Extra friendly",
+      "Normal",
+      "Like a joke about food"
+     ]
+    },
+    {
+     "type": "mc",
+     "q": "Who normally gets keigo?",
+     "a": "A customer at your shop",
+     "opts": [
+      "A customer at your shop",
+      "Your little brother",
+      "A close classmate",
+      "Your dog"
+     ]
+    },
+    {
+     "type": "mc",
+     "q": "An older coworker says 「タメ口でいいよ」. What does that mean?",
+     "a": "You can speak casually with them",
+     "opts": [
+      "You can speak casually with them",
+      "Please use keigo",
+      "Please speak more slowly",
+      "Please be quiet"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rg-questions",
+   "t": "Casual questions",
+   "sum": "Rising intonation, の？, and dropping か",
+   "exp": "Polite questions end in **か**: 行きますか。 In casual speech, か after a plain verb sounds rough, or like \"Shall we?\" (行くか), so casual questions work differently:\n**Rising intonation.** Say the plain form with a rising tone and write ？: 行く？ おいしい？\n**の？** asks for an explanation or confirmation. It's softer and very common: 行くの？ どうしたの？ It's the casual partner of polite **んですか**.\n**Nouns and な-adjectives** drop だ: 学生？ ひま？ With の they take な: 学生なの？\nQuestion words work the same way, usually without particles: 何食べる？ どこ行くの？",
+   "cols": [
+    "",
+    "Polite",
+    "Casual",
+    "Note"
+   ],
+   "table": [
+    [
+     "Yes/no (verb)",
+     "行きますか。",
+     "行く？",
+     "rising tone"
+    ],
+    [
+     "Asking for an explanation",
+     "行くんですか。",
+     "行くの？",
+     "softer, curious"
+    ],
+    [
+     "Noun",
+     "学生ですか。",
+     "学生？",
+     "no だ"
+    ],
+    [
+     "Noun + の",
+     "学生なんですか。",
+     "学生なの？",
+     "だ → な before の"
+    ],
+    [
+     "Adjective",
+     "おいしいですか。",
+     "おいしい？",
+     ""
+    ],
+    [
+     "Question word",
+     "何を食べますか。",
+     "何食べる？",
+     "を often dropped"
+    ],
+    [
+     "What happened?",
+     "どうしたんですか。",
+     "どうしたの？",
+     ""
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "週末、何するの？",
+     "fu": "しゅうまつ、なにするの？",
+     "en": "What are you doing this weekend?",
+     "reg": "casual",
+     "who": "to a friend"
+    },
+    {
+     "jp": "週末は何をしますか。",
+     "fu": "しゅうまつはなにをしますか。",
+     "en": "What are you doing this weekend?",
+     "reg": "polite",
+     "who": "to a coworker"
+    },
+    {
+     "jp": "それ、おいしい？",
+     "fu": "それ、おいしい？",
+     "en": "Is that good?",
+     "reg": "casual",
+     "who": "to a friend"
+    },
+    {
+     "jp": "どうしたの？大丈夫？",
+     "fu": "どうしたの？だいじょうぶ？",
+     "en": "What's wrong? Are you OK?",
+     "reg": "casual",
+     "who": "to your brother"
+    },
+    {
+     "jp": "どうかしましたか。",
+     "fu": "どうかしましたか。",
+     "en": "Is something wrong?",
+     "reg": "polite",
+     "who": "to a stranger"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "mc",
+     "q": "Most natural way to ask a friend \"Are you coming tomorrow?\"",
+     "a": "明日来る？",
+     "opts": [
+      "明日来る？",
+      "明日来るか。",
+      "明日来ますか。",
+      "明日来るだ？"
+     ]
+    },
+    {
+     "type": "switch",
+     "from": "polite",
+     "to": "casual",
+     "src": {
+      "jp": "何を飲みますか。",
+      "fu": "なにをのみますか。"
+     },
+     "answers": [
+      "何飲む",
+      "なにのむ",
+      "何を飲む",
+      "なにをのむ",
+      "何飲むの",
+      "なにのむの",
+      "何を飲むの",
+      "なにをのむの"
+     ],
+     "en": "What will you drink?"
+    },
+    {
+     "type": "switch",
+     "from": "polite",
+     "to": "casual",
+     "src": {
+      "jp": "学生なんですか。",
+      "fu": "がくせいなんですか。"
+     },
+     "answers": [
+      "学生なの",
+      "がくせいなの",
+      "学生",
+      "がくせい"
+     ],
+     "en": "Are you a student?"
+    },
+    {
+     "type": "mc",
+     "q": "What does の add in 「行くの？」?",
+     "a": "It asks for an explanation or confirmation",
+     "opts": [
+      "It asks for an explanation or confirmation",
+      "It makes it past tense",
+      "It makes it more polite than 行きますか",
+      "It turns it into a command"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rg-particles",
+   "t": "Ending particles",
+   "sum": "よ, ね, よね, な, かな, っけ: attitude at the end of a sentence",
+   "exp": "Casual speech relies on small particles at the end of a sentence to show attitude:\n**よ** gives new information: \"I'm telling you.\" **ね** looks for agreement or a shared feeling: \"isn't it?\" **よね** checks something you believe: \"right?\"\n**な** is mostly said to yourself (いいな, \"I wish / lucky you\"), and in men's speech it can replace ね. **かな** means \"I wonder.\" **っけ** means you're trying to remember: \"what was it again?\"\nMost of these work in polite speech too: いいですね, 行きますよ, 何時でしたっけ. Be careful with よ when talking to superiors: stressing that you know better can sound pushy.",
+   "cols": [
+    "Particle",
+    "Polite",
+    "Casual",
+    "Nuance"
+   ],
+   "table": [
+    [
+     "よ",
+     "行きますよ。",
+     "行くよ。",
+     "new info: I'm telling you"
+    ],
+    [
+     "ね",
+     "いい天気ですね。",
+     "いい天気だね。",
+     "shared feeling"
+    ],
+    [
+     "よね",
+     "明日は休みですよね。",
+     "明日、休みだよね。",
+     "checking: right?"
+    ],
+    [
+     "な",
+     "いいですね。",
+     "いいなあ。",
+     "to yourself; envy"
+    ],
+    [
+     "かな",
+     "雨が降るでしょうか。",
+     "雨、降るかな。",
+     "I wonder"
+    ],
+    [
+     "っけ",
+     "会議は何時でしたっけ。",
+     "会議、何時だっけ？",
+     "trying to remember"
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "このケーキ、おいしいね！",
+     "fu": "このケーキ、おいしいね！",
+     "en": "This cake is good, isn't it!",
+     "reg": "casual",
+     "who": "to a friend"
+    },
+    {
+     "jp": "もう八時だよ。早く起きて！",
+     "fu": "もうはちじだよ。はやくおきて！",
+     "en": "It's already eight! Get up!",
+     "reg": "casual",
+     "who": "to your brother"
+    },
+    {
+     "jp": "明日、晴れるかな。",
+     "fu": "あした、はれるかな。",
+     "en": "I wonder if it will be sunny tomorrow.",
+     "reg": "casual",
+     "who": "thinking aloud"
+    },
+    {
+     "jp": "田中さんの誕生日、いつだっけ？",
+     "fu": "たなかさんのたんじょうび、いつだっけ？",
+     "en": "When is Tanaka's birthday again?",
+     "reg": "casual",
+     "who": "to a friend"
+    },
+    {
+     "jp": "締め切りは金曜日ですよね。",
+     "fu": "しめきりはきんようびですよね。",
+     "en": "The deadline is Friday, right?",
+     "reg": "polite",
+     "who": "to a coworker"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "mc",
+     "q": "You and a friend taste ramen together. おいしい___！ (sharing the feeling)",
+     "a": "ね",
+     "opts": [
+      "ね",
+      "よ",
+      "かな",
+      "っけ"
+     ],
+     "en": "It's good, isn't it!"
+    },
+    {
+     "type": "mc",
+     "q": "You cannot remember the party time. パーティー、何時だった___？",
+     "a": "っけ",
+     "opts": [
+      "っけ",
+      "よ",
+      "ね",
+      "な"
+     ],
+     "en": "What time was the party again?"
+    },
+    {
+     "type": "mc",
+     "q": "Your friend doesn't know the shop is closed today. You tell them: 今日、休みだ___。",
+     "a": "よ",
+     "opts": [
+      "よ",
+      "ね",
+      "かな",
+      "っけ"
+     ],
+     "en": "It's closed today, you know."
+    },
+    {
+     "type": "switch",
+     "from": "casual",
+     "to": "polite",
+     "src": {
+      "jp": "明日は休みだよね。",
+      "fu": "あしたはやすみだよね。"
+     },
+     "answers": [
+      "明日は休みですよね",
+      "あしたはやすみですよね",
+      "明日休みですよね",
+      "あしたやすみですよね"
+     ],
+     "en": "Tomorrow's a day off, right?"
+    }
+   ]
+  },
+  {
+   "id": "rg-contract",
+   "t": "Casual contractions",
+   "sum": "〜てる, 〜ちゃう, 〜なきゃ, 〜ちゃだめ, じゃん and friends",
+   "exp": "In relaxed speech, sounds merge and shorten. You'll hear these all the time from friends and in dramas and anime. Use them with friends, but not in formal writing.\n**〜ている → 〜てる**: the い drops. **〜てしまう → 〜ちゃう / 〜じゃう** (\"finish\", or \"oops\"). **〜なければならない → 〜なきゃ** or **〜ないと** (\"I have to\"). **〜てはいけない → 〜ちゃだめ** (\"you mustn't\"). **〜ておく → 〜とく** (\"do in advance\").\nIn explanations, の becomes ん (行くんです, 行くんだ). **じゃない** is the casual form of ではない, and **じゃん** is a Tokyo-style \"see?/isn't it!\". ら-sounds can turn into ん: わからない → わかんない.",
+   "cols": [
+    "",
+    "Full form",
+    "Casual contraction",
+    "Note"
+   ],
+   "table": [
+    [
+     "is doing",
+     "食べている",
+     "食べてる",
+     "い drops"
+    ],
+    [
+     "oops / completely",
+     "忘れてしまった",
+     "忘れちゃった",
+     "で-verbs: 飲んじゃった"
+    ],
+    [
+     "must",
+     "行かなければならない",
+     "行かなきゃ",
+     "also 行かないと"
+    ],
+    [
+     "must not",
+     "見てはいけない",
+     "見ちゃだめ",
+     "で-verbs: 飲んじゃだめ"
+    ],
+    [
+     "do in advance",
+     "買っておく",
+     "買っとく",
+     ""
+    ],
+    [
+     "explanation",
+     "行くのです",
+     "行くんだ / 行くの",
+     "の → ん"
+    ],
+    [
+     "isn't it / see!",
+     "いいではないか",
+     "いいじゃん",
+     "very casual"
+    ],
+    [
+     "don't know",
+     "わからない",
+     "わかんない",
+     "very casual"
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "今、ご飯食べてる。",
+     "fu": "いま、ごはんたべてる。",
+     "en": "I'm eating right now.",
+     "reg": "casual",
+     "who": "to your mother"
+    },
+    {
+     "jp": "あ、傘忘れちゃった！",
+     "fu": "あ、かさわすれちゃった！",
+     "en": "Oh no, I forgot my umbrella!",
+     "reg": "casual",
+     "who": "to a friend"
+    },
+    {
+     "jp": "もう帰らなきゃ。",
+     "fu": "もうかえらなきゃ。",
+     "en": "I have to go home now.",
+     "reg": "casual",
+     "who": "to a friend"
+    },
+    {
+     "jp": "ここで写真撮っちゃだめだよ。",
+     "fu": "ここでしゃしんとっちゃだめだよ。",
+     "en": "You can't take photos here.",
+     "reg": "casual",
+     "who": "to a child"
+    },
+    {
+     "jp": "このシャツ、いいじゃん！",
+     "fu": "このシャツ、いいじゃん！",
+     "en": "Hey, this shirt's nice!",
+     "reg": "casual",
+     "who": "to a friend"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "mc",
+     "q": "The casual contraction of 読んでしまった is…",
+     "a": "読んじゃった",
+     "opts": [
+      "読んじゃった",
+      "読んちゃった",
+      "読んでちゃった",
+      "読みちゃった"
+     ],
+     "en": "I (accidentally) read it."
+    },
+    {
+     "type": "switch",
+     "from": "polite",
+     "to": "casual",
+     "src": {
+      "jp": "宿題をしなければなりません。",
+      "fu": "しゅくだいをしなければなりません。"
+     },
+     "answers": [
+      "宿題しなきゃ",
+      "しゅくだいしなきゃ",
+      "宿題をしなきゃ",
+      "しゅくだいをしなきゃ",
+      "宿題しないと",
+      "しゅくだいしないと",
+      "宿題をしないと",
+      "しゅくだいをしないと",
+      "宿題しなくちゃ",
+      "しゅくだいしなくちゃ",
+      "宿題をしなくちゃ",
+      "しゅくだいをしなくちゃ"
+     ],
+     "en": "I have to do my homework."
+    },
+    {
+     "type": "switch",
+     "from": "polite",
+     "to": "casual",
+     "src": {
+      "jp": "今、テレビを見ています。",
+      "fu": "いま、テレビをみています。"
+     },
+     "answers": [
+      "今テレビを見てる",
+      "いまテレビをみてる",
+      "今テレビ見てる",
+      "いまテレビみてる",
+      "今テレビを見ている",
+      "いまテレビをみている"
+     ],
+     "en": "I'm watching TV now."
+    },
+    {
+     "type": "mc",
+     "q": "What does 「食べちゃだめ」 mean?",
+     "a": "You mustn't eat it",
+     "opts": [
+      "You mustn't eat it",
+      "I ate it all",
+      "I have to eat it",
+      "I'm eating it now"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rg-voice",
+   "t": "Who's talking: 俺, 僕, あたし, ぞ, ぜ, わ",
+   "sum": "Gendered and rough speech: recognise it, use it carefully",
+   "exp": "Japanese often shows who is speaking through pronouns and particles.\n**私** (わたし) is neutral and safe for everyone, and **わたくし** is very formal. **僕** is used by boys and men; it's soft and friendly, and fine in everyday polite speech. **俺** is masculine, casual and confident: fine with friends, but rude with a boss. **あたし** is casual and feminine.\n**ぞ** and **ぜ** are rough, masculine emphasis (行くぞ！ \"Let's go!\") that you'll hear a lot in anime. A soft rising **わ** is feminine in older and fictional speech, but in in Kansai わ is a gender-neutral sentence-ender.\nDon't use **お前** or **あんた** for \"you\": they can sound rude. Using people's names with さん is safest. So recognise all of these, but default to 私 and plain よ/ね.",
+   "cols": [
+    "",
+    "Safe / neutral",
+    "Casual",
+    "Who and how"
+   ],
+   "table": [
+    [
+     "I",
+     "私（わたし）",
+     "俺・僕・あたし",
+     "pick by speaker"
+    ],
+    [
+     "I (very formal)",
+     "わたくし",
+     "—",
+     "speeches, business"
+    ],
+    [
+     "you",
+     "(name)さん",
+     "君・お前・あんた",
+     "お前/あんた can be rude"
+    ],
+    [
+     "Let's go!",
+     "行きましょう。",
+     "行こう！ / 行くぞ！",
+     "ぞ = rough, masculine"
+    ],
+    [
+     "It's fine",
+     "大丈夫ですよ。",
+     "大丈夫だぜ。",
+     "ぜ = macho, anime-like"
+    ],
+    [
+     "How lovely",
+     "すてきですね。",
+     "すてきだわ。",
+     "わ = feminine (Kansai: anyone)"
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "俺、ラーメン食べたい。",
+     "fu": "おれ、ラーメンたべたい。",
+     "en": "I want ramen.",
+     "reg": "casual",
+     "who": "a man to his friend"
+    },
+    {
+     "jp": "僕は大学生です。",
+     "fu": "ぼくはだいがくせいです。",
+     "en": "I'm a university student.",
+     "reg": "polite",
+     "who": "a young man introducing himself"
+    },
+    {
+     "jp": "私は会社員です。",
+     "fu": "わたしはかいしゃいんです。",
+     "en": "I'm an office worker.",
+     "reg": "polite",
+     "who": "anyone, anywhere"
+    },
+    {
+     "jp": "よし、行くぞ！",
+     "fu": "よし、いくぞ！",
+     "en": "Right, let's go!",
+     "reg": "casual",
+     "who": "a coach to his team"
+    },
+    {
+     "jp": "あたし、もう帰るね。",
+     "fu": "あたし、もうかえるね。",
+     "en": "I'm heading home now.",
+     "reg": "casual",
+     "who": "a woman to a close friend"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "mc",
+     "q": "Which word for \"I\" is safe in a job interview?",
+     "a": "私",
+     "opts": [
+      "私",
+      "俺",
+      "あたし",
+      "お前"
+     ]
+    },
+    {
+     "type": "mc",
+     "q": "You call your manager お前. How does that sound?",
+     "a": "Very rude",
+     "opts": [
+      "Very rude",
+      "Friendly",
+      "Formal",
+      "Normal"
+     ]
+    },
+    {
+     "type": "mc",
+     "q": "「行くぞ！」 sounds…",
+     "a": "Rough and masculine, like a team captain",
+     "opts": [
+      "Rough and masculine, like a team captain",
+      "Very polite",
+      "Soft and feminine",
+      "Like a question"
+     ]
+    },
+    {
+     "type": "mc",
+     "q": "Safest way to address someone as \"you\"?",
+     "a": "Use their name + さん",
+     "opts": [
+      "Use their name + さん",
+      "お前",
+      "あんた",
+      "君"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rg-drop",
+   "t": "Dropping particles",
+   "sum": "Casual speech leaves out は, が, を and へ",
+   "exp": "In casual speech, **は, が, を and へ/に** (for direction) are often dropped when the meaning is clear: 映画見た？ (映画を見た？), お腹すいた (お腹がすいた), どこ行く？ (どこに行く？). A short pause, written as a comma, often replaces a dropped は: 私、学生。\nParticles that carry real meaning **stay**: **で** (place of action, means), **と** (with), **から / まで** (from / until), **の** (possessive). You can't guess these from context.\nIn polite speech, and especially in writing, keep all the particles.",
+   "cols": [
+    "",
+    "Full (polite)",
+    "Casual",
+    "Dropped"
+   ],
+   "table": [
+    [
+     "object",
+     "映画を見ましたか。",
+     "映画見た？",
+     "を"
+    ],
+    [
+     "topic",
+     "私は学生です。",
+     "私、学生。",
+     "は → pause"
+    ],
+    [
+     "direction",
+     "どこへ行きますか。",
+     "どこ行く？",
+     "へ / に"
+    ],
+    [
+     "subject",
+     "お腹がすきました。",
+     "お腹すいた。",
+     "が"
+    ],
+    [
+     "place of action",
+     "駅で待っています。",
+     "駅で待ってる。",
+     "で stays!"
+    ],
+    [
+     "with",
+     "友達と行きます。",
+     "友達と行く。",
+     "と stays!"
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "宿題やった？",
+     "fu": "しゅくだいやった？",
+     "en": "Did you do the homework?",
+     "reg": "casual",
+     "who": "to a classmate"
+    },
+    {
+     "jp": "お腹すいた。何か食べよう。",
+     "fu": "おなかすいた。なにかたべよう。",
+     "en": "I'm hungry. Let's eat something.",
+     "reg": "casual",
+     "who": "to a friend"
+    },
+    {
+     "jp": "明日、どこ行く？",
+     "fu": "あした、どこいく？",
+     "en": "Where shall we go tomorrow?",
+     "reg": "casual",
+     "who": "to a friend"
+    },
+    {
+     "jp": "図書館で勉強してる。",
+     "fu": "としょかんでべんきょうしてる。",
+     "en": "I'm studying at the library.",
+     "reg": "casual",
+     "who": "で stays"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "mc",
+     "q": "Which particle can NOT be dropped? 公園___遊ぼう。",
+     "a": "で",
+     "opts": [
+      "で",
+      "を",
+      "が",
+      "は"
+     ],
+     "en": "Let's play in the park."
+    },
+    {
+     "type": "switch",
+     "from": "polite",
+     "to": "casual",
+     "src": {
+      "jp": "水を飲みますか。",
+      "fu": "みずをのみますか。"
+     },
+     "answers": [
+      "水飲む",
+      "みずのむ",
+      "水を飲む",
+      "みずをのむ"
+     ],
+     "en": "Are you going to drink water?"
+    },
+    {
+     "type": "switch",
+     "from": "polite",
+     "to": "casual",
+     "src": {
+      "jp": "雨が降っています。",
+      "fu": "あめがふっています。"
+     },
+     "answers": [
+      "雨降ってる",
+      "あめふってる",
+      "雨が降ってる",
+      "あめがふってる",
+      "雨降ってるよ",
+      "あめふってるよ",
+      "雨が降ってるよ",
+      "あめがふってるよ"
+     ],
+     "en": "It's raining."
+    },
+    {
+     "type": "mc",
+     "q": "In 「映画見た？」, which particle was dropped?",
+     "a": "を",
+     "opts": [
+      "を",
+      "で",
+      "に",
+      "の"
+     ],
+     "en": "Did you see the movie?"
+    }
+   ]
+  },
+  {
+   "id": "rg-sonkei",
+   "t": "Keigo 1: 尊敬語, raising them",
+   "sum": "いらっしゃる, 召し上がる, おっしゃる, ご覧になる, お〜になる",
+   "exp": "Keigo has two main tools. **尊敬語** (sonkeigo, respectful language) is used for the **actions of someone you respect**: a customer, a client, a teacher, a senior person. It raises them up.\nSome common verbs have special forms: **いらっしゃる** (be / go / come), **召し上がる** (eat / drink), **おっしゃる** (say), **ご覧になる** (look), **なさる** (do), **くださる** (give to me), and **ご存じだ** (know).\nMost other verbs use the pattern **お + ます-stem + になる**: お待ちになる, お帰りになる.\nNote that いらっしゃる, おっしゃる, なさる and くださる take い in the ます form: いらっしゃいます. Never use 尊敬語 for your own actions.",
+   "cols": [
+    "Meaning",
+    "尊敬語 (their action)",
+    "Plain",
+    "ます form"
+   ],
+   "table": [
+    [
+     "be / go / come",
+     "いらっしゃる",
+     "いる・行く・来る",
+     "いらっしゃいます"
+    ],
+    [
+     "eat / drink",
+     "召し上がる",
+     "食べる・飲む",
+     "召し上がります"
+    ],
+    [
+     "say",
+     "おっしゃる",
+     "言う",
+     "おっしゃいます"
+    ],
+    [
+     "look / see",
+     "ご覧になる",
+     "見る",
+     "ご覧になります"
+    ],
+    [
+     "do",
+     "なさる",
+     "する",
+     "なさいます"
+    ],
+    [
+     "know",
+     "ご存じだ",
+     "知っている",
+     "ご存じです"
+    ],
+    [
+     "wait",
+     "お待ちになる",
+     "待つ",
+     "お待ちになります"
+    ],
+    [
+     "go home",
+     "お帰りになる",
+     "帰る",
+     "お帰りになります"
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "社長は何時にいらっしゃいますか。",
+     "fu": "しゃちょうはなんじにいらっしゃいますか。",
+     "en": "What time will the president arrive?",
+     "reg": "keigo",
+     "who": "to a secretary"
+    },
+    {
+     "jp": "どうぞ、召し上がってください。",
+     "fu": "どうぞ、めしあがってください。",
+     "en": "Please, help yourself.",
+     "reg": "keigo",
+     "who": "a host to a guest"
+    },
+    {
+     "jp": "先生のおっしゃるとおりです。",
+     "fu": "せんせいのおっしゃるとおりです。",
+     "en": "It's just as you say, professor.",
+     "reg": "keigo",
+     "who": "a student to a professor"
+    },
+    {
+     "jp": "こちらの資料をご覧ください。",
+     "fu": "こちらのしりょうをごらんください。",
+     "en": "Please take a look at this document.",
+     "reg": "keigo",
+     "who": "presenting to clients"
+    },
+    {
+     "jp": "部長はもうお帰りになりました。",
+     "fu": "ぶちょうはもうおかえりになりました。",
+     "en": "The department head has already gone home.",
+     "reg": "keigo",
+     "who": "to a coworker, about the boss"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "mc",
+     "q": "The 尊敬語 of 食べる is…",
+     "a": "召し上がる",
+     "opts": [
+      "召し上がる",
+      "いただく",
+      "参る",
+      "拝見する"
+     ]
+    },
+    {
+     "type": "mc",
+     "q": "Asking a customer to look at the menu: メニューを___ください。",
+     "a": "ご覧",
+     "opts": [
+      "ご覧",
+      "拝見",
+      "見る",
+      "参り"
+     ],
+     "en": "Please take a look at the menu."
+    },
+    {
+     "type": "mc",
+     "q": "Can you say 「私は明日いらっしゃいます」?",
+     "a": "No: 尊敬語 is never for your own actions",
+     "opts": [
+      "No: 尊敬語 is never for your own actions",
+      "Yes, it is extra polite",
+      "Yes, but only in writing",
+      "Only on the phone"
+     ]
+    },
+    {
+     "type": "switch",
+     "from": "polite",
+     "to": "keigo",
+     "src": {
+      "jp": "先生は何と言いましたか。",
+      "fu": "せんせいはなんといいましたか。"
+     },
+     "answers": [
+      "先生は何とおっしゃいましたか",
+      "せんせいはなんとおっしゃいましたか",
+      "先生はなんとおっしゃいましたか",
+      "先生は何ておっしゃいましたか",
+      "せんせいはなんておっしゃいましたか"
+     ],
+     "en": "What did the teacher say?"
+    }
+   ]
+  },
+  {
+   "id": "rg-kenjo",
+   "t": "Keigo 2: 謙譲語, lowering yourself",
+   "sum": "参る, いただく, 申す, 拝見する, お〜する",
+   "exp": "**謙譲語** (kenjōgo, humble language) is for **your own actions**, or your group's, toward someone you respect. Lowering yourself raises them.\nSpecial verbs: **参る** (go / come), **おる** (be), **いただく** (eat / drink / receive), **申す** (say, be called), **拝見する** (look), **いたす** (do), **伺う** (visit / ask), and **存じる** (know).\nThe general pattern is **お + ます-stem + する / いたす**: お持ちします (\"let me carry it\"), お送りします. For する-nouns, use ご: ご連絡します, ご案内します.\nThe two tools work together: the customer いらっしゃる, and you 参ります. The classic mistake is using a humble verb for the other person: 「拝見してください」 is wrong, and the correct form is 「ご覧ください」.",
+   "cols": [
+    "Meaning",
+    "謙譲語 (my action)",
+    "Plain",
+    "ます form"
+   ],
+   "table": [
+    [
+     "go / come",
+     "参る",
+     "行く・来る",
+     "参ります"
+    ],
+    [
+     "be",
+     "おる",
+     "いる",
+     "おります"
+    ],
+    [
+     "eat / drink / receive",
+     "いただく",
+     "食べる・飲む・もらう",
+     "いただきます"
+    ],
+    [
+     "say / be called",
+     "申す",
+     "言う",
+     "申します"
+    ],
+    [
+     "look",
+     "拝見する",
+     "見る",
+     "拝見します"
+    ],
+    [
+     "do",
+     "いたす",
+     "する",
+     "いたします"
+    ],
+    [
+     "visit / ask",
+     "伺う",
+     "訪ねる・聞く",
+     "伺います"
+    ],
+    [
+     "carry (pattern)",
+     "お持ちする",
+     "持つ",
+     "お持ちします"
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "田中と申します。よろしくお願いいたします。",
+     "fu": "たなかともうします。よろしくおねがいいたします。",
+     "en": "My name is Tanaka. I look forward to working with you.",
+     "reg": "keigo",
+     "who": "introducing yourself at work"
+    },
+    {
+     "jp": "明日、御社に伺います。",
+     "fu": "あした、おんしゃにうかがいます。",
+     "en": "I'll visit your company tomorrow.",
+     "reg": "keigo",
+     "who": "to a client"
+    },
+    {
+     "jp": "資料を拝見しました。",
+     "fu": "しりょうをはいけんしました。",
+     "en": "I've looked through the documents.",
+     "reg": "keigo",
+     "who": "to a client"
+    },
+    {
+     "jp": "お荷物、お持ちします。",
+     "fu": "おにもつ、おもちします。",
+     "en": "Let me carry your bags.",
+     "reg": "keigo",
+     "who": "hotel staff to a guest"
+    },
+    {
+     "jp": "父は今、出かけております。",
+     "fu": "ちちはいま、でかけております。",
+     "en": "My father is out at the moment.",
+     "reg": "keigo",
+     "who": "answering the phone at home"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "mc",
+     "q": "Introduce yourself humbly: スミスと___。",
+     "a": "申します",
+     "opts": [
+      "申します",
+      "おっしゃいます",
+      "いらっしゃいます",
+      "ご覧になります"
+     ],
+     "en": "My name is Smith."
+    },
+    {
+     "type": "mc",
+     "q": "Which one is WRONG when talking to a customer?",
+     "a": "こちらを拝見してください。",
+     "opts": [
+      "こちらを拝見してください。",
+      "こちらをご覧ください。",
+      "資料を拝見しました。",
+      "すぐに参ります。"
+     ],
+     "en": "拝見する is humble, so it can only describe your own looking."
+    },
+    {
+     "type": "switch",
+     "from": "polite",
+     "to": "keigo",
+     "src": {
+      "jp": "明日、そちらに行きます。",
+      "fu": "あした、そちらにいきます。"
+     },
+     "answers": [
+      "明日、そちらに伺います",
+      "あした、そちらにうかがいます",
+      "明日、そちらに参ります",
+      "あした、そちらにまいります",
+      "明日そちらに伺います",
+      "明日そちらに参ります"
+     ],
+     "en": "I'll come to your office tomorrow."
+    },
+    {
+     "type": "mc",
+     "q": "The 謙譲語 of もらう (receive) is…",
+     "a": "いただく",
+     "opts": [
+      "いただく",
+      "くださる",
+      "召し上がる",
+      "なさる"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rg-shop",
+   "t": "Shop and service Japanese",
+   "sum": "The keigo you will hear: いらっしゃいませ, 少々お待ちください, かしこまりました",
+   "exp": "Staff in shops, restaurants, hotels and stations use **fixed, very polite keigo phrases** (接客用語). You don't have to talk like this: as a customer, plain です/ます is perfect. But you do need to **understand** it.\nCustomers keep replies short: **はい**, **お願いします**, **大丈夫です** (\"I'm fine\", a polite no-thanks), and **いいえ、結構です** (a firmer no-thanks). Don't copy staff phrases like かしこまりました back to them: that's their line, not yours.\nYou'll also hear **〜でよろしかったでしょうか** (\"Was that right?\"), a common part-timer phrase that some people find grating.",
+   "cols": [
+    "Meaning",
+    "Staff say (keigo)",
+    "Plain version",
+    "You can reply"
+   ],
+   "table": [
+    [
+     "Welcome",
+     "いらっしゃいませ。",
+     "いらっしゃい。",
+     "nothing, or a nod"
+    ],
+    [
+     "Please wait a moment",
+     "少々お待ちください。",
+     "ちょっと待って。",
+     "はい。"
+    ],
+    [
+     "Is this all right?",
+     "こちらでよろしいでしょうか。",
+     "これでいい？",
+     "はい、お願いします。"
+    ],
+    [
+     "Certainly",
+     "かしこまりました。",
+     "わかった。",
+     "—"
+    ],
+    [
+     "Eating in?",
+     "店内でお召し上がりですか。",
+     "ここで食べる？",
+     "はい。 / 持ち帰りで。"
+    ],
+    [
+     "Do you have a point card?",
+     "ポイントカードはお持ちですか。",
+     "ポイントカード持ってる？",
+     "大丈夫です。"
+    ],
+    [
+     "Sorry to keep you waiting",
+     "お待たせいたしました。",
+     "お待たせ。",
+     "—"
+    ],
+    [
+     "Thank you very much",
+     "ありがとうございました。",
+     "ありがとう。",
+     "どうも。"
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "いらっしゃいませ。何名様ですか。",
+     "fu": "いらっしゃいませ。なんめいさまですか。",
+     "en": "Welcome. How many people?",
+     "reg": "keigo",
+     "who": "restaurant staff"
+    },
+    {
+     "jp": "二人です。",
+     "fu": "ふたりです。",
+     "en": "Two, please.",
+     "reg": "polite",
+     "who": "you, the customer"
+    },
+    {
+     "jp": "袋はご利用ですか。",
+     "fu": "ふくろはごりようですか。",
+     "en": "Would you like a bag?",
+     "reg": "keigo",
+     "who": "a cashier"
+    },
+    {
+     "jp": "大丈夫です。",
+     "fu": "だいじょうぶです。",
+     "en": "I'm fine, thanks (no bag).",
+     "reg": "polite",
+     "who": "you, declining"
+    },
+    {
+     "jp": "お会計は千二百円でございます。",
+     "fu": "おかいけいはせんにひゃくえんでございます。",
+     "en": "That comes to 1,200 yen.",
+     "reg": "keigo",
+     "who": "a cashier"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "mc",
+     "q": "The clerk says 「少々お待ちください。」 They want you to…",
+     "a": "Wait a moment",
+     "opts": [
+      "Wait a moment",
+      "Pay now",
+      "Leave the shop",
+      "Sit down"
+     ]
+    },
+    {
+     "type": "mc",
+     "q": "Cashier: 「袋はご利用ですか。」 You don't need one. Best reply?",
+     "a": "大丈夫です。",
+     "opts": [
+      "大丈夫です。",
+      "いらっしゃいませ。",
+      "かしこまりました。",
+      "大丈夫だよ。"
+     ]
+    },
+    {
+     "type": "mc",
+     "q": "「かしこまりました」 means…",
+     "a": "Certainly (I understand and will do it)",
+     "opts": [
+      "Certainly (I understand and will do it)",
+      "Welcome",
+      "Please wait",
+      "Thank you for waiting"
+     ]
+    },
+    {
+     "type": "mc",
+     "q": "Staff ask 「店内でお召し上がりですか。」 What is the question?",
+     "a": "Are you eating in?",
+     "opts": [
+      "Are you eating in?",
+      "Did you enjoy the meal?",
+      "Do you have a reservation?",
+      "Would you like a drink?"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rg-request",
+   "t": "Asking nicely: from 〜て to email",
+   "sum": "〜てくれる？, 〜てもらえますか, 〜ていただけますか, お手数ですが",
+   "exp": "Requests come in levels. **Casual**: 〜て (見せて), 〜てくれる？, 〜てもらえる？ (\"could I get you to…?\").\n**Polite**: 〜てください is a polite *instruction*. It's fine with clerks and friends' parents, but it can sound like an order to a superior. 〜てくれますか and 〜てもらえますか are softer.\n**Very polite / keigo**: 〜ていただけますか, and the even softer negative question 〜ていただけませんか. In emails, use **〜ていただけますでしょうか** or **ご〜いただけますか**, and end with **よろしくお願いいたします**.\nOpen with a softener: **すみませんが** (sorry, but), **お手数ですが** (sorry for the trouble), or **もしよければ** (if it's OK).",
+   "cols": [
+    "",
+    "Polite / keigo",
+    "Casual",
+    "Note"
+   ],
+   "table": [
+    [
+     "Basic",
+     "見てください。",
+     "見て。",
+     "can sound like an order to a superior"
+    ],
+    [
+     "Will you…?",
+     "見てくれますか。",
+     "見てくれる？",
+     ""
+    ],
+    [
+     "Could I get you to…?",
+     "見てもらえますか。",
+     "見てもらえる？",
+     "softer"
+    ],
+    [
+     "Could you please…?",
+     "見ていただけますか。",
+     "—",
+     "boss, teacher, client"
+    ],
+    [
+     "Softest",
+     "見ていただけませんか。",
+     "見てくれない？",
+     "negative question softens"
+    ],
+    [
+     "Email",
+     "ご確認いただけますでしょうか。",
+     "—",
+     "business writing"
+    ]
+   ],
+   "ex": [
+    {
+     "jp": "ちょっとこれ、見てくれる？",
+     "fu": "ちょっとこれ、みてくれる？",
+     "en": "Can you take a look at this?",
+     "reg": "casual",
+     "who": "to a friend"
+    },
+    {
+     "jp": "すみません、写真を撮ってもらえますか。",
+     "fu": "すみません、しゃしんをとってもらえますか。",
+     "en": "Excuse me, could you take a photo for us?",
+     "reg": "polite",
+     "who": "to a stranger"
+    },
+    {
+     "jp": "この書類をチェックしていただけますか。",
+     "fu": "このしょるいをチェックしていただけますか。",
+     "en": "Could you please check this document?",
+     "reg": "keigo",
+     "who": "to your boss"
+    },
+    {
+     "jp": "お手数ですが、ご確認いただけますでしょうか。",
+     "fu": "おてすうですが、ごかくにんいただけますでしょうか。",
+     "en": "Sorry for the trouble, but could you confirm this?",
+     "reg": "keigo",
+     "who": "a business email"
+    },
+    {
+     "jp": "窓、開けてもらえる？",
+     "fu": "まど、あけてもらえる？",
+     "en": "Could you open the window?",
+     "reg": "casual",
+     "who": "to your sister"
+    }
+   ],
+   "quiz": [
+    {
+     "type": "switch",
+     "from": "keigo",
+     "to": "casual",
+     "src": {
+      "jp": "その本を貸していただけますか。",
+      "fu": "そのほんをかしていただけますか。"
+     },
+     "answers": [
+      "その本貸してくれる",
+      "そのほんかしてくれる",
+      "その本を貸してくれる",
+      "そのほんをかしてくれる",
+      "その本貸してもらえる",
+      "そのほんかしてもらえる",
+      "その本を貸してもらえる",
+      "そのほんをかしてもらえる",
+      "その本貸して",
+      "そのほんかして",
+      "その本を貸して",
+      "そのほんをかして",
+      "その本貸してくれない",
+      "その本を貸してくれない"
+     ],
+     "en": "Could you lend me that book?"
+    },
+    {
+     "type": "mc",
+     "q": "Asking your boss to check a report. Most appropriate:",
+     "a": "確認していただけますか。",
+     "opts": [
+      "確認していただけますか。",
+      "確認して。",
+      "確認してくれる？",
+      "確認しろ。"
+     ]
+    },
+    {
+     "type": "switch",
+     "from": "casual",
+     "to": "polite",
+     "src": {
+      "jp": "手伝ってくれる？",
+      "fu": "てつだってくれる？"
+     },
+     "answers": [
+      "手伝ってくれますか",
+      "てつだってくれますか",
+      "手伝ってもらえますか",
+      "てつだってもらえますか",
+      "手伝ってくれませんか",
+      "てつだってくれませんか",
+      "手伝ってもらえませんか",
+      "てつだってもらえませんか",
+      "手伝ってください",
+      "てつだってください"
+     ],
+     "en": "Can you help me?"
+    },
+    {
+     "type": "mc",
+     "q": "Which softener means \"Sorry for the trouble, but…\"?",
+     "a": "お手数ですが",
+     "opts": [
+      "お手数ですが",
+      "いらっしゃいませ",
+      "おかげさまで",
+      "お疲れさまです"
+     ]
+    }
+   ]
+  }
+ ],
+ "pairs": [
+  {
+   "id": "p001",
+   "en": "Are you going tomorrow?",
+   "casual": {
+    "jp": "明日行く？",
+    "fu": "あしたいく？"
+   },
+   "polite": {
+    "jp": "明日行きますか。",
+    "fu": "あしたいきますか。"
+   },
+   "keigo": {
+    "jp": "明日いらっしゃいますか。",
+    "fu": "あしたいらっしゃいますか。"
+   },
+   "ctx": "いらっしゃる raises the listener's going."
+  },
+  {
+   "id": "p002",
+   "en": "I'm going tomorrow.",
+   "casual": {
+    "jp": "明日行くよ。",
+    "fu": "あしたいくよ。"
+   },
+   "polite": {
+    "jp": "明日行きます。",
+    "fu": "あしたいきます。"
+   },
+   "keigo": {
+    "jp": "明日参ります。",
+    "fu": "あしたまいります。"
+   },
+   "ctx": "参る humbly lowers your own going.",
+   "alt": {
+    "casual": [
+     "明日行く",
+     "あしたいく"
+    ]
+   }
+  },
+  {
+   "id": "p003",
+   "en": "Have you eaten yet?",
+   "casual": {
+    "jp": "もう食べた？",
+    "fu": "もうたべた？"
+   },
+   "polite": {
+    "jp": "もう食べましたか。",
+    "fu": "もうたべましたか。"
+   },
+   "keigo": {
+    "jp": "もう召し上がりましたか。",
+    "fu": "もうめしあがりましたか。"
+   },
+   "ctx": "召し上がる is the respectful eat/drink."
+  },
+  {
+   "id": "p004",
+   "en": "I'm hungry.",
+   "casual": {
+    "jp": "お腹すいた。",
+    "fu": "おなかすいた。"
+   },
+   "polite": {
+    "jp": "お腹がすきました。",
+    "fu": "おなかがすきました。"
+   },
+   "ctx": "Casual speech drops が.",
+   "alt": {
+    "casual": [
+     "お腹すいたー",
+     "お腹がすいた",
+     "おなかがすいた"
+    ]
+   }
+  },
+  {
+   "id": "p005",
+   "en": "What did you say?",
+   "casual": {
+    "jp": "何て言った？",
+    "fu": "なんていった？"
+   },
+   "polite": {
+    "jp": "何と言いましたか。",
+    "fu": "なんといいましたか。"
+   },
+   "keigo": {
+    "jp": "何とおっしゃいましたか。",
+    "fu": "なんとおっしゃいましたか。"
+   },
+   "ctx": "て is the casual form of the quoting と.",
+   "alt": {
+    "casual": [
+     "なんて言った",
+     "何と言った",
+     "なんといった"
+    ],
+    "polite": [
+     "何て言いましたか",
+     "なんていいましたか"
+    ]
+   }
+  },
+  {
+   "id": "p006",
+   "en": "Do you know Mr. Tanaka?",
+   "casual": {
+    "jp": "田中さん、知ってる？",
+    "fu": "たなかさん、しってる？"
+   },
+   "polite": {
+    "jp": "田中さんを知っていますか。",
+    "fu": "たなかさんをしっていますか。"
+   },
+   "keigo": {
+    "jp": "田中さんをご存じですか。",
+    "fu": "たなかさんをごぞんじですか。"
+   },
+   "ctx": "ご存じ is the respectful \"know\".",
+   "alt": {
+    "casual": [
+     "田中さん知ってる",
+     "田中さんを知ってる",
+     "たなかさんをしってる"
+    ]
+   }
+  },
+  {
+   "id": "p007",
+   "en": "I don't know.",
+   "casual": {
+    "jp": "知らない。",
+    "fu": "しらない。"
+   },
+   "polite": {
+    "jp": "知りません。",
+    "fu": "しりません。"
+   },
+   "keigo": {
+    "jp": "存じません。",
+    "fu": "ぞんじません。"
+   },
+   "ctx": "知らない can sound curt; わからない ('not sure') is softer.",
+   "alt": {
+    "casual": [
+     "わからない",
+     "わかんない"
+    ],
+    "polite": [
+     "わかりません"
+    ]
+   }
+  },
+  {
+   "id": "p008",
+   "en": "Please wait a moment.",
+   "casual": {
+    "jp": "ちょっと待って。",
+    "fu": "ちょっとまって。"
+   },
+   "polite": {
+    "jp": "ちょっと待ってください。",
+    "fu": "ちょっとまってください。"
+   },
+   "keigo": {
+    "jp": "少々お待ちください。",
+    "fu": "しょうしょうおまちください。"
+   },
+   "ctx": "少々 is the formal ちょっと.",
+   "alt": {
+    "casual": [
+     "待って",
+     "まって",
+     "ちょっと待ってて",
+     "ちょっとまってて"
+    ]
+   }
+  },
+  {
+   "id": "p009",
+   "en": "Sorry I'm late.",
+   "casual": {
+    "jp": "遅れてごめん。",
+    "fu": "おくれてごめん。"
+   },
+   "polite": {
+    "jp": "遅れてすみません。",
+    "fu": "おくれてすみません。"
+   },
+   "keigo": {
+    "jp": "遅れて申し訳ございません。",
+    "fu": "おくれてもうしわけございません。"
+   },
+   "ctx": "ごめん → すみません → 申し訳ございません.",
+   "alt": {
+    "casual": [
+     "遅れてごめんね",
+     "ごめん、遅れた",
+     "ごめんおくれた"
+    ],
+    "polite": [
+     "遅くなってすみません",
+     "遅れてごめんなさい"
+    ],
+    "keigo": [
+     "遅れて申し訳ありません",
+     "おくれてもうしわけありません",
+     "遅くなって申し訳ございません"
+    ]
+   }
+  },
+  {
+   "id": "p010",
+   "en": "Thank you.",
+   "casual": {
+    "jp": "ありがとう。",
+    "fu": "ありがとう。"
+   },
+   "polite": {
+    "jp": "ありがとうございます。",
+    "fu": "ありがとうございます。"
+   },
+   "keigo": {
+    "jp": "誠にありがとうございます。",
+    "fu": "まことにありがとうございます。"
+   },
+   "ctx": "誠に makes it formal (speeches, business)."
+  },
+  {
+   "id": "p011",
+   "en": "It's delicious.",
+   "casual": {
+    "jp": "おいしい！",
+    "fu": "おいしい！"
+   },
+   "polite": {
+    "jp": "おいしいです。",
+    "fu": "おいしいです。"
+   },
+   "ctx": "い-adjectives just add です.",
+   "alt": {
+    "casual": [
+     "おいしいね",
+     "おいしいよ",
+     "うまい"
+    ]
+   }
+  },
+  {
+   "id": "p012",
+   "en": "Is this OK?",
+   "casual": {
+    "jp": "これでいい？",
+    "fu": "これでいい？"
+   },
+   "polite": {
+    "jp": "これでいいですか。",
+    "fu": "これでいいですか。"
+   },
+   "keigo": {
+    "jp": "こちらでよろしいでしょうか。",
+    "fu": "こちらでよろしいでしょうか。"
+   },
+   "ctx": "こちら/よろしい/でしょうか: three steps up at once.",
+   "alt": {
+    "keigo": [
+     "これでよろしいでしょうか",
+     "こちらでよろしいですか"
+    ]
+   }
+  },
+  {
+   "id": "p013",
+   "en": "Where's the station?",
+   "casual": {
+    "jp": "駅、どこ？",
+    "fu": "えき、どこ？"
+   },
+   "polite": {
+    "jp": "駅はどこですか。",
+    "fu": "えきはどこですか。"
+   },
+   "keigo": {
+    "jp": "駅はどちらでしょうか。",
+    "fu": "えきはどちらでしょうか。"
+   },
+   "ctx": "どちら is the polite どこ.",
+   "alt": {
+    "keigo": [
+     "駅はどちらですか"
+    ]
+   }
+  },
+  {
+   "id": "p014",
+   "en": "What are you doing this weekend?",
+   "casual": {
+    "jp": "週末、何するの？",
+    "fu": "しゅうまつ、なにするの？"
+   },
+   "polite": {
+    "jp": "週末は何をしますか。",
+    "fu": "しゅうまつはなにをしますか。"
+   },
+   "keigo": {
+    "jp": "週末は何をなさいますか。",
+    "fu": "しゅうまつはなにをなさいますか。"
+   },
+   "ctx": "なさる is the respectful する.",
+   "alt": {
+    "casual": [
+     "週末何する",
+     "しゅうまつなにする",
+     "週末は何するの",
+     "週末何をするの"
+    ],
+    "polite": [
+     "週末は何をするんですか",
+     "週末何をしますか"
+    ]
+   }
+  },
+  {
+   "id": "p015",
+   "en": "I'm busy today.",
+   "casual": {
+    "jp": "今日、忙しいんだ。",
+    "fu": "きょう、いそがしいんだ。"
+   },
+   "polite": {
+    "jp": "今日は忙しいです。",
+    "fu": "きょうはいそがしいです。"
+   },
+   "ctx": "んだ explains your situation in casual speech.",
+   "alt": {
+    "casual": [
+     "今日忙しい",
+     "きょういそがしい",
+     "今日は忙しい",
+     "今日忙しいんだよ"
+    ]
+   }
+  },
+  {
+   "id": "p016",
+   "en": "Let's go together.",
+   "casual": {
+    "jp": "一緒に行こう。",
+    "fu": "いっしょにいこう。"
+   },
+   "polite": {
+    "jp": "一緒に行きましょう。",
+    "fu": "いっしょにいきましょう。"
+   },
+   "ctx": "Casual volitional 〜おう = polite 〜ましょう.",
+   "alt": {
+    "casual": [
+     "一緒に行こうよ"
+    ]
+   }
+  },
+  {
+   "id": "p017",
+   "en": "Shall we eat?",
+   "casual": {
+    "jp": "食べようか。",
+    "fu": "たべようか。"
+   },
+   "polite": {
+    "jp": "食べましょうか。",
+    "fu": "たべましょうか。"
+   },
+   "ctx": "Volitional + か = \"shall we?\"",
+   "alt": {
+    "casual": [
+     "食べよっか",
+     "たべよっか",
+     "食べよう"
+    ]
+   }
+  },
+  {
+   "id": "p018",
+   "en": "I don't understand.",
+   "casual": {
+    "jp": "わからない。",
+    "fu": "わからない。"
+   },
+   "polite": {
+    "jp": "わかりません。",
+    "fu": "わかりません。"
+   },
+   "ctx": "わかんない is even more casual.",
+   "alt": {
+    "casual": [
+     "わかんない"
+    ]
+   }
+  },
+  {
+   "id": "p019",
+   "en": "Can you help me?",
+   "casual": {
+    "jp": "手伝ってくれる？",
+    "fu": "てつだってくれる？"
+   },
+   "polite": {
+    "jp": "手伝ってもらえますか。",
+    "fu": "てつだってもらえますか。"
+   },
+   "keigo": {
+    "jp": "手伝っていただけますか。",
+    "fu": "てつだっていただけますか。"
+   },
+   "ctx": "くれる → もらえる → いただける: each step softer.",
+   "alt": {
+    "casual": [
+     "手伝ってもらえる",
+     "てつだってもらえる",
+     "手伝って",
+     "てつだって"
+    ],
+    "polite": [
+     "手伝ってくれますか",
+     "てつだってくれますか",
+     "手伝ってくれませんか",
+     "手伝ってもらえませんか"
+    ],
+    "keigo": [
+     "手伝っていただけませんか",
+     "てつだっていただけませんか"
+    ]
+   }
+  },
+  {
+   "id": "p020",
+   "en": "Please show me.",
+   "casual": {
+    "jp": "見せて。",
+    "fu": "みせて。"
+   },
+   "polite": {
+    "jp": "見せてください。",
+    "fu": "みせてください。"
+   },
+   "keigo": {
+    "jp": "見せていただけますか。",
+    "fu": "みせていただけますか。"
+   },
+   "ctx": "てください is fine with staff; use いただけますか upward.",
+   "alt": {
+    "keigo": [
+     "見せていただけませんか",
+     "みせていただけませんか"
+    ]
+   }
+  },
+  {
+   "id": "p021",
+   "en": "What time is it now?",
+   "casual": {
+    "jp": "今何時？",
+    "fu": "いまなんじ？"
+   },
+   "polite": {
+    "jp": "今何時ですか。",
+    "fu": "いまなんじですか。"
+   },
+   "ctx": "Casual questions just drop ですか.",
+   "alt": {
+    "polite": [
+     "今は何時ですか"
+    ]
+   }
+  },
+  {
+   "id": "p022",
+   "en": "It's cold today, isn't it?",
+   "casual": {
+    "jp": "今日、寒いね。",
+    "fu": "きょう、さむいね。"
+   },
+   "polite": {
+    "jp": "今日は寒いですね。",
+    "fu": "きょうはさむいですね。"
+   },
+   "ctx": "ね works in both styles.",
+   "alt": {
+    "casual": [
+     "今日は寒いね",
+     "今日寒いね"
+    ]
+   }
+  },
+  {
+   "id": "p023",
+   "en": "I'm tired.",
+   "casual": {
+    "jp": "疲れた。",
+    "fu": "つかれた。"
+   },
+   "polite": {
+    "jp": "疲れました。",
+    "fu": "つかれました。"
+   },
+   "ctx": "Japanese uses the past tense for \"I'm tired\" (I got tired).",
+   "alt": {
+    "casual": [
+     "疲れたー",
+     "疲れたよ"
+    ]
+   }
+  },
+  {
+   "id": "p024",
+   "en": "Are you OK?",
+   "casual": {
+    "jp": "大丈夫？",
+    "fu": "だいじょうぶ？"
+   },
+   "polite": {
+    "jp": "大丈夫ですか。",
+    "fu": "だいじょうぶですか。"
+   },
+   "ctx": "The same word in both styles."
+  },
+  {
+   "id": "p025",
+   "en": "I'm heading home now.",
+   "casual": {
+    "jp": "もう帰るね。",
+    "fu": "もうかえるね。"
+   },
+   "polite": {
+    "jp": "もう帰ります。",
+    "fu": "もうかえります。"
+   },
+   "keigo": {
+    "jp": "お先に失礼いたします。",
+    "fu": "おさきにしつれいいたします。"
+   },
+   "ctx": "At work you leave with お先に失礼します.",
+   "alt": {
+    "casual": [
+     "もう帰る",
+     "もうかえる",
+     "そろそろ帰るね"
+    ],
+    "keigo": [
+     "お先に失礼します",
+     "おさきにしつれいします"
+    ]
+   }
+  },
+  {
+   "id": "p026",
+   "en": "Is the teacher in?",
+   "casual": {
+    "jp": "先生いる？",
+    "fu": "せんせいいる？"
+   },
+   "polite": {
+    "jp": "先生はいますか。",
+    "fu": "せんせいはいますか。"
+   },
+   "keigo": {
+    "jp": "先生はいらっしゃいますか。",
+    "fu": "せんせいはいらっしゃいますか。"
+   },
+   "ctx": "いらっしゃる = respectful いる.",
+   "alt": {
+    "casual": [
+     "先生はいる",
+     "せんせいはいる"
+    ]
+   }
+  },
+  {
+   "id": "p027",
+   "en": "I'm at home now.",
+   "casual": {
+    "jp": "今、家にいる。",
+    "fu": "いま、いえにいる。"
+   },
+   "polite": {
+    "jp": "今、家にいます。",
+    "fu": "いま、いえにいます。"
+   },
+   "keigo": {
+    "jp": "今、家におります。",
+    "fu": "いま、いえにおります。"
+   },
+   "ctx": "おる = humble いる. 家 can be read いえ or うち.",
+   "alt": {
+    "casual": [
+     "今うちにいる",
+     "いまうちにいる",
+     "今家にいるよ"
+    ],
+    "polite": [
+     "今うちにいます",
+     "いまうちにいます"
+    ],
+    "keigo": [
+     "今うちにおります",
+     "いまうちにおります"
+    ]
+   }
+  },
+  {
+   "id": "p028",
+   "en": "Please, help yourself (eat).",
+   "casual": {
+    "jp": "食べて食べて。",
+    "fu": "たべてたべて。"
+   },
+   "polite": {
+    "jp": "どうぞ食べてください。",
+    "fu": "どうぞたべてください。"
+   },
+   "keigo": {
+    "jp": "どうぞ召し上がってください。",
+    "fu": "どうぞめしあがってください。"
+   },
+   "ctx": "Repeating 食べて is a warm, casual push.",
+   "alt": {
+    "casual": [
+     "食べて",
+     "たべて",
+     "どうぞ食べて",
+     "どうぞたべて"
+    ],
+    "keigo": [
+     "どうぞお召し上がりください",
+     "どうぞおめしあがりください",
+     "召し上がってください"
+    ]
+   }
+  },
+  {
+   "id": "p029",
+   "en": "Have you seen this movie?",
+   "casual": {
+    "jp": "この映画、見た？",
+    "fu": "このえいが、みた？"
+   },
+   "polite": {
+    "jp": "この映画を見ましたか。",
+    "fu": "このえいがをみましたか。"
+   },
+   "keigo": {
+    "jp": "この映画はご覧になりましたか。",
+    "fu": "このえいがはごらんになりましたか。"
+   },
+   "ctx": "ご覧になる = respectful 見る.",
+   "alt": {
+    "casual": [
+     "この映画見た",
+     "この映画を見た",
+     "このえいがをみた"
+    ],
+    "polite": [
+     "この映画は見ましたか",
+     "このえいがはみましたか"
+    ],
+    "keigo": [
+     "この映画をご覧になりましたか",
+     "このえいがをごらんになりましたか"
+    ]
+   }
+  },
+  {
+   "id": "p030",
+   "en": "I read your email.",
+   "casual": {
+    "jp": "メール読んだよ。",
+    "fu": "メールよんだよ。"
+   },
+   "polite": {
+    "jp": "メールを読みました。",
+    "fu": "メールをよみました。"
+   },
+   "keigo": {
+    "jp": "メールを拝見しました。",
+    "fu": "メールをはいけんしました。"
+   },
+   "ctx": "拝見する = humbly looking at something of theirs.",
+   "alt": {
+    "casual": [
+     "メール読んだ",
+     "メールよんだ",
+     "メールを読んだ",
+     "メールをよんだ"
+    ],
+    "keigo": [
+     "メール拝見しました",
+     "メールはいけんしました"
+    ]
+   }
+  },
+  {
+   "id": "p031",
+   "en": "I'm Smith.",
+   "casual": {
+    "jp": "スミスだよ。",
+    "fu": "スミスだよ。"
+   },
+   "polite": {
+    "jp": "スミスです。",
+    "fu": "スミスです。"
+   },
+   "keigo": {
+    "jp": "スミスと申します。",
+    "fu": "スミスともうします。"
+   },
+   "ctx": "申す = humble \"be called\".",
+   "alt": {
+    "casual": [
+     "スミス"
+    ]
+   }
+  },
+  {
+   "id": "p032",
+   "en": "Where do you live?",
+   "casual": {
+    "jp": "どこに住んでるの？",
+    "fu": "どこにすんでるの？"
+   },
+   "polite": {
+    "jp": "どこに住んでいますか。",
+    "fu": "どこにすんでいますか。"
+   },
+   "keigo": {
+    "jp": "どちらにお住まいですか。",
+    "fu": "どちらにおすまいですか。"
+   },
+   "ctx": "お住まい is the honorific noun for \"residence\".",
+   "alt": {
+    "casual": [
+     "どこに住んでる",
+     "どこにすんでる",
+     "どこ住んでるの",
+     "どこすんでるの"
+    ],
+    "polite": [
+     "どこに住んでいるんですか",
+     "どこにすんでいるんですか"
+    ]
+   }
+  },
+  {
+   "id": "p033",
+   "en": "I live in Tokyo.",
+   "casual": {
+    "jp": "東京に住んでる。",
+    "fu": "とうきょうにすんでる。"
+   },
+   "polite": {
+    "jp": "東京に住んでいます。",
+    "fu": "とうきょうにすんでいます。"
+   },
+   "keigo": {
+    "jp": "東京に住んでおります。",
+    "fu": "とうきょうにすんでおります。"
+   },
+   "ctx": "ておる = humble ている.",
+   "alt": {
+    "casual": [
+     "東京に住んでるよ",
+     "東京住んでる"
+    ]
+   }
+  },
+  {
+   "id": "p034",
+   "en": "What would you like to drink?",
+   "casual": {
+    "jp": "何飲む？",
+    "fu": "なにのむ？"
+   },
+   "polite": {
+    "jp": "何を飲みますか。",
+    "fu": "なにをのみますか。"
+   },
+   "keigo": {
+    "jp": "お飲み物は何になさいますか。",
+    "fu": "おのみものはなにになさいますか。"
+   },
+   "ctx": "になさる = respectful \"decide on / have\".",
+   "alt": {
+    "casual": [
+     "何を飲む",
+     "なにをのむ",
+     "何飲む？"
+    ],
+    "polite": [
+     "何を飲みますか",
+     "何にしますか",
+     "なににしますか"
+    ]
+   }
+  },
+  {
+   "id": "p035",
+   "en": "Coffee, please.",
+   "casual": {
+    "jp": "コーヒーちょうだい。",
+    "fu": "コーヒーちょうだい。"
+   },
+   "polite": {
+    "jp": "コーヒーをお願いします。",
+    "fu": "コーヒーをおねがいします。"
+   },
+   "ctx": "ちょうだい is for family and friends, not staff.",
+   "alt": {
+    "casual": [
+     "コーヒーお願い",
+     "コーヒーおねがい"
+    ],
+    "polite": [
+     "コーヒーお願いします",
+     "コーヒーおねがいします",
+     "コーヒーをください",
+     "コーヒーください"
+    ]
+   }
+  },
+  {
+   "id": "p036",
+   "en": "Is it expensive?",
+   "casual": {
+    "jp": "高い？",
+    "fu": "たかい？"
+   },
+   "polite": {
+    "jp": "高いですか。",
+    "fu": "たかいですか。"
+   },
+   "ctx": "Rising tone makes the casual question."
+  },
+  {
+   "id": "p037",
+   "en": "I got it. / Understood.",
+   "casual": {
+    "jp": "わかった。",
+    "fu": "わかった。"
+   },
+   "polite": {
+    "jp": "わかりました。",
+    "fu": "わかりました。"
+   },
+   "keigo": {
+    "jp": "かしこまりました。",
+    "fu": "かしこまりました。"
+   },
+   "ctx": "承知しました (しょうちしました) is the office equivalent.",
+   "alt": {
+    "casual": [
+     "了解",
+     "りょうかい",
+     "オッケー"
+    ],
+    "keigo": [
+     "承知しました",
+     "しょうちしました",
+     "承知いたしました",
+     "しょうちいたしました"
+    ]
+   }
+  },
+  {
+   "id": "p038",
+   "en": "Do you have time now?",
+   "casual": {
+    "jp": "今、時間ある？",
+    "fu": "いま、じかんある？"
+   },
+   "polite": {
+    "jp": "今、時間ありますか。",
+    "fu": "いま、じかんありますか。"
+   },
+   "keigo": {
+    "jp": "今、お時間よろしいでしょうか。",
+    "fu": "いま、おじかんよろしいでしょうか。"
+   },
+   "ctx": "Ask whether their time is \"all right\" rather than whether they \"have\" it.",
+   "alt": {
+    "casual": [
+     "今時間ある",
+     "今ちょっといい",
+     "いまちょっといい"
+    ],
+    "polite": [
+     "今、時間がありますか",
+     "いまじかんがありますか",
+     "今お時間ありますか",
+     "いまおじかんありますか"
+    ],
+    "keigo": [
+     "今お時間よろしいですか",
+     "いまおじかんよろしいですか"
+    ]
+   }
+  },
+  {
+   "id": "p039",
+   "en": "Can I ask you something?",
+   "casual": {
+    "jp": "ちょっと聞いてもいい？",
+    "fu": "ちょっときいてもいい？"
+   },
+   "polite": {
+    "jp": "ちょっと聞いてもいいですか。",
+    "fu": "ちょっときいてもいいですか。"
+   },
+   "keigo": {
+    "jp": "少し伺ってもよろしいでしょうか。",
+    "fu": "すこしうかがってもよろしいでしょうか。"
+   },
+   "ctx": "伺う = humble \"ask\".",
+   "alt": {
+    "casual": [
+     "ちょっと聞いていい",
+     "ちょっときいていい",
+     "聞いてもいい",
+     "きいてもいい"
+    ],
+    "polite": [
+     "聞いてもいいですか",
+     "きいてもいいですか",
+     "ちょっと質問してもいいですか"
+    ],
+    "keigo": [
+     "少しお伺いしてもよろしいでしょうか",
+     "すこしおうかがいしてもよろしいでしょうか",
+     "ちょっと伺ってもよろしいでしょうか"
+    ]
+   }
+  },
+  {
+   "id": "p040",
+   "en": "I'll call you later.",
+   "casual": {
+    "jp": "後で電話するね。",
+    "fu": "あとででんわするね。"
+   },
+   "polite": {
+    "jp": "後で電話します。",
+    "fu": "あとででんわします。"
+   },
+   "keigo": {
+    "jp": "後ほどお電話いたします。",
+    "fu": "のちほどおでんわいたします。"
+   },
+   "ctx": "後ほど is the formal \"later\".",
+   "alt": {
+    "casual": [
+     "後で電話する",
+     "あとででんわする",
+     "あとで電話するね"
+    ],
+    "polite": [
+     "あとで電話します"
+    ],
+    "keigo": [
+     "後ほどお電話します",
+     "のちほどおでんわします"
+    ]
+   }
+  },
+  {
+   "id": "p041",
+   "en": "Is this seat free?",
+   "casual": {
+    "jp": "ここ、空いてる？",
+    "fu": "ここ、あいてる？"
+   },
+   "polite": {
+    "jp": "ここ、空いていますか。",
+    "fu": "ここ、あいていますか。"
+   },
+   "ctx": "空く is read あく here.",
+   "alt": {
+    "polite": [
+     "この席、空いていますか",
+     "このせきあいていますか",
+     "ここ空いてますか",
+     "ここあいてますか"
+    ]
+   }
+  },
+  {
+   "id": "p042",
+   "en": "Please say it again.",
+   "casual": {
+    "jp": "もう一回言って。",
+    "fu": "もういっかいいって。"
+   },
+   "polite": {
+    "jp": "もう一度言ってください。",
+    "fu": "もういちどいってください。"
+   },
+   "keigo": {
+    "jp": "もう一度おっしゃっていただけますか。",
+    "fu": "もういちどおっしゃっていただけますか。"
+   },
+   "ctx": "一回 is casual, 一度 more polite.",
+   "alt": {
+    "casual": [
+     "もう一回",
+     "もういっかい",
+     "もう一回言ってくれる"
+    ],
+    "polite": [
+     "もう一回言ってください",
+     "もういっかいいってください",
+     "もう一度お願いします",
+     "もういちどおねがいします"
+    ],
+    "keigo": [
+     "もう一度おっしゃっていただけませんか"
+    ]
+   }
+  },
+  {
+   "id": "p043",
+   "en": "Please speak slowly.",
+   "casual": {
+    "jp": "ゆっくり話して。",
+    "fu": "ゆっくりはなして。"
+   },
+   "polite": {
+    "jp": "ゆっくり話してください。",
+    "fu": "ゆっくりはなしてください。"
+   },
+   "keigo": {
+    "jp": "ゆっくり話していただけますか。",
+    "fu": "ゆっくりはなしていただけますか。"
+   },
+   "ctx": "",
+   "alt": {
+    "keigo": [
+     "ゆっくり話していただけませんか",
+     "ゆっくりお話しいただけますか"
+    ]
+   }
+  },
+  {
+   "id": "p044",
+   "en": "I like this.",
+   "casual": {
+    "jp": "これ、好き。",
+    "fu": "これ、すき。"
+   },
+   "polite": {
+    "jp": "これが好きです。",
+    "fu": "これがすきです。"
+   },
+   "ctx": "Casual drops が and だ.",
+   "alt": {
+    "casual": [
+     "これ好きだよ",
+     "これが好き",
+     "これがすき"
+    ],
+    "polite": [
+     "これ、好きです",
+     "これすきです"
+    ]
+   }
+  },
+  {
+   "id": "p045",
+   "en": "I don't like it much.",
+   "casual": {
+    "jp": "あんまり好きじゃない。",
+    "fu": "あんまりすきじゃない。"
+   },
+   "polite": {
+    "jp": "あまり好きじゃありません。",
+    "fu": "あまりすきじゃありません。"
+   },
+   "ctx": "あんまり is the casual あまり.",
+   "alt": {
+    "casual": [
+     "あまり好きじゃない",
+     "あまりすきじゃない"
+    ],
+    "polite": [
+     "あまり好きではありません",
+     "あまりすきではありません",
+     "あまり好きじゃないです",
+     "あまりすきじゃないです"
+    ]
+   }
+  },
+  {
+   "id": "p046",
+   "en": "It isn't expensive.",
+   "casual": {
+    "jp": "高くないよ。",
+    "fu": "たかくないよ。"
+   },
+   "polite": {
+    "jp": "高くないです。",
+    "fu": "たかくないです。"
+   },
+   "ctx": "くないです and くありません are both polite.",
+   "alt": {
+    "casual": [
+     "高くない",
+     "たかくない"
+    ],
+    "polite": [
+     "高くありません",
+     "たかくありません"
+    ]
+   }
+  },
+  {
+   "id": "p047",
+   "en": "Yesterday was fun.",
+   "casual": {
+    "jp": "昨日、楽しかった。",
+    "fu": "きのう、たのしかった。"
+   },
+   "polite": {
+    "jp": "昨日は楽しかったです。",
+    "fu": "きのうはたのしかったです。"
+   },
+   "ctx": "Never 楽しいでした: the past goes on the adjective.",
+   "alt": {
+    "casual": [
+     "昨日は楽しかった",
+     "昨日楽しかったね",
+     "昨日楽しかったよ"
+    ]
+   }
+  },
+  {
+   "id": "p048",
+   "en": "I didn't go.",
+   "casual": {
+    "jp": "行かなかった。",
+    "fu": "いかなかった。"
+   },
+   "polite": {
+    "jp": "行きませんでした。",
+    "fu": "いきませんでした。"
+   },
+   "ctx": "",
+   "alt": {
+    "polite": [
+     "行かなかったです",
+     "いかなかったです"
+    ]
+   }
+  },
+  {
+   "id": "p049",
+   "en": "Are you a student?",
+   "casual": {
+    "jp": "学生？",
+    "fu": "がくせい？"
+   },
+   "polite": {
+    "jp": "学生ですか。",
+    "fu": "がくせいですか。"
+   },
+   "ctx": "Casual noun questions drop だ.",
+   "alt": {
+    "casual": [
+     "学生なの",
+     "がくせいなの"
+    ]
+   }
+  },
+  {
+   "id": "p050",
+   "en": "I'm not a student.",
+   "casual": {
+    "jp": "学生じゃないよ。",
+    "fu": "がくせいじゃないよ。"
+   },
+   "polite": {
+    "jp": "学生じゃありません。",
+    "fu": "がくせいじゃありません。"
+   },
+   "ctx": "では is more formal than じゃ.",
+   "alt": {
+    "casual": [
+     "学生じゃない",
+     "がくせいじゃない"
+    ],
+    "polite": [
+     "学生ではありません",
+     "がくせいではありません",
+     "学生じゃないです",
+     "がくせいじゃないです"
+    ]
+   }
+  },
+  {
+   "id": "p051",
+   "en": "Who is that?",
+   "casual": {
+    "jp": "あの人、誰？",
+    "fu": "あのひと、だれ？"
+   },
+   "polite": {
+    "jp": "あの人は誰ですか。",
+    "fu": "あのひとはだれですか。"
+   },
+   "keigo": {
+    "jp": "あの方はどなたですか。",
+    "fu": "あのかたはどなたですか。"
+   },
+   "ctx": "方 and どなた are the polite 人 and 誰.",
+   "alt": {
+    "keigo": [
+     "あの方はどなたでしょうか",
+     "あのかたはどなたでしょうか"
+    ]
+   }
+  },
+  {
+   "id": "p052",
+   "en": "Where are you from?",
+   "casual": {
+    "jp": "どこから来たの？",
+    "fu": "どこからきたの？"
+   },
+   "polite": {
+    "jp": "どこから来ましたか。",
+    "fu": "どこからきましたか。"
+   },
+   "keigo": {
+    "jp": "どちらからいらっしゃいましたか。",
+    "fu": "どちらからいらっしゃいましたか。"
+   },
+   "ctx": "いらっしゃる covers \"come\" too.",
+   "alt": {
+    "casual": [
+     "どこから来た",
+     "どこからきた"
+    ],
+    "polite": [
+     "出身はどこですか",
+     "しゅっしんはどこですか",
+     "どちらから来ましたか"
+    ]
+   }
+  },
+  {
+   "id": "p053",
+   "en": "I'm from America.",
+   "casual": {
+    "jp": "アメリカから来た。",
+    "fu": "アメリカからきた。"
+   },
+   "polite": {
+    "jp": "アメリカから来ました。",
+    "fu": "アメリカからきました。"
+   },
+   "keigo": {
+    "jp": "アメリカから参りました。",
+    "fu": "アメリカからまいりました。"
+   },
+   "ctx": "参る = humble \"come\".",
+   "alt": {
+    "casual": [
+     "アメリカから来たよ",
+     "アメリカからきたよ",
+     "アメリカから来たんだ"
+    ]
+   }
+  },
+  {
+   "id": "p054",
+   "en": "What are you doing?",
+   "casual": {
+    "jp": "何してるの？",
+    "fu": "なにしてるの？"
+   },
+   "polite": {
+    "jp": "何をしているんですか。",
+    "fu": "なにをしているんですか。"
+   },
+   "keigo": {
+    "jp": "何をなさっているんですか。",
+    "fu": "なにをなさっているんですか。"
+   },
+   "ctx": "なさる = respectful する.",
+   "alt": {
+    "casual": [
+     "何してる",
+     "なにしてる"
+    ],
+    "polite": [
+     "何をしていますか",
+     "なにをしていますか",
+     "何をしてるんですか"
+    ],
+    "keigo": [
+     "何をなさっていますか",
+     "なにをなさっていますか"
+    ]
+   }
+  },
+  {
+   "id": "p055",
+   "en": "I'm reading a book.",
+   "casual": {
+    "jp": "本読んでる。",
+    "fu": "ほんよんでる。"
+   },
+   "polite": {
+    "jp": "本を読んでいます。",
+    "fu": "ほんをよんでいます。"
+   },
+   "ctx": "ている → てる, を dropped.",
+   "alt": {
+    "casual": [
+     "本を読んでる",
+     "ほんをよんでる",
+     "本読んでるよ"
+    ]
+   }
+  },
+  {
+   "id": "p056",
+   "en": "Let's take a break.",
+   "casual": {
+    "jp": "ちょっと休もう。",
+    "fu": "ちょっとやすもう。"
+   },
+   "polite": {
+    "jp": "少し休みましょう。",
+    "fu": "すこしやすみましょう。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "休もう",
+     "やすもう",
+     "ちょっと休もうか"
+    ],
+    "polite": [
+     "ちょっと休みましょう",
+     "ちょっとやすみましょう"
+    ]
+   }
+  },
+  {
+   "id": "p057",
+   "en": "It's raining.",
+   "casual": {
+    "jp": "雨降ってる。",
+    "fu": "あめふってる。"
+   },
+   "polite": {
+    "jp": "雨が降っています。",
+    "fu": "あめがふっています。"
+   },
+   "ctx": "Casual drops が and the い of ている.",
+   "alt": {
+    "casual": [
+     "雨が降ってる",
+     "あめがふってる",
+     "雨降ってるよ",
+     "あめふってるよ"
+    ]
+   }
+  },
+  {
+   "id": "p058",
+   "en": "Did you finish?",
+   "casual": {
+    "jp": "終わった？",
+    "fu": "おわった？"
+   },
+   "polite": {
+    "jp": "終わりましたか。",
+    "fu": "おわりましたか。"
+   },
+   "ctx": ""
+  },
+  {
+   "id": "p059",
+   "en": "I have to go now.",
+   "casual": {
+    "jp": "もう行かなきゃ。",
+    "fu": "もういかなきゃ。"
+   },
+   "polite": {
+    "jp": "もう行かなければなりません。",
+    "fu": "もういかなければなりません。"
+   },
+   "ctx": "なきゃ is short for なければ.",
+   "alt": {
+    "casual": [
+     "もう行かないと",
+     "もういかないと",
+     "もう行かなくちゃ",
+     "もういかなくちゃ"
+    ],
+    "polite": [
+     "もう行かないといけません",
+     "もういかないといけません",
+     "もう行かなければいけません"
+    ]
+   }
+  },
+  {
+   "id": "p060",
+   "en": "You can't smoke here.",
+   "casual": {
+    "jp": "ここ、タバコだめだよ。",
+    "fu": "ここ、タバコだめだよ。"
+   },
+   "polite": {
+    "jp": "ここでタバコを吸ってはいけません。",
+    "fu": "ここでタバコをすってはいけません。"
+   },
+   "keigo": {
+    "jp": "こちらでのおタバコはご遠慮ください。",
+    "fu": "こちらでのおタバコはごえんりょください。"
+   },
+   "ctx": "ご遠慮ください is the standard polite \"please refrain\".",
+   "alt": {
+    "casual": [
+     "ここでタバコ吸っちゃだめ",
+     "ここでタバコすっちゃだめ",
+     "ここでタバコ吸っちゃだめだよ"
+    ],
+    "polite": [
+     "ここでタバコを吸わないでください",
+     "ここでタバコをすわないでください"
+    ]
+   }
+  },
+  {
+   "id": "p061",
+   "en": "May I come in?",
+   "casual": {
+    "jp": "入っていい？",
+    "fu": "はいっていい？"
+   },
+   "polite": {
+    "jp": "入ってもいいですか。",
+    "fu": "はいってもいいですか。"
+   },
+   "keigo": {
+    "jp": "入ってもよろしいでしょうか。",
+    "fu": "はいってもよろしいでしょうか。"
+   },
+   "ctx": "よろしい is the polite いい.",
+   "alt": {
+    "casual": [
+     "入ってもいい",
+     "はいってもいい"
+    ],
+    "keigo": [
+     "失礼してもよろしいでしょうか",
+     "入ってもよろしいですか"
+    ]
+   }
+  },
+  {
+   "id": "p062",
+   "en": "Please come in.",
+   "casual": {
+    "jp": "入って。",
+    "fu": "はいって。"
+   },
+   "polite": {
+    "jp": "どうぞ入ってください。",
+    "fu": "どうぞはいってください。"
+   },
+   "keigo": {
+    "jp": "どうぞお入りください。",
+    "fu": "どうぞおはいりください。"
+   },
+   "ctx": "お + stem + ください is the respectful request.",
+   "alt": {
+    "casual": [
+     "どうぞ入って",
+     "どうぞはいって"
+    ],
+    "polite": [
+     "入ってください",
+     "はいってください"
+    ]
+   }
+  },
+  {
+   "id": "p063",
+   "en": "Please have a seat.",
+   "casual": {
+    "jp": "座って。",
+    "fu": "すわって。"
+   },
+   "polite": {
+    "jp": "座ってください。",
+    "fu": "すわってください。"
+   },
+   "keigo": {
+    "jp": "どうぞおかけください。",
+    "fu": "どうぞおかけください。"
+   },
+   "ctx": "おかけください (from 掛ける) is the standard polite \"have a seat\".",
+   "alt": {
+    "casual": [
+     "座っていいよ",
+     "どうぞ座って"
+    ],
+    "polite": [
+     "どうぞ座ってください",
+     "どうぞすわってください"
+    ],
+    "keigo": [
+     "おかけください",
+     "どうぞお座りください",
+     "どうぞおすわりください"
+    ]
+   }
+  },
+  {
+   "id": "p064",
+   "en": "Please wait here.",
+   "casual": {
+    "jp": "ここで待ってて。",
+    "fu": "ここでまってて。"
+   },
+   "polite": {
+    "jp": "ここで待っていてください。",
+    "fu": "ここでまっていてください。"
+   },
+   "keigo": {
+    "jp": "こちらでお待ちください。",
+    "fu": "こちらでおまちください。"
+   },
+   "ctx": "こちら is the polite ここ.",
+   "alt": {
+    "casual": [
+     "ここで待って",
+     "ここでまって"
+    ],
+    "polite": [
+     "ここで待ってください",
+     "ここでまってください",
+     "ここで待っててください"
+    ]
+   }
+  },
+  {
+   "id": "p065",
+   "en": "What's your name?",
+   "casual": {
+    "jp": "名前は？",
+    "fu": "なまえは？"
+   },
+   "polite": {
+    "jp": "お名前は何ですか。",
+    "fu": "おなまえはなんですか。"
+   },
+   "keigo": {
+    "jp": "お名前を伺ってもよろしいでしょうか。",
+    "fu": "おなまえをうかがってもよろしいでしょうか。"
+   },
+   "ctx": "Asking permission to ask is the keigo move.",
+   "alt": {
+    "casual": [
+     "名前何",
+     "なまえなに",
+     "名前なんていうの",
+     "なまえなんていうの"
+    ],
+    "polite": [
+     "お名前は",
+     "おなまえは",
+     "お名前を教えてください"
+    ],
+    "keigo": [
+     "お名前をお伺いしてもよろしいでしょうか",
+     "お名前は何とおっしゃいますか"
+    ]
+   }
+  },
+  {
+   "id": "p066",
+   "en": "Want to eat together?",
+   "casual": {
+    "jp": "一緒に食べない？",
+    "fu": "いっしょにたべない？"
+   },
+   "polite": {
+    "jp": "一緒に食べませんか。",
+    "fu": "いっしょにたべませんか。"
+   },
+   "keigo": {
+    "jp": "ご一緒にいかがですか。",
+    "fu": "ごいっしょにいかがですか。"
+   },
+   "ctx": "A negative question is a soft invitation.",
+   "alt": {
+    "casual": [
+     "一緒に食べよう",
+     "いっしょにたべよう"
+    ]
+   }
+  },
+  {
+   "id": "p067",
+   "en": "How about some tea?",
+   "casual": {
+    "jp": "お茶、どう？",
+    "fu": "おちゃ、どう？"
+   },
+   "polite": {
+    "jp": "お茶はどうですか。",
+    "fu": "おちゃはどうですか。"
+   },
+   "keigo": {
+    "jp": "お茶はいかがですか。",
+    "fu": "おちゃはいかがですか。"
+   },
+   "ctx": "いかが is the polite どう.",
+   "alt": {
+    "casual": [
+     "お茶飲む",
+     "おちゃのむ",
+     "お茶どう"
+    ],
+    "keigo": [
+     "お茶はいかがでしょうか",
+     "おちゃはいかがでしょうか"
+    ]
+   }
+  },
+  {
+   "id": "p068",
+   "en": "I'm sorry.",
+   "casual": {
+    "jp": "ごめん。",
+    "fu": "ごめん。"
+   },
+   "polite": {
+    "jp": "すみません。",
+    "fu": "すみません。"
+   },
+   "keigo": {
+    "jp": "申し訳ございません。",
+    "fu": "もうしわけございません。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "ごめんね"
+    ],
+    "polite": [
+     "ごめんなさい"
+    ],
+    "keigo": [
+     "申し訳ありません",
+     "もうしわけありません"
+    ]
+   }
+  },
+  {
+   "id": "p069",
+   "en": "Sure, that's fine.",
+   "casual": {
+    "jp": "いいよ。",
+    "fu": "いいよ。"
+   },
+   "polite": {
+    "jp": "いいですよ。",
+    "fu": "いいですよ。"
+   },
+   "keigo": {
+    "jp": "かしこまりました。",
+    "fu": "かしこまりました。"
+   },
+   "ctx": "Staff agree with かしこまりました.",
+   "alt": {
+    "polite": [
+     "大丈夫ですよ",
+     "だいじょうぶですよ"
+    ],
+    "keigo": [
+     "承知しました",
+     "しょうちしました",
+     "承知いたしました"
+    ]
+   }
+  },
+  {
+   "id": "p070",
+   "en": "Where is the toilet?",
+   "casual": {
+    "jp": "トイレどこ？",
+    "fu": "トイレどこ？"
+   },
+   "polite": {
+    "jp": "トイレはどこですか。",
+    "fu": "トイレはどこですか。"
+   },
+   "keigo": {
+    "jp": "お手洗いはどちらですか。",
+    "fu": "おてあらいはどちらですか。"
+   },
+   "ctx": "お手洗い is the polite word for toilet.",
+   "alt": {
+    "keigo": [
+     "お手洗いはどちらでしょうか",
+     "おてあらいはどちらでしょうか"
+    ]
+   }
+  },
+  {
+   "id": "p071",
+   "en": "Do you have a smaller one?",
+   "casual": {
+    "jp": "もっと小さいの、ある？",
+    "fu": "もっとちいさいの、ある？"
+   },
+   "polite": {
+    "jp": "もっと小さいのはありますか。",
+    "fu": "もっとちいさいのはありますか。"
+   },
+   "keigo": {
+    "jp": "もう少し小さいサイズはございますか。",
+    "fu": "もうすこしちいさいサイズはございますか。"
+   },
+   "ctx": "ございます = polite ある.",
+   "alt": {
+    "casual": [
+     "もっと小さいのない",
+     "もっとちいさいのない"
+    ],
+    "polite": [
+     "もう少し小さいのはありますか",
+     "もうすこしちいさいのはありますか",
+     "もっと小さいサイズはありますか"
+    ]
+   }
+  },
+  {
+   "id": "p072",
+   "en": "Here it is.",
+   "casual": {
+    "jp": "はい、これ。",
+    "fu": "はい、これ。"
+   },
+   "polite": {
+    "jp": "はい、これです。",
+    "fu": "はい、これです。"
+   },
+   "keigo": {
+    "jp": "こちらでございます。",
+    "fu": "こちらでございます。"
+   },
+   "ctx": "でございます = very polite です.",
+   "alt": {
+    "casual": [
+     "これ",
+     "はいどうぞ"
+    ]
+   }
+  },
+  {
+   "id": "p073",
+   "en": "It's over there.",
+   "casual": {
+    "jp": "あっちだよ。",
+    "fu": "あっちだよ。"
+   },
+   "polite": {
+    "jp": "あちらです。",
+    "fu": "あちらです。"
+   },
+   "keigo": {
+    "jp": "あちらでございます。",
+    "fu": "あちらでございます。"
+   },
+   "ctx": "あっち → あちら → あちらでございます.",
+   "alt": {
+    "casual": [
+     "あっち",
+     "あそこだよ"
+    ],
+    "polite": [
+     "あそこです"
+    ]
+   }
+  },
+  {
+   "id": "p074",
+   "en": "Whose is this?",
+   "casual": {
+    "jp": "これ、誰の？",
+    "fu": "これ、だれの？"
+   },
+   "polite": {
+    "jp": "これは誰のですか。",
+    "fu": "これはだれのですか。"
+   },
+   "keigo": {
+    "jp": "こちらはどなたのものでしょうか。",
+    "fu": "こちらはどなたのものでしょうか。"
+   },
+   "ctx": "どなた = polite 誰.",
+   "alt": {
+    "polite": [
+     "これは誰のものですか",
+     "これはだれのものですか"
+    ],
+    "keigo": [
+     "こちらはどなたのですか",
+     "こちらはどなたのものですか"
+    ]
+   }
+  },
+  {
+   "id": "p075",
+   "en": "I'll do it.",
+   "casual": {
+    "jp": "私がやるよ。",
+    "fu": "わたしがやるよ。"
+   },
+   "polite": {
+    "jp": "私がやります。",
+    "fu": "わたしがやります。"
+   },
+   "keigo": {
+    "jp": "私がいたします。",
+    "fu": "わたくしがいたします。"
+   },
+   "ctx": "いたす = humble する; 私 is often read わたくし in keigo.",
+   "alt": {
+    "casual": [
+     "私がやる",
+     "わたしがやる",
+     "私やるよ"
+    ],
+    "polite": [
+     "私がします",
+     "わたしがします"
+    ],
+    "keigo": [
+     "わたしがいたします"
+    ]
+   }
+  },
+  {
+   "id": "p076",
+   "en": "Shall I carry that?",
+   "casual": {
+    "jp": "それ、持とうか？",
+    "fu": "それ、もとうか？"
+   },
+   "polite": {
+    "jp": "それ、持ちましょうか。",
+    "fu": "それ、もちましょうか。"
+   },
+   "keigo": {
+    "jp": "お持ちしましょうか。",
+    "fu": "おもちしましょうか。"
+   },
+   "ctx": "お + stem + する = humble action for them.",
+   "alt": {
+    "casual": [
+     "持とうか",
+     "もとうか"
+    ],
+    "polite": [
+     "持ちましょうか",
+     "もちましょうか"
+    ]
+   }
+  },
+  {
+   "id": "p077",
+   "en": "I'll show you the way.",
+   "casual": {
+    "jp": "案内するよ。",
+    "fu": "あんないするよ。"
+   },
+   "polite": {
+    "jp": "案内します。",
+    "fu": "あんないします。"
+   },
+   "keigo": {
+    "jp": "ご案内いたします。",
+    "fu": "ごあんないいたします。"
+   },
+   "ctx": "ご + noun + いたす = humble.",
+   "alt": {
+    "casual": [
+     "案内する",
+     "あんないする"
+    ],
+    "keigo": [
+     "ご案内します",
+     "ごあんないします"
+    ]
+   }
+  },
+  {
+   "id": "p078",
+   "en": "I'll get in touch.",
+   "casual": {
+    "jp": "連絡するね。",
+    "fu": "れんらくするね。"
+   },
+   "polite": {
+    "jp": "連絡します。",
+    "fu": "れんらくします。"
+   },
+   "keigo": {
+    "jp": "ご連絡いたします。",
+    "fu": "ごれんらくいたします。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "連絡する",
+     "れんらくする",
+     "また連絡するね"
+    ],
+    "keigo": [
+     "ご連絡します",
+     "ごれんらくします"
+    ]
+   }
+  },
+  {
+   "id": "p079",
+   "en": "When is good for you?",
+   "casual": {
+    "jp": "いつがいい？",
+    "fu": "いつがいい？"
+   },
+   "polite": {
+    "jp": "いつがいいですか。",
+    "fu": "いつがいいですか。"
+   },
+   "keigo": {
+    "jp": "いつがよろしいでしょうか。",
+    "fu": "いつがよろしいでしょうか。"
+   },
+   "ctx": "ご都合はいかがですか is another keigo way.",
+   "alt": {
+    "polite": [
+     "いつが都合がいいですか",
+     "いつがつごうがいいですか"
+    ],
+    "keigo": [
+     "いつがよろしいですか",
+     "ご都合はいかがですか",
+     "ごつごうはいかがですか"
+    ]
+   }
+  },
+  {
+   "id": "p080",
+   "en": "Are you free tomorrow?",
+   "casual": {
+    "jp": "明日ひま？",
+    "fu": "あしたひま？"
+   },
+   "polite": {
+    "jp": "明日は時間がありますか。",
+    "fu": "あしたはじかんがありますか。"
+   },
+   "keigo": {
+    "jp": "明日はご都合いかがでしょうか。",
+    "fu": "あしたはごつごういかがでしょうか。"
+   },
+   "ctx": "ひま sounds too direct outside close friends, so ask about their time or 都合 (convenience).",
+   "alt": {
+    "casual": [
+     "明日暇",
+     "明日空いてる",
+     "あしたあいてる"
+    ],
+    "polite": [
+     "明日時間ありますか",
+     "あしたじかんありますか",
+     "明日は空いていますか",
+     "あしたはあいていますか"
+    ],
+    "keigo": [
+     "明日のご都合はいかがでしょうか",
+     "あしたのごつごうはいかがでしょうか",
+     "明日はご都合いかがですか"
+    ]
+   }
+  },
+  {
+   "id": "p081",
+   "en": "Did you hear the news?",
+   "casual": {
+    "jp": "ニュース、聞いた？",
+    "fu": "ニュース、きいた？"
+   },
+   "polite": {
+    "jp": "ニュースを聞きましたか。",
+    "fu": "ニュースをききましたか。"
+   },
+   "keigo": {
+    "jp": "ニュースはお聞きになりましたか。",
+    "fu": "ニュースはおききになりましたか。"
+   },
+   "ctx": "お + stem + になる = respectful.",
+   "alt": {
+    "casual": [
+     "ニュース聞いた",
+     "ニュースを聞いた"
+    ],
+    "polite": [
+     "ニュースは聞きましたか"
+    ],
+    "keigo": [
+     "ニュースをお聞きになりましたか",
+     "ニュースをおききになりましたか"
+    ]
+   }
+  },
+  {
+   "id": "p082",
+   "en": "Thanks for the meal.",
+   "casual": {
+    "jp": "ごちそうさま。",
+    "fu": "ごちそうさま。"
+   },
+   "polite": {
+    "jp": "ごちそうさまでした。",
+    "fu": "ごちそうさまでした。"
+   },
+   "ctx": "Said after eating; でした makes it polite."
+  },
+  {
+   "id": "p083",
+   "en": "Let's meet at six.",
+   "casual": {
+    "jp": "6時に会おう。",
+    "fu": "ろくじにあおう。"
+   },
+   "polite": {
+    "jp": "6時に会いましょう。",
+    "fu": "ろくじにあいましょう。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "六時に会おう",
+     "6時に会おうよ"
+    ],
+    "polite": [
+     "六時に会いましょう"
+    ]
+   }
+  },
+  {
+   "id": "p084",
+   "en": "How much is this?",
+   "casual": {
+    "jp": "これ、いくら？",
+    "fu": "これ、いくら？"
+   },
+   "polite": {
+    "jp": "これはいくらですか。",
+    "fu": "これはいくらですか。"
+   },
+   "ctx": "Customers use です/ます; they don't need keigo.",
+   "alt": {
+    "polite": [
+     "これいくらですか"
+    ]
+   }
+  },
+  {
+   "id": "p085",
+   "en": "I'll have this one.",
+   "casual": {
+    "jp": "これにする。",
+    "fu": "これにする。"
+   },
+   "polite": {
+    "jp": "これにします。",
+    "fu": "これにします。"
+   },
+   "keigo": {
+    "jp": "こちらにいたします。",
+    "fu": "こちらにいたします。"
+   },
+   "ctx": "にする = decide on.",
+   "alt": {
+    "casual": [
+     "これにするよ"
+    ]
+   }
+  },
+  {
+   "id": "p086",
+   "en": "Coming! (I'll be right there.)",
+   "casual": {
+    "jp": "今行く！",
+    "fu": "いまいく！"
+   },
+   "polite": {
+    "jp": "今行きます。",
+    "fu": "いまいきます。"
+   },
+   "keigo": {
+    "jp": "ただいま参ります。",
+    "fu": "ただいままいります。"
+   },
+   "ctx": "ただいま = formal \"right now\".",
+   "alt": {
+    "casual": [
+     "今行くね",
+     "いまいくね"
+    ],
+    "keigo": [
+     "すぐに参ります",
+     "すぐにまいります",
+     "今参ります"
+    ]
+   }
+  },
+  {
+   "id": "p087",
+   "en": "The manager said so.",
+   "casual": {
+    "jp": "部長がそう言ってた。",
+    "fu": "ぶちょうがそういってた。"
+   },
+   "polite": {
+    "jp": "部長がそう言っていました。",
+    "fu": "ぶちょうがそういっていました。"
+   },
+   "keigo": {
+    "jp": "部長がそうおっしゃっていました。",
+    "fu": "ぶちょうがそうおっしゃっていました。"
+   },
+   "ctx": "Talking about your boss inside the company: 尊敬語.",
+   "alt": {
+    "polite": [
+     "部長がそう言いました",
+     "ぶちょうがそういいました"
+    ],
+    "keigo": [
+     "部長がそうおっしゃいました",
+     "ぶちょうがそうおっしゃいました"
+    ]
+   }
+  },
+  {
+   "id": "p088",
+   "en": "Have you ever been to Kyoto?",
+   "casual": {
+    "jp": "京都、行ったことある？",
+    "fu": "きょうと、いったことある？"
+   },
+   "polite": {
+    "jp": "京都に行ったことがありますか。",
+    "fu": "きょうとにいったことがありますか。"
+   },
+   "keigo": {
+    "jp": "京都にいらっしゃったことはありますか。",
+    "fu": "きょうとにいらっしゃったことはありますか。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "京都に行ったことある",
+     "きょうとにいったことある"
+    ],
+    "polite": [
+     "京都に行ったことはありますか",
+     "きょうとにいったことはありますか"
+    ],
+    "keigo": [
+     "京都にいらっしゃったことがありますか",
+     "きょうとにいらっしゃったことがありますか"
+    ]
+   }
+  },
+  {
+   "id": "p089",
+   "en": "I want to go to Japan.",
+   "casual": {
+    "jp": "日本に行きたい。",
+    "fu": "にほんにいきたい。"
+   },
+   "polite": {
+    "jp": "日本に行きたいです。",
+    "fu": "にほんにいきたいです。"
+   },
+   "ctx": "たい is an い-adjective: add です.",
+   "alt": {
+    "casual": [
+     "日本行きたい",
+     "にほんいきたい",
+     "日本に行きたいな"
+    ]
+   }
+  },
+  {
+   "id": "p090",
+   "en": "Is it far?",
+   "casual": {
+    "jp": "遠い？",
+    "fu": "とおい？"
+   },
+   "polite": {
+    "jp": "遠いですか。",
+    "fu": "とおいですか。"
+   },
+   "ctx": ""
+  },
+  {
+   "id": "p091",
+   "en": "It's close.",
+   "casual": {
+    "jp": "近いよ。",
+    "fu": "ちかいよ。"
+   },
+   "polite": {
+    "jp": "近いです。",
+    "fu": "ちかいです。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "近い",
+     "ちかい"
+    ]
+   }
+  },
+  {
+   "id": "p092",
+   "en": "Please don't worry about it.",
+   "casual": {
+    "jp": "気にしないで。",
+    "fu": "きにしないで。"
+   },
+   "polite": {
+    "jp": "気にしないでください。",
+    "fu": "きにしないでください。"
+   },
+   "keigo": {
+    "jp": "どうぞお気になさらないでください。",
+    "fu": "どうぞおきになさらないでください。"
+   },
+   "ctx": "お気になさらず is a common keigo short form.",
+   "alt": {
+    "keigo": [
+     "お気になさらないでください",
+     "おきになさらないでください",
+     "お気になさらずに",
+     "おきになさらずに"
+    ]
+   }
+  },
+  {
+   "id": "p093",
+   "en": "I forgot.",
+   "casual": {
+    "jp": "忘れちゃった。",
+    "fu": "わすれちゃった。"
+   },
+   "polite": {
+    "jp": "忘れてしまいました。",
+    "fu": "わすれてしまいました。"
+   },
+   "ctx": "てしまう → ちゃう.",
+   "alt": {
+    "casual": [
+     "忘れた",
+     "わすれた"
+    ],
+    "polite": [
+     "忘れました",
+     "わすれました"
+    ]
+   }
+  },
+  {
+   "id": "p094",
+   "en": "Did you understand?",
+   "casual": {
+    "jp": "わかった？",
+    "fu": "わかった？"
+   },
+   "polite": {
+    "jp": "わかりましたか。",
+    "fu": "わかりましたか。"
+   },
+   "keigo": {
+    "jp": "おわかりになりましたか。",
+    "fu": "おわかりになりましたか。"
+   },
+   "ctx": "Asking a superior this can sound condescending; ご不明な点はございますか is safer.",
+   "alt": {
+    "keigo": [
+     "おわかりいただけましたか"
+    ]
+   }
+  },
+  {
+   "id": "p095",
+   "en": "Do you need a bag?",
+   "casual": {
+    "jp": "袋いる？",
+    "fu": "ふくろいる？"
+   },
+   "polite": {
+    "jp": "袋はいりますか。",
+    "fu": "ふくろはいりますか。"
+   },
+   "keigo": {
+    "jp": "袋はご利用ですか。",
+    "fu": "ふくろはごりようですか。"
+   },
+   "ctx": "The cashier's standard question.",
+   "alt": {
+    "casual": [
+     "袋は要る",
+     "ふくろはいる"
+    ],
+    "polite": [
+     "袋、いりますか",
+     "袋は要りますか"
+    ],
+    "keigo": [
+     "袋はご入用ですか",
+     "ふくろはごにゅうようですか",
+     "袋はお使いになりますか"
+    ]
+   }
+  },
+  {
+   "id": "p096",
+   "en": "I'll be waiting.",
+   "casual": {
+    "jp": "待ってるね。",
+    "fu": "まってるね。"
+   },
+   "polite": {
+    "jp": "待っています。",
+    "fu": "まっています。"
+   },
+   "keigo": {
+    "jp": "お待ちしております。",
+    "fu": "おまちしております。"
+   },
+   "ctx": "A very common line in business email.",
+   "alt": {
+    "casual": [
+     "待ってる",
+     "まってる",
+     "待ってるよ"
+    ]
+   }
+  },
+  {
+   "id": "p097",
+   "en": "Please give me a call.",
+   "casual": {
+    "jp": "電話して。",
+    "fu": "でんわして。"
+   },
+   "polite": {
+    "jp": "電話してください。",
+    "fu": "でんわしてください。"
+   },
+   "keigo": {
+    "jp": "お電話ください。",
+    "fu": "おでんわください。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "電話してね",
+     "でんわしてね"
+    ],
+    "keigo": [
+     "お電話いただけますか",
+     "おでんわいただけますか",
+     "お電話くださいませ"
+    ]
+   }
+  },
+  {
+   "id": "p098",
+   "en": "Is it spicy?",
+   "casual": {
+    "jp": "辛い？",
+    "fu": "からい？"
+   },
+   "polite": {
+    "jp": "辛いですか。",
+    "fu": "からいですか。"
+   },
+   "ctx": "辛い is read からい here."
+  },
+  {
+   "id": "p099",
+   "en": "I'm looking forward to it.",
+   "casual": {
+    "jp": "楽しみにしてる。",
+    "fu": "たのしみにしてる。"
+   },
+   "polite": {
+    "jp": "楽しみにしています。",
+    "fu": "たのしみにしています。"
+   },
+   "keigo": {
+    "jp": "楽しみにしております。",
+    "fu": "たのしみにしております。"
+   },
+   "ctx": "ておる = humble ている.",
+   "alt": {
+    "casual": [
+     "楽しみ",
+     "たのしみ",
+     "楽しみにしてるね",
+     "楽しみだね"
+    ]
+   }
+  },
+  {
+   "id": "p100",
+   "en": "Nice to meet you. / Please treat me well.",
+   "casual": {
+    "jp": "よろしくね。",
+    "fu": "よろしくね。"
+   },
+   "polite": {
+    "jp": "よろしくお願いします。",
+    "fu": "よろしくおねがいします。"
+   },
+   "keigo": {
+    "jp": "どうぞよろしくお願いいたします。",
+    "fu": "どうぞよろしくおねがいいたします。"
+   },
+   "ctx": "いたします is the humble します.",
+   "alt": {
+    "casual": [
+     "よろしく"
+    ],
+    "keigo": [
+     "よろしくお願いいたします",
+     "よろしくおねがいいたします",
+     "よろしくお願い申し上げます"
+    ]
+   }
+  },
+  {
+   "id": "p101",
+   "en": "Long time no see.",
+   "casual": {
+    "jp": "久しぶり！",
+    "fu": "ひさしぶり！"
+   },
+   "polite": {
+    "jp": "お久しぶりです。",
+    "fu": "おひさしぶりです。"
+   },
+   "keigo": {
+    "jp": "ご無沙汰しております。",
+    "fu": "ごぶさたしております。"
+   },
+   "ctx": "ご無沙汰 is used with superiors and clients.",
+   "alt": {
+    "casual": [
+     "久しぶりだね",
+     "ひさしぶりだね"
+    ]
+   }
+  },
+  {
+   "id": "p102",
+   "en": "How are you doing?",
+   "casual": {
+    "jp": "元気？",
+    "fu": "げんき？"
+   },
+   "polite": {
+    "jp": "お元気ですか。",
+    "fu": "おげんきですか。"
+   },
+   "keigo": {
+    "jp": "お元気でいらっしゃいますか。",
+    "fu": "おげんきでいらっしゃいますか。"
+   },
+   "ctx": "でいらっしゃる = respectful です.",
+   "alt": {
+    "casual": [
+     "元気だった",
+     "げんきだった",
+     "元気にしてる",
+     "げんきにしてる"
+    ]
+   }
+  },
+  {
+   "id": "p103",
+   "en": "I'm doing well.",
+   "casual": {
+    "jp": "元気だよ。",
+    "fu": "げんきだよ。"
+   },
+   "polite": {
+    "jp": "元気です。",
+    "fu": "げんきです。"
+   },
+   "keigo": {
+    "jp": "おかげさまで、元気にしております。",
+    "fu": "おかげさまで、げんきにしております。"
+   },
+   "ctx": "おかげさまで (\"thanks to you\") is a polite habit.",
+   "alt": {
+    "casual": [
+     "元気",
+     "げんき"
+    ],
+    "polite": [
+     "おかげさまで元気です",
+     "おかげさまでげんきです"
+    ],
+    "keigo": [
+     "おかげさまで元気にしております"
+    ]
+   }
+  },
+  {
+   "id": "p104",
+   "en": "Where should I go?",
+   "casual": {
+    "jp": "どこ行けばいい？",
+    "fu": "どこいけばいい？"
+   },
+   "polite": {
+    "jp": "どこに行けばいいですか。",
+    "fu": "どこにいけばいいですか。"
+   },
+   "keigo": {
+    "jp": "どちらに伺えばよろしいでしょうか。",
+    "fu": "どちらにうかがえばよろしいでしょうか。"
+   },
+   "ctx": "伺う also means humble \"visit\".",
+   "alt": {
+    "casual": [
+     "どこに行けばいい",
+     "どこにいけばいい"
+    ],
+    "keigo": [
+     "どちらに参ればよろしいでしょうか",
+     "どちらにまいればよろしいでしょうか",
+     "どちらに伺えばよろしいですか"
+    ]
+   }
+  },
+  {
+   "id": "p105",
+   "en": "Can I use this?",
+   "casual": {
+    "jp": "これ、使っていい？",
+    "fu": "これ、つかっていい？"
+   },
+   "polite": {
+    "jp": "これを使ってもいいですか。",
+    "fu": "これをつかってもいいですか。"
+   },
+   "keigo": {
+    "jp": "こちらを使わせていただいてもよろしいでしょうか。",
+    "fu": "こちらをつかわせていただいてもよろしいでしょうか。"
+   },
+   "ctx": "させていただく = humbly asking permission.",
+   "alt": {
+    "casual": [
+     "これ使ってもいい",
+     "これつかってもいい"
+    ],
+    "polite": [
+     "これ、使ってもいいですか",
+     "これつかってもいいですか"
+    ],
+    "keigo": [
+     "こちらを使ってもよろしいでしょうか",
+     "こちらをつかってもよろしいでしょうか",
+     "こちらをお借りしてもよろしいでしょうか"
+    ]
+   }
+  },
+  {
+   "id": "p106",
+   "en": "I'll take tomorrow off.",
+   "casual": {
+    "jp": "明日休むね。",
+    "fu": "あしたやすむね。"
+   },
+   "polite": {
+    "jp": "明日休みます。",
+    "fu": "あしたやすみます。"
+   },
+   "keigo": {
+    "jp": "明日お休みをいただきます。",
+    "fu": "あしたおやすみをいただきます。"
+   },
+   "ctx": "At work you humbly \"receive\" a day off.",
+   "alt": {
+    "casual": [
+     "明日休む",
+     "あしたやすむ"
+    ],
+    "keigo": [
+     "明日はお休みをいただきます",
+     "あしたはおやすみをいただきます"
+    ]
+   }
+  },
+  {
+   "id": "p107",
+   "en": "Did you sleep well?",
+   "casual": {
+    "jp": "よく寝た？",
+    "fu": "よくねた？"
+   },
+   "polite": {
+    "jp": "よく寝ましたか。",
+    "fu": "よくねましたか。"
+   },
+   "keigo": {
+    "jp": "よくお休みになりましたか。",
+    "fu": "よくおやすみになりましたか。"
+   },
+   "ctx": "お休みになる = respectful 寝る.",
+   "alt": {
+    "casual": [
+     "よく眠れた",
+     "よくねむれた"
+    ],
+    "polite": [
+     "よく眠れましたか",
+     "よくねむれましたか"
+    ],
+    "keigo": [
+     "よくお休みになれましたか",
+     "よくおやすみになれましたか"
+    ]
+   }
+  },
+  {
+   "id": "p108",
+   "en": "It's hot, isn't it?",
+   "casual": {
+    "jp": "暑いね。",
+    "fu": "あついね。"
+   },
+   "polite": {
+    "jp": "暑いですね。",
+    "fu": "あついですね。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "暑いねー",
+     "暑い"
+    ]
+   }
+  },
+  {
+   "id": "p109",
+   "en": "That's right.",
+   "casual": {
+    "jp": "そうだね。",
+    "fu": "そうだね。"
+   },
+   "polite": {
+    "jp": "そうですね。",
+    "fu": "そうですね。"
+   },
+   "keigo": {
+    "jp": "おっしゃるとおりです。",
+    "fu": "おっしゃるとおりです。"
+   },
+   "ctx": "おっしゃるとおり = \"just as you say\".",
+   "alt": {
+    "casual": [
+     "そうだよね",
+     "だよね",
+     "そうそう"
+    ],
+    "keigo": [
+     "おっしゃる通りです",
+     "おっしゃるとおりでございます"
+    ]
+   }
+  },
+  {
+   "id": "p110",
+   "en": "Really?",
+   "casual": {
+    "jp": "本当？",
+    "fu": "ほんとう？"
+   },
+   "polite": {
+    "jp": "本当ですか。",
+    "fu": "ほんとうですか。"
+   },
+   "ctx": "ほんと and マジで are more casual still.",
+   "alt": {
+    "casual": [
+     "ほんと",
+     "本当に",
+     "ほんとうに",
+     "マジで"
+    ],
+    "polite": [
+     "ほんとですか",
+     "そうなんですか"
+    ]
+   }
+  },
+  {
+   "id": "p111",
+   "en": "I think so too.",
+   "casual": {
+    "jp": "私もそう思う。",
+    "fu": "わたしもそうおもう。"
+   },
+   "polite": {
+    "jp": "私もそう思います。",
+    "fu": "わたしもそうおもいます。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "私もそう思うよ",
+     "私も",
+     "わたしも",
+     "そう思う",
+     "そうおもう"
+    ],
+    "polite": [
+     "そう思います",
+     "そうおもいます"
+    ]
+   }
+  },
+  {
+   "id": "p112",
+   "en": "It's my first time.",
+   "casual": {
+    "jp": "初めてなんだ。",
+    "fu": "はじめてなんだ。"
+   },
+   "polite": {
+    "jp": "初めてです。",
+    "fu": "はじめてです。"
+   },
+   "ctx": "なんだ explains your situation.",
+   "alt": {
+    "casual": [
+     "初めて",
+     "はじめて",
+     "初めてだよ",
+     "はじめてだよ"
+    ]
+   }
+  },
+  {
+   "id": "p113",
+   "en": "Could you lend me a pen?",
+   "casual": {
+    "jp": "ペン貸して。",
+    "fu": "ペンかして。"
+   },
+   "polite": {
+    "jp": "ペンを貸してもらえますか。",
+    "fu": "ペンをかしてもらえますか。"
+   },
+   "keigo": {
+    "jp": "ペンをお借りしてもよろしいですか。",
+    "fu": "ペンをおかりしてもよろしいですか。"
+   },
+   "ctx": "Keigo flips it: \"May I borrow?\" (お借りする, humble).",
+   "alt": {
+    "casual": [
+     "ペン貸してくれる",
+     "ペンかしてくれる",
+     "ペンを貸して",
+     "ペンをかして"
+    ],
+    "polite": [
+     "ペンを貸してください",
+     "ペンをかしてください",
+     "ペンを貸してくれますか",
+     "ペン貸してもらえますか"
+    ],
+    "keigo": [
+     "ペンをお借りしてもよろしいでしょうか",
+     "ペンをおかりしてもよろしいでしょうか",
+     "ペンを貸していただけますか",
+     "ペンをかしていただけますか"
+    ]
+   }
+  },
+  {
+   "id": "p114",
+   "en": "Please call me Ken.",
+   "casual": {
+    "jp": "ケンって呼んで。",
+    "fu": "ケンってよんで。"
+   },
+   "polite": {
+    "jp": "ケンと呼んでください。",
+    "fu": "ケンとよんでください。"
+   },
+   "ctx": "って is the casual quoting と.",
+   "alt": {
+    "casual": [
+     "ケンって呼んでね",
+     "ケンでいいよ"
+    ],
+    "polite": [
+     "ケンって呼んでください",
+     "ケンってよんでください"
+    ]
+   }
+  },
+  {
+   "id": "p115",
+   "en": "Which one would you like?",
+   "casual": {
+    "jp": "どっちがいい？",
+    "fu": "どっちがいい？"
+   },
+   "polite": {
+    "jp": "どちらがいいですか。",
+    "fu": "どちらがいいですか。"
+   },
+   "keigo": {
+    "jp": "どちらになさいますか。",
+    "fu": "どちらになさいますか。"
+   },
+   "ctx": "どっち → どちら; になさる = respectful \"choose\".",
+   "alt": {
+    "keigo": [
+     "どちらがよろしいですか",
+     "どちらがよろしいでしょうか"
+    ]
+   }
+  },
+  {
+   "id": "p116",
+   "en": "Would you like some water?",
+   "casual": {
+    "jp": "水、飲む？",
+    "fu": "みず、のむ？"
+   },
+   "polite": {
+    "jp": "水を飲みますか。",
+    "fu": "みずをのみますか。"
+   },
+   "keigo": {
+    "jp": "お水はいかがですか。",
+    "fu": "おみずはいかがですか。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "水飲む",
+     "みずのむ",
+     "水いる",
+     "みずいる"
+    ],
+    "polite": [
+     "お水はどうですか",
+     "おみずはどうですか",
+     "水はいりますか"
+    ]
+   }
+  },
+  {
+   "id": "p117",
+   "en": "Is it OK if I leave first?",
+   "casual": {
+    "jp": "先に帰ってもいい？",
+    "fu": "さきにかえってもいい？"
+   },
+   "polite": {
+    "jp": "先に帰ってもいいですか。",
+    "fu": "さきにかえってもいいですか。"
+   },
+   "keigo": {
+    "jp": "お先に失礼してもよろしいでしょうか。",
+    "fu": "おさきにしつれいしてもよろしいでしょうか。"
+   },
+   "ctx": "失礼する is the humble \"leave\".",
+   "alt": {
+    "casual": [
+     "先帰っていい",
+     "さきかえっていい",
+     "先に帰っていい",
+     "さきにかえっていい"
+    ],
+    "keigo": [
+     "お先に失礼してもよろしいですか",
+     "おさきにしつれいしてもよろしいですか"
+    ]
+   }
+  },
+  {
+   "id": "p118",
+   "en": "Is the meeting tomorrow?",
+   "casual": {
+    "jp": "会議、明日だっけ？",
+    "fu": "かいぎ、あしただっけ？"
+   },
+   "polite": {
+    "jp": "会議は明日ですか。",
+    "fu": "かいぎはあしたですか。"
+   },
+   "ctx": "だっけ = \"was it…?\" (checking your memory).",
+   "alt": {
+    "casual": [
+     "会議は明日",
+     "かいぎはあした",
+     "会議明日",
+     "かいぎあした"
+    ],
+    "polite": [
+     "会議は明日でしたっけ",
+     "かいぎはあしたでしたっけ",
+     "会議は明日でしたか"
+    ]
+   }
+  },
+  {
+   "id": "p119",
+   "en": "I've finished.",
+   "casual": {
+    "jp": "終わったよ。",
+    "fu": "おわったよ。"
+   },
+   "polite": {
+    "jp": "終わりました。",
+    "fu": "おわりました。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "終わった",
+     "おわった"
+    ]
+   }
+  },
+  {
+   "id": "p120",
+   "en": "Please be careful.",
+   "casual": {
+    "jp": "気をつけてね。",
+    "fu": "きをつけてね。"
+   },
+   "polite": {
+    "jp": "気をつけてください。",
+    "fu": "きをつけてください。"
+   },
+   "keigo": {
+    "jp": "どうぞお気をつけください。",
+    "fu": "どうぞおきをつけください。"
+   },
+   "ctx": "Also お気をつけて as a parting phrase.",
+   "alt": {
+    "casual": [
+     "気をつけて",
+     "きをつけて"
+    ],
+    "keigo": [
+     "お気をつけください",
+     "おきをつけください",
+     "お気をつけて",
+     "おきをつけて",
+     "お気をつけてお帰りください"
+    ]
+   }
+  },
+  {
+   "id": "p121",
+   "en": "I made a mistake.",
+   "casual": {
+    "jp": "間違えちゃった。",
+    "fu": "まちがえちゃった。"
+   },
+   "polite": {
+    "jp": "間違えました。",
+    "fu": "まちがえました。"
+   },
+   "keigo": {
+    "jp": "失礼いたしました。",
+    "fu": "しつれいいたしました。"
+   },
+   "ctx": "In service settings, 失礼いたしました is the apology for a slip.",
+   "alt": {
+    "casual": [
+     "間違えた",
+     "まちがえた"
+    ],
+    "polite": [
+     "間違えてしまいました",
+     "まちがえてしまいました"
+    ],
+    "keigo": [
+     "大変失礼いたしました",
+     "たいへんしつれいいたしました"
+    ]
+   }
+  },
+  {
+   "id": "p122",
+   "en": "Can you come to the party?",
+   "casual": {
+    "jp": "パーティー、来られる？",
+    "fu": "パーティー、こられる？"
+   },
+   "polite": {
+    "jp": "パーティーに来られますか。",
+    "fu": "パーティーにこられますか。"
+   },
+   "keigo": {
+    "jp": "パーティーにお越しいただけますか。",
+    "fu": "パーティーにおこしいただけますか。"
+   },
+   "ctx": "Casual speech often uses これる (ら-less).",
+   "alt": {
+    "casual": [
+     "パーティー来れる",
+     "パーティーこれる",
+     "パーティーに来られる",
+     "パーティーにこられる",
+     "パーティー来る",
+     "パーティーくる"
+    ],
+    "polite": [
+     "パーティーに来ますか",
+     "パーティーにきますか",
+     "パーティーに来れますか",
+     "パーティーにこれますか"
+    ],
+    "keigo": [
+     "パーティーにいらっしゃれますか",
+     "パーティーにお越しいただけませんか",
+     "パーティーにおこしいただけませんか"
+    ]
+   }
+  },
+  {
+   "id": "p123",
+   "en": "I'll go (too).",
+   "casual": {
+    "jp": "私も行く。",
+    "fu": "わたしもいく。"
+   },
+   "polite": {
+    "jp": "私も行きます。",
+    "fu": "わたしもいきます。"
+   },
+   "keigo": {
+    "jp": "私も参ります。",
+    "fu": "わたくしもまいります。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "私も行くよ",
+     "わたしもいくよ"
+    ],
+    "keigo": [
+     "わたしもまいります"
+    ]
+   }
+  },
+  {
+   "id": "p124",
+   "en": "Please wait a little longer.",
+   "casual": {
+    "jp": "もうちょっと待って。",
+    "fu": "もうちょっとまって。"
+   },
+   "polite": {
+    "jp": "もう少し待ってください。",
+    "fu": "もうすこしまってください。"
+   },
+   "keigo": {
+    "jp": "もう少々お待ちください。",
+    "fu": "もうしょうしょうおまちください。"
+   },
+   "ctx": "",
+   "alt": {
+    "casual": [
+     "もう少し待って",
+     "もうすこしまって"
+    ],
+    "polite": [
+     "もうちょっと待ってください",
+     "もうちょっとまってください"
+    ]
+   }
+  },
+  {
+   "id": "p125",
+   "en": "Where are you going?",
+   "casual": {
+    "jp": "どこ行くの？",
+    "fu": "どこいくの？"
+   },
+   "polite": {
+    "jp": "どこに行くんですか。",
+    "fu": "どこにいくんですか。"
+   },
+   "keigo": {
+    "jp": "どちらにいらっしゃるんですか。",
+    "fu": "どちらにいらっしゃるんですか。"
+   },
+   "ctx": "どちらへ？ alone is also a polite greeting.",
+   "alt": {
+    "casual": [
+     "どこ行く",
+     "どこいく",
+     "どこに行くの",
+     "どこにいくの"
+    ],
+    "polite": [
+     "どこに行きますか",
+     "どこにいきますか",
+     "どこへ行くんですか"
+    ],
+    "keigo": [
+     "どちらへいらっしゃいますか",
+     "どちらにいらっしゃいますか",
+     "どちらへいらっしゃるんですか"
+    ]
+   }
+  },
+  {
+   "id": "p126",
+   "en": "I'll send it tomorrow.",
+   "casual": {
+    "jp": "明日送るね。",
+    "fu": "あしたおくるね。"
+   },
+   "polite": {
+    "jp": "明日送ります。",
+    "fu": "あしたおくります。"
+   },
+   "keigo": {
+    "jp": "明日お送りいたします。",
+    "fu": "あしたおおくりいたします。"
+   },
+   "ctx": "お送りします is already humble; いたします adds more.",
+   "alt": {
+    "casual": [
+     "明日送る",
+     "あしたおくる"
+    ],
+    "keigo": [
+     "明日お送りします",
+     "あしたおおくりします"
+    ]
+   }
+  },
+  {
+   "id": "p127",
+   "en": "Can you hear me?",
+   "casual": {
+    "jp": "聞こえる？",
+    "fu": "きこえる？"
+   },
+   "polite": {
+    "jp": "聞こえますか。",
+    "fu": "きこえますか。"
+   },
+   "ctx": "On business calls you will also hear 聞こえますでしょうか.",
+   "alt": {
+    "polite": [
+     "聞こえていますか",
+     "きこえていますか"
+    ]
+   }
+  },
+  {
+   "id": "p128",
+   "en": "I'll ask the manager.",
+   "casual": {
+    "jp": "店長に聞いてみる。",
+    "fu": "てんちょうにきいてみる。"
+   },
+   "polite": {
+    "jp": "店長に聞いてみます。",
+    "fu": "てんちょうにきいてみます。"
+   },
+   "keigo": {
+    "jp": "店長に確認いたします。",
+    "fu": "てんちょうにかくにんいたします。"
+   },
+   "ctx": "To customers, staff \"check\" (確認) rather than \"ask\".",
+   "alt": {
+    "casual": [
+     "店長に聞いてみるね",
+     "てんちょうにきいてみるね"
+    ],
+    "keigo": [
+     "店長に確認してまいります",
+     "てんちょうにかくにんしてまいります",
+     "店長に確認します"
+    ]
+   }
+  },
+  {
+   "id": "p129",
+   "en": "Please write your name here.",
+   "casual": {
+    "jp": "ここに名前書いて。",
+    "fu": "ここになまえかいて。"
+   },
+   "polite": {
+    "jp": "ここに名前を書いてください。",
+    "fu": "ここになまえをかいてください。"
+   },
+   "keigo": {
+    "jp": "こちらにお名前をご記入ください。",
+    "fu": "こちらにおなまえをごきにゅうください。"
+   },
+   "ctx": "ご記入ください = the form-filling keigo.",
+   "alt": {
+    "casual": [
+     "ここに名前を書いて",
+     "ここになまえをかいて"
+    ],
+    "keigo": [
+     "こちらにお名前をお書きください",
+     "こちらにおなまえをおかきください"
+    ]
+   }
+  },
+  {
+   "id": "p130",
+   "en": "Do you have a reservation?",
+   "casual": {
+    "jp": "予約してる？",
+    "fu": "よやくしてる？"
+   },
+   "polite": {
+    "jp": "予約していますか。",
+    "fu": "よやくしていますか。"
+   },
+   "keigo": {
+    "jp": "ご予約のお客様でいらっしゃいますか。",
+    "fu": "ごよやくのおきゃくさまでいらっしゃいますか。"
+   },
+   "ctx": "Staff ask whether you are \"a customer with a reservation\".",
+   "alt": {
+    "casual": [
+     "予約した",
+     "よやくした"
+    ],
+    "polite": [
+     "予約はありますか",
+     "よやくはありますか",
+     "予約しましたか",
+     "よやくしましたか"
+    ],
+    "keigo": [
+     "ご予約はございますか",
+     "ごよやくはございますか",
+     "ご予約のお客様でしょうか",
+     "ご予約のお客様ですか",
+     "ご予約はおありですか"
+    ]
+   }
+  },
+  {
+   "id": "p131",
+   "en": "Is this the right train for Shinjuku?",
+   "casual": {
+    "jp": "これ、新宿行く？",
+    "fu": "これ、しんじゅくいく？"
+   },
+   "polite": {
+    "jp": "これは新宿に行きますか。",
+    "fu": "これはしんじゅくにいきますか。"
+   },
+   "ctx": "Passengers use です/ます; staff answer in keigo.",
+   "alt": {
+    "casual": [
+     "これ新宿に行く",
+     "これしんじゅくにいく"
+    ],
+    "polite": [
+     "この電車は新宿に行きますか",
+     "このでんしゃはしんじゅくにいきますか"
+    ]
+   }
+  }
+ ],
+ "situations": [
+  {
+   "id": "s01",
+   "scene": "Your close friend asks if you want to get ramen after class.",
+   "who": "friend",
+   "prompt": {
+    "jp": "授業のあと、ラーメン行かない？",
+    "fu": "じゅぎょうのあと、ラーメンいかない？"
+   },
+   "options": [
+    {
+     "jp": "いいね、行こう！",
+     "fu": "いいね、いこう！",
+     "verdict": "best",
+     "why": "Warm and casual, matching your friend."
+    },
+    {
+     "jp": "はい、行きましょう。",
+     "fu": "はい、いきましょう。",
+     "verdict": "ok",
+     "why": "Correct, but polite style sounds stiff with a close friend."
+    },
+    {
+     "jp": "かしこまりました。",
+     "fu": "かしこまりました。",
+     "verdict": "off",
+     "why": "Shop-staff keigo: it sounds like you are taking their order."
+    },
+    {
+     "jp": "ぜひご一緒させていただきます。",
+     "fu": "ぜひごいっしょさせていただきます。",
+     "verdict": "off",
+     "why": "Business keigo with a friend sounds sarcastic or cold."
+    }
+   ]
+  },
+  {
+   "id": "s02",
+   "scene": "Your manager asks if you have finished the report.",
+   "who": "boss",
+   "prompt": {
+    "jp": "報告書、もう終わった？",
+    "fu": "ほうこくしょ、もうおわった？"
+   },
+   "options": [
+    {
+     "jp": "はい、終わりました。",
+     "fu": "はい、おわりました。",
+     "verdict": "best",
+     "why": "Your boss may speak casually to you, but you answer with です/ます."
+    },
+    {
+     "jp": "うん、終わったよ。",
+     "fu": "うん、おわったよ。",
+     "verdict": "off",
+     "why": "Copying your boss's casual style is too familiar."
+    },
+    {
+     "jp": "はい、先ほど完了いたしました。",
+     "fu": "はい、さきほどかんりょういたしました。",
+     "verdict": "ok",
+     "why": "Correct and very polite, just more formal than a daily check-in needs."
+    },
+    {
+     "jp": "終わったっけ？",
+     "fu": "おわったっけ？",
+     "verdict": "off",
+     "why": "Casual, and it sounds like you have forgotten."
+    }
+   ]
+  },
+  {
+   "id": "s03",
+   "scene": "A convenience-store clerk asks if you need a bag.",
+   "who": "clerk",
+   "prompt": {
+    "jp": "袋はご利用ですか。",
+    "fu": "ふくろはごりようですか。"
+   },
+   "options": [
+    {
+     "jp": "あ、大丈夫です。",
+     "fu": "あ、だいじょうぶです。",
+     "verdict": "best",
+     "why": "The standard polite \"no thanks\" at the till."
+    },
+    {
+     "jp": "いらない。",
+     "fu": "いらない。",
+     "verdict": "off",
+     "why": "Plain and blunt: rude to a stranger."
+    },
+    {
+     "jp": "結構でございます。",
+     "fu": "けっこうでございます。",
+     "verdict": "ok",
+     "why": "Grammatical, but customers do not need でございます."
+    },
+    {
+     "jp": "かしこまりました。",
+     "fu": "かしこまりました。",
+     "verdict": "off",
+     "why": "That is what staff say, not customers."
+    }
+   ]
+  },
+  {
+   "id": "s04",
+   "scene": "Your teacher asks whether you did your homework.",
+   "who": "teacher",
+   "prompt": {
+    "jp": "宿題はやってきましたか。",
+    "fu": "しゅくだいはやってきましたか。"
+   },
+   "options": [
+    {
+     "jp": "はい、やってきました。",
+     "fu": "はい、やってきました。",
+     "verdict": "best",
+     "why": "Polite and natural with a teacher."
+    },
+    {
+     "jp": "うん、やったよ。",
+     "fu": "うん、やったよ。",
+     "verdict": "off",
+     "why": "Too casual for a teacher."
+    },
+    {
+     "jp": "はい、いたしました。",
+     "fu": "はい、いたしました。",
+     "verdict": "ok",
+     "why": "Humble keigo is correct but stiffer than needed in class."
+    }
+   ]
+  },
+  {
+   "id": "s05",
+   "scene": "You need directions to the station from someone on the street.",
+   "who": "stranger",
+   "options": [
+    {
+     "jp": "すみません、駅はどこですか。",
+     "fu": "すみません、えきはどこですか。",
+     "verdict": "best",
+     "why": "Polite and clear: the safe choice with strangers."
+    },
+    {
+     "jp": "ねえ、駅どこ？",
+     "fu": "ねえ、えきどこ？",
+     "verdict": "off",
+     "why": "Casual with a stranger sounds rude."
+    },
+    {
+     "jp": "駅はどこだ。",
+     "fu": "えきはどこだ。",
+     "verdict": "off",
+     "why": "Blunt and demanding."
+    },
+    {
+     "jp": "恐れ入りますが、駅はどちらでしょうか。",
+     "fu": "おそれいりますが、えきはどちらでしょうか。",
+     "verdict": "ok",
+     "why": "Perfectly polite, just more formal than a quick street question needs."
+    }
+   ]
+  },
+  {
+   "id": "s06",
+   "scene": "A lost five-year-old is crying at the station.",
+   "who": "child",
+   "options": [
+    {
+     "jp": "どうしたの？ママはどこ？",
+     "fu": "どうしたの？ママはどこ？",
+     "verdict": "best",
+     "why": "Gentle casual speech: how adults talk to small children."
+    },
+    {
+     "jp": "どうかなさいましたか。",
+     "fu": "どうかなさいましたか。",
+     "verdict": "off",
+     "why": "Keigo to a small child sounds bizarre."
+    },
+    {
+     "jp": "どうしましたか。",
+     "fu": "どうしましたか。",
+     "verdict": "ok",
+     "why": "Polite is fine, but it sounds distant to a child."
+    }
+   ]
+  },
+  {
+   "id": "s07",
+   "scene": "Your mother asks what you want for dinner.",
+   "who": "family",
+   "prompt": {
+    "jp": "晩ご飯、何がいい？",
+    "fu": "ばんごはん、なにがいい？"
+   },
+   "options": [
+    {
+     "jp": "カレーがいいな。",
+     "fu": "カレーがいいな。",
+     "verdict": "best",
+     "why": "Relaxed and natural with family."
+    },
+    {
+     "jp": "カレーをお願いいたします。",
+     "fu": "カレーをおねがいいたします。",
+     "verdict": "off",
+     "why": "Sounds like ordering at a restaurant: cold, or a joke."
+    },
+    {
+     "jp": "カレーがいいです。",
+     "fu": "カレーがいいです。",
+     "verdict": "ok",
+     "why": "Polite to your own mother sounds a little distant."
+    }
+   ]
+  },
+  {
+   "id": "s08",
+   "scene": "You work at a café. A customer walks in.",
+   "who": "customer",
+   "options": [
+    {
+     "jp": "いらっしゃいませ。",
+     "fu": "いらっしゃいませ。",
+     "verdict": "best",
+     "why": "The standard welcome from staff."
+    },
+    {
+     "jp": "いらっしゃい！",
+     "fu": "いらっしゃい！",
+     "verdict": "ok",
+     "why": "Heard in casual, family-run places; chain shops use いらっしゃいませ."
+    },
+    {
+     "jp": "おはよう！",
+     "fu": "おはよう！",
+     "verdict": "off",
+     "why": "Casual greeting: too familiar for a customer."
+    },
+    {
+     "jp": "どうも。",
+     "fu": "どうも。",
+     "verdict": "off",
+     "why": "Too curt for greeting a customer."
+    }
+   ]
+  },
+  {
+   "id": "s09",
+   "scene": "You are leaving the office while your boss is still working.",
+   "who": "boss",
+   "options": [
+    {
+     "jp": "お先に失礼します。",
+     "fu": "おさきにしつれいします。",
+     "verdict": "best",
+     "why": "The set phrase for leaving before others at work."
+    },
+    {
+     "jp": "じゃあね、バイバイ。",
+     "fu": "じゃあね、バイバイ。",
+     "verdict": "off",
+     "why": "Playground casual: very odd with a boss."
+    },
+    {
+     "jp": "帰ります。",
+     "fu": "かえります。",
+     "verdict": "ok",
+     "why": "Polite, but abrupt; the set phrase is expected."
+    }
+   ]
+  },
+  {
+   "id": "s10",
+   "scene": "A friend asks how the movie was.",
+   "who": "friend",
+   "prompt": {
+    "jp": "映画、どうだった？",
+    "fu": "えいが、どうだった？"
+   },
+   "options": [
+    {
+     "jp": "すごく面白かったよ！",
+     "fu": "すごくおもしろかったよ！",
+     "verdict": "best",
+     "why": "Casual and enthusiastic, matching your friend."
+    },
+    {
+     "jp": "大変面白うございました。",
+     "fu": "たいへんおもしろうございました。",
+     "verdict": "off",
+     "why": "Old-fashioned ultra-formal; comical with a friend."
+    },
+    {
+     "jp": "とても面白かったです。",
+     "fu": "とてもおもしろかったです。",
+     "verdict": "ok",
+     "why": "Correct but stiff between friends."
+    }
+   ]
+  },
+  {
+   "id": "s11",
+   "scene": "A server asks if you are ready to order.",
+   "who": "clerk",
+   "prompt": {
+    "jp": "ご注文はお決まりですか。",
+    "fu": "ごちゅうもんはおきまりですか。"
+   },
+   "options": [
+    {
+     "jp": "はい、このセットをお願いします。",
+     "fu": "はい、このセットをおねがいします。",
+     "verdict": "best",
+     "why": "Polite and simple: exactly what customers say."
+    },
+    {
+     "jp": "これちょうだい。",
+     "fu": "これちょうだい。",
+     "verdict": "off",
+     "why": "ちょうだい is family speech: rude to staff."
+    },
+    {
+     "jp": "このセットを召し上がります。",
+     "fu": "このセットをめしあがります。",
+     "verdict": "off",
+     "why": "召し上がる is respectful; never use it for your own eating."
+    },
+    {
+     "jp": "はい、このセットにいたします。",
+     "fu": "はい、このセットにいたします。",
+     "verdict": "ok",
+     "why": "Correct humble form, a notch more formal than customers usually are."
+    }
+   ]
+  },
+  {
+   "id": "s12",
+   "scene": "You want to ask your teacher a question after class.",
+   "who": "teacher",
+   "options": [
+    {
+     "jp": "先生、ちょっと質問してもいいですか。",
+     "fu": "せんせい、ちょっとしつもんしてもいいですか。",
+     "verdict": "best",
+     "why": "Polite, and asks permission first."
+    },
+    {
+     "jp": "先生、質問ある。",
+     "fu": "せんせい、しつもんある。",
+     "verdict": "off",
+     "why": "Plain form to a teacher sounds rude."
+    },
+    {
+     "jp": "ねえ、聞いていい？",
+     "fu": "ねえ、きいていい？",
+     "verdict": "off",
+     "why": "ねえ and casual speech are for friends."
+    },
+    {
+     "jp": "すみません、質問があります。",
+     "fu": "すみません、しつもんがあります。",
+     "verdict": "ok",
+     "why": "Polite, but a little abrupt without asking if they have time."
+    }
+   ]
+  },
+  {
+   "id": "s13",
+   "scene": "Someone on the train drops their wallet.",
+   "who": "stranger",
+   "options": [
+    {
+     "jp": "あの、落としましたよ。",
+     "fu": "あの、おとしましたよ。",
+     "verdict": "best",
+     "why": "Polite, with a helpful よ."
+    },
+    {
+     "jp": "おい、落としたぞ。",
+     "fu": "おい、おとしたぞ。",
+     "verdict": "off",
+     "why": "おい and ぞ are rough; this sounds aggressive."
+    },
+    {
+     "jp": "財布、落としたよ。",
+     "fu": "さいふ、おとしたよ。",
+     "verdict": "off",
+     "why": "Kind, but too familiar with a stranger."
+    }
+   ]
+  },
+  {
+   "id": "s14",
+   "scene": "Your boss offers you a coffee.",
+   "who": "boss",
+   "prompt": {
+    "jp": "コーヒー飲む？",
+    "fu": "コーヒーのむ？"
+   },
+   "options": [
+    {
+     "jp": "ありがとうございます。いただきます。",
+     "fu": "ありがとうございます。いただきます。",
+     "verdict": "best",
+     "why": "Thanks + humble いただきます: perfect."
+    },
+    {
+     "jp": "うん、飲む！",
+     "fu": "うん、のむ！",
+     "verdict": "off",
+     "why": "Casual answer to your boss."
+    },
+    {
+     "jp": "はい、召し上がります。",
+     "fu": "はい、めしあがります。",
+     "verdict": "off",
+     "why": "召し上がる raises the eater: wrong for yourself."
+    }
+   ]
+  },
+  {
+   "id": "s15",
+   "scene": "Your friend says they are going to Osaka next week.",
+   "who": "friend",
+   "prompt": {
+    "jp": "来週、大阪に行くんだ。",
+    "fu": "らいしゅう、おおさかにいくんだ。"
+   },
+   "options": [
+    {
+     "jp": "いいな！何しに行くの？",
+     "fu": "いいな！なにしにいくの？",
+     "verdict": "best",
+     "why": "Casual, curious and friendly."
+    },
+    {
+     "jp": "そうでございますか。",
+     "fu": "そうでございますか。",
+     "verdict": "off",
+     "why": "Service keigo: very odd with a friend."
+    },
+    {
+     "jp": "そうですか。いいですね。",
+     "fu": "そうですか。いいですね。",
+     "verdict": "ok",
+     "why": "Polite and fine, but stiff between friends."
+    }
+   ]
+  },
+  {
+   "id": "s16",
+   "scene": "At a ticket office you want one ticket to Kyoto.",
+   "who": "clerk",
+   "options": [
+    {
+     "jp": "京都まで一枚お願いします。",
+     "fu": "きょうとまでいちまいおねがいします。",
+     "verdict": "best",
+     "why": "Clear and polite."
+    },
+    {
+     "jp": "京都、一枚。",
+     "fu": "きょうと、いちまい。",
+     "verdict": "ok",
+     "why": "Understandable but curt; add お願いします."
+    },
+    {
+     "jp": "京都まで一枚くれ。",
+     "fu": "きょうとまでいちまいくれ。",
+     "verdict": "off",
+     "why": "くれ is a rough command."
+    }
+   ]
+  },
+  {
+   "id": "s17",
+   "scene": "You work in a shop. A customer asks where the toilets are.",
+   "who": "customer",
+   "prompt": {
+    "jp": "すみません、トイレはどこですか。",
+    "fu": "すみません、トイレはどこですか。"
+   },
+   "options": [
+    {
+     "jp": "お手洗いはあちらでございます。",
+     "fu": "おてあらいはあちらでございます。",
+     "verdict": "best",
+     "why": "Staff keigo: お手洗い, あちら and でございます."
+    },
+    {
+     "jp": "あっちだよ。",
+     "fu": "あっちだよ。",
+     "verdict": "off",
+     "why": "Casual speech to a customer is unprofessional."
+    },
+    {
+     "jp": "あちらです。",
+     "fu": "あちらです。",
+     "verdict": "ok",
+     "why": "Polite and fine, though staff usually go one step higher."
+    }
+   ]
+  },
+  {
+   "id": "s18",
+   "scene": "Your teacher says you did well on the test.",
+   "who": "teacher",
+   "prompt": {
+    "jp": "テスト、よくできましたね。",
+    "fu": "テスト、よくできましたね。"
+   },
+   "options": [
+    {
+     "jp": "ありがとうございます！",
+     "fu": "ありがとうございます！",
+     "verdict": "best",
+     "why": "A simple, polite thank-you."
+    },
+    {
+     "jp": "だろ？",
+     "fu": "だろ？",
+     "verdict": "off",
+     "why": "Rough and cocky: \"Told you so.\""
+    },
+    {
+     "jp": "ありがとう！",
+     "fu": "ありがとう！",
+     "verdict": "off",
+     "why": "Casual ありがとう is too familiar with a teacher."
+    }
+   ]
+  },
+  {
+   "id": "s19",
+   "scene": "Your younger brother borrowed your phone charger without asking.",
+   "who": "family",
+   "options": [
+    {
+     "jp": "ちょっと、充電器返して！",
+     "fu": "ちょっと、じゅうでんきかえして！",
+     "verdict": "best",
+     "why": "Normal sibling speech."
+    },
+    {
+     "jp": "充電器を返していただけますか。",
+     "fu": "じゅうでんきをかえしていただけますか。",
+     "verdict": "off",
+     "why": "Keigo to your brother sounds icy or sarcastic."
+    },
+    {
+     "jp": "充電器を返してください。",
+     "fu": "じゅうでんきをかえしてください。",
+     "verdict": "ok",
+     "why": "Polite with family sounds cold, as if you are angry."
+    }
+   ]
+  },
+  {
+   "id": "s20",
+   "scene": "You need your boss to check a document.",
+   "who": "boss",
+   "options": [
+    {
+     "jp": "すみません、この資料を確認していただけますか。",
+     "fu": "すみません、このしりょうをかくにんしていただけますか。",
+     "verdict": "best",
+     "why": "Softener + ていただけますか: the right level for a superior."
+    },
+    {
+     "jp": "これ、見て。",
+     "fu": "これ、みて。",
+     "verdict": "off",
+     "why": "A casual order to your boss."
+    },
+    {
+     "jp": "この資料を確認してください。",
+     "fu": "このしりょうをかくにんしてください。",
+     "verdict": "ok",
+     "why": "てください sounds like an instruction to a superior."
+    }
+   ]
+  },
+  {
+   "id": "s21",
+   "scene": "An elderly woman is standing on the bus. You offer your seat.",
+   "who": "stranger",
+   "options": [
+    {
+     "jp": "よかったら、どうぞ。",
+     "fu": "よかったら、どうぞ。",
+     "verdict": "best",
+     "why": "Short, polite and kind: what people really say."
+    },
+    {
+     "jp": "座れ。",
+     "fu": "すわれ。",
+     "verdict": "off",
+     "why": "A rough command."
+    },
+    {
+     "jp": "ここ座っていいよ。",
+     "fu": "ここすわっていいよ。",
+     "verdict": "off",
+     "why": "Casual, and sounds like you are granting permission."
+    },
+    {
+     "jp": "どうぞお座りください。",
+     "fu": "どうぞおすわりください。",
+     "verdict": "ok",
+     "why": "Correct keigo, a little formal for a quick offer."
+    }
+   ]
+  },
+  {
+   "id": "s22",
+   "scene": "In a clothes shop, the assistant says you can try it on.",
+   "who": "clerk",
+   "prompt": {
+    "jp": "よろしければ、ご試着もできますよ。",
+    "fu": "よろしければ、ごしちゃくもできますよ。"
+   },
+   "options": [
+    {
+     "jp": "じゃあ、お願いします。",
+     "fu": "じゃあ、おねがいします。",
+     "verdict": "best",
+     "why": "Simple and polite."
+    },
+    {
+     "jp": "じゃあ、着る。",
+     "fu": "じゃあ、きる。",
+     "verdict": "off",
+     "why": "Plain form to staff sounds curt."
+    },
+    {
+     "jp": "では、試着させていただきます。",
+     "fu": "では、しちゃくさせていただきます。",
+     "verdict": "ok",
+     "why": "Grammatical, but far more formal than a customer needs."
+    },
+    {
+     "jp": "着てみるね。",
+     "fu": "きてみるね。",
+     "verdict": "off",
+     "why": "Casual ね with a shop assistant is too familiar."
+    }
+   ]
+  },
+  {
+   "id": "s23",
+   "scene": "Your friend messages you: where are you now?",
+   "who": "friend",
+   "prompt": {
+    "jp": "今どこ？",
+    "fu": "いまどこ？"
+   },
+   "options": [
+    {
+     "jp": "駅の前にいるよ。",
+     "fu": "えきのまえにいるよ。",
+     "verdict": "best",
+     "why": "Casual, matching the message."
+    },
+    {
+     "jp": "駅の前におります。",
+     "fu": "えきのまえにおります。",
+     "verdict": "off",
+     "why": "Humble keigo with a friend is weird."
+    },
+    {
+     "jp": "駅の前にいます。",
+     "fu": "えきのまえにいます。",
+     "verdict": "ok",
+     "why": "Polite and correct, but stiff with a friend."
+    }
+   ]
+  },
+  {
+   "id": "s24",
+   "scene": "Your friend's seven-year-old shows you a drawing.",
+   "who": "child",
+   "prompt": {
+    "jp": "見て！これ、ぼくがかいたの！",
+    "fu": "みて！これ、ぼくがかいたの！"
+   },
+   "options": [
+    {
+     "jp": "わあ、上手だね！",
+     "fu": "わあ、じょうずだね！",
+     "verdict": "best",
+     "why": "Warm casual praise for a child."
+    },
+    {
+     "jp": "大変お上手でいらっしゃいますね。",
+     "fu": "たいへんおじょうずでいらっしゃいますね。",
+     "verdict": "off",
+     "why": "Keigo to a child sounds comical."
+    },
+    {
+     "jp": "上手ですね。",
+     "fu": "じょうずですね。",
+     "verdict": "ok",
+     "why": "Polite, but distant for a child."
+    }
+   ]
+  },
+  {
+   "id": "s25",
+   "scene": "Your boss asks if you can come in on Saturday. You cannot.",
+   "who": "boss",
+   "prompt": {
+    "jp": "土曜日、出てこられる？",
+    "fu": "どようび、でてこられる？"
+   },
+   "options": [
+    {
+     "jp": "すみません、土曜日はちょっと…。",
+     "fu": "すみません、どようびはちょっと…。",
+     "verdict": "best",
+     "why": "Polite apology + trailing ちょっと: the soft Japanese refusal."
+    },
+    {
+     "jp": "無理。",
+     "fu": "むり。",
+     "verdict": "off",
+     "why": "Blunt and casual: rude to a boss."
+    },
+    {
+     "jp": "出られません。",
+     "fu": "でられません。",
+     "verdict": "ok",
+     "why": "Polite form, but a bare refusal sounds blunt."
+    }
+   ]
+  },
+  {
+   "id": "s26",
+   "scene": "You arrive late to class.",
+   "who": "teacher",
+   "options": [
+    {
+     "jp": "遅れてすみません。",
+     "fu": "おくれてすみません。",
+     "verdict": "best",
+     "why": "The normal polite apology."
+    },
+    {
+     "jp": "ごめん、遅れた。",
+     "fu": "ごめん、おくれた。",
+     "verdict": "off",
+     "why": "Casual apology to a teacher."
+    },
+    {
+     "jp": "遅くなりまして、誠に申し訳ございません。",
+     "fu": "おそくなりまして、まことにもうしわけございません。",
+     "verdict": "ok",
+     "why": "Correct, but formal enough for a client, not a classroom."
+    }
+   ]
+  },
+  {
+   "id": "s27",
+   "scene": "The server brings your food.",
+   "who": "clerk",
+   "prompt": {
+    "jp": "お待たせいたしました。ハンバーグセットです。",
+    "fu": "おまたせいたしました。ハンバーグセットです。"
+   },
+   "options": [
+    {
+     "jp": "ありがとうございます。",
+     "fu": "ありがとうございます。",
+     "verdict": "best",
+     "why": "Polite thanks."
+    },
+    {
+     "jp": "どうも。",
+     "fu": "どうも。",
+     "verdict": "ok",
+     "why": "A brief casual thanks; common, if a little clipped."
+    },
+    {
+     "jp": "ご苦労。",
+     "fu": "ごくろう。",
+     "verdict": "off",
+     "why": "Talking down, like a lord to a servant."
+    }
+   ]
+  },
+  {
+   "id": "s28",
+   "scene": "You work at a hotel front desk. A guest gives their name.",
+   "who": "customer",
+   "prompt": {
+    "jp": "予約したスミスです。",
+    "fu": "よやくしたスミスです。"
+   },
+   "options": [
+    {
+     "jp": "スミス様ですね。お待ちしておりました。",
+     "fu": "スミスさまですね。おまちしておりました。",
+     "verdict": "best",
+     "why": "様 and humble お待ちしておりました: textbook hotel keigo."
+    },
+    {
+     "jp": "スミスさん？ちょっと待ってね。",
+     "fu": "スミスさん？ちょっとまってね。",
+     "verdict": "off",
+     "why": "Casual speech to a hotel guest."
+    },
+    {
+     "jp": "スミスさんですね。待っていました。",
+     "fu": "スミスさんですね。まっていました。",
+     "verdict": "ok",
+     "why": "Polite, but plain for a hotel; guests expect keigo."
+    }
+   ]
+  },
+  {
+   "id": "s29",
+   "scene": "You run into an old friend you have not seen for years.",
+   "who": "friend",
+   "prompt": {
+    "jp": "うわ、久しぶり！",
+    "fu": "うわ、ひさしぶり！"
+   },
+   "options": [
+    {
+     "jp": "久しぶり！元気だった？",
+     "fu": "ひさしぶり！げんきだった？",
+     "verdict": "best",
+     "why": "Casual and warm, matching them."
+    },
+    {
+     "jp": "ご無沙汰しております。",
+     "fu": "ごぶさたしております。",
+     "verdict": "off",
+     "why": "Business keigo: cold with an old friend."
+    },
+    {
+     "jp": "お久しぶりです。",
+     "fu": "おひさしぶりです。",
+     "verdict": "ok",
+     "why": "Polite; fine if you were never close."
+    }
+   ]
+  },
+  {
+   "id": "s30",
+   "scene": "You bump into someone on a crowded street.",
+   "who": "stranger",
+   "options": [
+    {
+     "jp": "あ、すみません。",
+     "fu": "あ、すみません。",
+     "verdict": "best",
+     "why": "The everyday apology with strangers."
+    },
+    {
+     "jp": "ごめんなさい。",
+     "fu": "ごめんなさい。",
+     "verdict": "ok",
+     "why": "Fine, though すみません is more usual with strangers."
+    },
+    {
+     "jp": "悪い。",
+     "fu": "わるい。",
+     "verdict": "off",
+     "why": "Rough 'my bad': casual, used mostly by men, among close friends."
+    }
+   ]
+  },
+  {
+   "id": "s31",
+   "scene": "At the end of the day your boss says お疲れさま.",
+   "who": "boss",
+   "prompt": {
+    "jp": "今日はお疲れさま。",
+    "fu": "きょうはおつかれさま。"
+   },
+   "options": [
+    {
+     "jp": "お疲れさまでした。",
+     "fu": "おつかれさまでした。",
+     "verdict": "best",
+     "why": "でした makes it polite: right for a superior."
+    },
+    {
+     "jp": "ご苦労さまでした。",
+     "fu": "ごくろうさまでした。",
+     "verdict": "off",
+     "why": "ご苦労さま is said to subordinates; to a boss it is rude."
+    },
+    {
+     "jp": "お疲れ！",
+     "fu": "おつかれ！",
+     "verdict": "off",
+     "why": "Casual; only for peers."
+    }
+   ]
+  },
+  {
+   "id": "s32",
+   "scene": "At a pharmacy you want to ask if they have cold medicine.",
+   "who": "clerk",
+   "options": [
+    {
+     "jp": "すみません、風邪薬はありますか。",
+     "fu": "すみません、かぜぐすりはありますか。",
+     "verdict": "best",
+     "why": "Polite and natural for a customer."
+    },
+    {
+     "jp": "風邪薬ある？",
+     "fu": "かぜぐすりある？",
+     "verdict": "off",
+     "why": "Casual with staff you do not know."
+    },
+    {
+     "jp": "風邪薬はございますか。",
+     "fu": "かぜぐすりはございますか。",
+     "verdict": "ok",
+     "why": "Politely formal; fine, just more than needed."
+    }
+   ]
+  },
+  {
+   "id": "s33",
+   "scene": "Your grandmother offers you more food.",
+   "who": "family",
+   "prompt": {
+    "jp": "もっと食べる？",
+    "fu": "もっとたべる？"
+   },
+   "options": [
+    {
+     "jp": "うん、ありがとう！",
+     "fu": "うん、ありがとう！",
+     "verdict": "best",
+     "why": "Casual and warm with family."
+    },
+    {
+     "jp": "はい、いただきます。",
+     "fu": "はい、いただきます。",
+     "verdict": "ok",
+     "why": "Fine; some families speak a bit politely to grandparents."
+    },
+    {
+     "jp": "結構でございます。",
+     "fu": "けっこうでございます。",
+     "verdict": "off",
+     "why": "Stiff service keigo, and a cold refusal."
+    }
+   ]
+  },
+  {
+   "id": "s34",
+   "scene": "Your teacher asks if you understood.",
+   "who": "teacher",
+   "prompt": {
+    "jp": "わかりましたか。",
+    "fu": "わかりましたか。"
+   },
+   "options": [
+    {
+     "jp": "はい、わかりました。",
+     "fu": "はい、わかりました。",
+     "verdict": "best",
+     "why": "Polite and direct."
+    },
+    {
+     "jp": "うん、わかった。",
+     "fu": "うん、わかった。",
+     "verdict": "off",
+     "why": "Casual with a teacher."
+    },
+    {
+     "jp": "はい、承知いたしました。",
+     "fu": "はい、しょうちいたしました。",
+     "verdict": "ok",
+     "why": "Office keigo: correct, but it sounds like a business reply."
+    }
+   ]
+  },
+  {
+   "id": "s35",
+   "scene": "You work in a shop. A customer asks if they can pay by card.",
+   "who": "customer",
+   "prompt": {
+    "jp": "カードで払えますか。",
+    "fu": "カードではらえますか。"
+   },
+   "options": [
+    {
+     "jp": "はい、ご利用いただけます。",
+     "fu": "はい、ごりよういただけます。",
+     "verdict": "best",
+     "why": "Service keigo: \"Yes, you may use it.\""
+    },
+    {
+     "jp": "うん、使えるよ。",
+     "fu": "うん、つかえるよ。",
+     "verdict": "off",
+     "why": "Casual to a customer."
+    },
+    {
+     "jp": "はい、使えます。",
+     "fu": "はい、つかえます。",
+     "verdict": "ok",
+     "why": "Polite, but plainer than staff normally speak."
+    }
+   ]
+  },
+  {
+   "id": "s36",
+   "scene": "You ask a passer-by to take a photo of you.",
+   "who": "stranger",
+   "options": [
+    {
+     "jp": "すみません、写真を撮ってもらえませんか。",
+     "fu": "すみません、しゃしんをとってもらえませんか。",
+     "verdict": "best",
+     "why": "Softener + negative question: a soft, polite request."
+    },
+    {
+     "jp": "写真撮って。",
+     "fu": "しゃしんとって。",
+     "verdict": "off",
+     "why": "A casual order to a stranger."
+    },
+    {
+     "jp": "写真を撮ってください。",
+     "fu": "しゃしんをとってください。",
+     "verdict": "ok",
+     "why": "Polite, but てください is quite direct for a favour."
+    }
+   ]
+  },
+  {
+   "id": "s37",
+   "scene": "Your friend offers you a bite of their cake.",
+   "who": "friend",
+   "prompt": {
+    "jp": "一口食べる？",
+    "fu": "ひとくちたべる？"
+   },
+   "options": [
+    {
+     "jp": "いいの？ありがとう！",
+     "fu": "いいの？ありがとう！",
+     "verdict": "best",
+     "why": "Casual and grateful."
+    },
+    {
+     "jp": "恐れ入ります。頂戴いたします。",
+     "fu": "おそれいります。ちょうだいいたします。",
+     "verdict": "off",
+     "why": "Formal keigo with a friend is comically stiff."
+    },
+    {
+     "jp": "いいんですか。ありがとうございます。",
+     "fu": "いいんですか。ありがとうございます。",
+     "verdict": "ok",
+     "why": "Polite; stiff for a close friend."
+    }
+   ]
+  },
+  {
+   "id": "s38",
+   "scene": "A client phones for your boss, Mr Sato, who is away from his desk.",
+   "who": "customer",
+   "prompt": {
+    "jp": "佐藤部長はいらっしゃいますか。",
+    "fu": "さとうぶちょうはいらっしゃいますか。"
+   },
+   "options": [
+    {
+     "jp": "申し訳ございません。佐藤はただいま席を外しております。",
+     "fu": "もうしわけございません。さとうはただいませきをはずしております。",
+     "verdict": "best",
+     "why": "To outsiders you drop your own boss's title and use humble forms."
+    },
+    {
+     "jp": "佐藤部長は今いらっしゃいません。",
+     "fu": "さとうぶちょうはいまいらっしゃいません。",
+     "verdict": "off",
+     "why": "Honouring your own boss to an outsider is a classic mistake."
+    },
+    {
+     "jp": "佐藤さんは今いないです。",
+     "fu": "さとうさんはいまいないです。",
+     "verdict": "off",
+     "why": "Too plain for a business call, and さん is wrong for your own colleague here."
+    }
+   ]
+  },
+  {
+   "id": "s39",
+   "scene": "You need to tell your teacher you will be absent tomorrow.",
+   "who": "teacher",
+   "options": [
+    {
+     "jp": "先生、すみません、明日は休ませてください。",
+     "fu": "せんせい、すみません、あしたはやすませてください。",
+     "verdict": "best",
+     "why": "Apology + 休ませてください (\"please let me be absent\")."
+    },
+    {
+     "jp": "明日は熱があるので、休みます。",
+     "fu": "あしたはねつがあるので、やすみます。",
+     "verdict": "ok",
+     "why": "Polite, but announces it rather than asking."
+    },
+    {
+     "jp": "明日休むね。",
+     "fu": "あしたやすむね。",
+     "verdict": "off",
+     "why": "Casual with a teacher."
+    }
+   ]
+  },
+  {
+   "id": "s40",
+   "scene": "At a hair salon the stylist asks what you would like today.",
+   "who": "clerk",
+   "prompt": {
+    "jp": "今日はどうなさいますか。",
+    "fu": "きょうはどうなさいますか。"
+   },
+   "options": [
+    {
+     "jp": "少し短くしてください。",
+     "fu": "すこしみじかくしてください。",
+     "verdict": "best",
+     "why": "てください is natural for asking a service."
+    },
+    {
+     "jp": "短くして。",
+     "fu": "みじかくして。",
+     "verdict": "off",
+     "why": "Casual order to someone you do not know well."
+    },
+    {
+     "jp": "少し短くしていただけますでしょうか。",
+     "fu": "すこしみじかくしていただけますでしょうか。",
+     "verdict": "ok",
+     "why": "Very polite; more careful than you need to be as a customer."
+    }
+   ]
+  },
+  {
+   "id": "s41",
+   "scene": "Your friend apologises for being late.",
+   "who": "friend",
+   "prompt": {
+    "jp": "ごめん、遅くなった！",
+    "fu": "ごめん、おそくなった！"
+   },
+   "options": [
+    {
+     "jp": "大丈夫、今来たとこ。",
+     "fu": "だいじょうぶ、いまきたとこ。",
+     "verdict": "best",
+     "why": "Casual and kind (とこ = ところ)."
+    },
+    {
+     "jp": "とんでもないです。",
+     "fu": "とんでもないです。",
+     "verdict": "ok",
+     "why": "Polite; stiff for a friend."
+    },
+    {
+     "jp": "お気になさらないでください。",
+     "fu": "おきになさらないでください。",
+     "verdict": "off",
+     "why": "Keigo with a friend sounds cold."
+    }
+   ]
+  },
+  {
+   "id": "s42",
+   "scene": "In a meeting your boss proposes a plan you agree with.",
+   "who": "boss",
+   "prompt": {
+    "jp": "この案でいこうと思うんだけど、どう？",
+    "fu": "このあんでいこうとおもうんだけど、どう？"
+   },
+   "options": [
+    {
+     "jp": "いいと思います。賛成です。",
+     "fu": "いいとおもいます。さんせいです。",
+     "verdict": "best",
+     "why": "Clear, polite agreement."
+    },
+    {
+     "jp": "いいじゃん！",
+     "fu": "いいじゃん！",
+     "verdict": "off",
+     "why": "Slangy casual: too familiar in a meeting."
+    },
+    {
+     "jp": "おっしゃるとおりでございます。",
+     "fu": "おっしゃるとおりでございます。",
+     "verdict": "ok",
+     "why": "Correct, but it can sound fawning in a normal meeting."
+    }
+   ]
+  },
+  {
+   "id": "s43",
+   "scene": "An older man at the bus stop asks you the time.",
+   "who": "stranger",
+   "prompt": {
+    "jp": "すみません、今何時ですか。",
+    "fu": "すみません、いまなんじですか。"
+   },
+   "options": [
+    {
+     "jp": "三時十分です。",
+     "fu": "さんじじゅっぷんです。",
+     "verdict": "best",
+     "why": "Simple and polite."
+    },
+    {
+     "jp": "三時十分だよ。",
+     "fu": "さんじじゅっぷんだよ。",
+     "verdict": "off",
+     "why": "Casual to an older stranger."
+    },
+    {
+     "jp": "三時十分でございます。",
+     "fu": "さんじじゅっぷんでございます。",
+     "verdict": "ok",
+     "why": "Overly formal for a passer-by."
+    }
+   ]
+  },
+  {
+   "id": "s44",
+   "scene": "Your neighbour's child says hello on the way home from school.",
+   "who": "child",
+   "prompt": {
+    "jp": "こんにちは！",
+    "fu": "こんにちは！"
+   },
+   "options": [
+    {
+     "jp": "こんにちは！学校の帰り？",
+     "fu": "こんにちは！がっこうのかえり？",
+     "verdict": "best",
+     "why": "Friendly and casual with a child."
+    },
+    {
+     "jp": "ごきげんよう。",
+     "fu": "ごきげんよう。",
+     "verdict": "off",
+     "why": "Very formal and posh: odd with a child."
+    },
+    {
+     "jp": "こんにちは。学校の帰りですか。",
+     "fu": "こんにちは。がっこうのかえりですか。",
+     "verdict": "ok",
+     "why": "Polite, but distant for a child."
+    }
+   ]
+  },
+  {
+   "id": "s45",
+   "scene": "You work in a department store. A customer leaves.",
+   "who": "customer",
+   "options": [
+    {
+     "jp": "ありがとうございました。またお越しくださいませ。",
+     "fu": "ありがとうございました。またおこしくださいませ。",
+     "verdict": "best",
+     "why": "Standard shop farewell: お越しください = please come again."
+    },
+    {
+     "jp": "また来てね！",
+     "fu": "またきてね！",
+     "verdict": "off",
+     "why": "Fine in a friendly local shop, but too casual for department-store staff."
+    },
+    {
+     "jp": "もう帰るの？",
+     "fu": "もうかえるの？",
+     "verdict": "off",
+     "why": "Casual, and sounds like you are questioning them."
+    }
+   ]
+  },
+  {
+   "id": "s46",
+   "scene": "You are emailing your professor to ask for a meeting next week.",
+   "who": "teacher",
+   "options": [
+    {
+     "jp": "来週、お時間をいただけないでしょうか。",
+     "fu": "らいしゅう、おじかんをいただけないでしょうか。",
+     "verdict": "best",
+     "why": "\"Could I have some of your time?\": standard, respectful."
+    },
+    {
+     "jp": "来週、会える？",
+     "fu": "らいしゅう、あえる？",
+     "verdict": "off",
+     "why": "Casual text-message style."
+    },
+    {
+     "jp": "来週、会いたいです。",
+     "fu": "らいしゅう、あいたいです。",
+     "verdict": "off",
+     "why": "Too direct, and 会いたい can sound personal."
+    },
+    {
+     "jp": "来週、会っていただけますか。",
+     "fu": "らいしゅう、あっていただけますか。",
+     "verdict": "ok",
+     "why": "Polite; asking for their time is the more standard phrasing."
+    }
+   ]
+  },
+  {
+   "id": "s47",
+   "scene": "Your dad asks whether you will be home for dinner.",
+   "who": "family",
+   "prompt": {
+    "jp": "今日、夕飯いる？",
+    "fu": "きょう、ゆうはんいる？"
+   },
+   "options": [
+    {
+     "jp": "うん、七時ごろ帰る。",
+     "fu": "うん、しちじごろかえる。",
+     "verdict": "best",
+     "why": "Casual and natural with family."
+    },
+    {
+     "jp": "はい、七時ごろ帰ります。",
+     "fu": "はい、しちじごろかえります。",
+     "verdict": "ok",
+     "why": "Polite with your dad sounds a bit distant."
+    },
+    {
+     "jp": "はい、七時ごろ参ります。",
+     "fu": "はい、しちじごろまいります。",
+     "verdict": "off",
+     "why": "Humble 参る to your own family is strange, and it means \"come\", not \"come home\"."
+    }
+   ]
+  },
+  {
+   "id": "s48",
+   "scene": "The convenience-store clerk asks if you want your bento heated.",
+   "who": "clerk",
+   "prompt": {
+    "jp": "お弁当、温めますか。",
+    "fu": "おべんとう、あたためますか。"
+   },
+   "options": [
+    {
+     "jp": "はい、お願いします。",
+     "fu": "はい、おねがいします。",
+     "verdict": "best",
+     "why": "The standard customer reply."
+    },
+    {
+     "jp": "うん、温めて。",
+     "fu": "うん、あたためて。",
+     "verdict": "off",
+     "why": "Casual order to a clerk."
+    },
+    {
+     "jp": "はい、温めてくださいませ。",
+     "fu": "はい、あたためてくださいませ。",
+     "verdict": "off",
+     "why": "くださいませ is shop-staff language; customers do not use it."
+    }
+   ]
+  },
+  {
+   "id": "s49",
+   "scene": "Your friend is at home sick in bed.",
+   "who": "friend",
+   "options": [
+    {
+     "jp": "大丈夫？ゆっくり休んでね。",
+     "fu": "だいじょうぶ？ゆっくりやすんでね。",
+     "verdict": "best",
+     "why": "Warm casual care."
+    },
+    {
+     "jp": "お大事になさってください。",
+     "fu": "おだいじになさってください。",
+     "verdict": "ok",
+     "why": "A caring set phrase, but formal for a friend (お大事に alone is fine)."
+    },
+    {
+     "jp": "ゆっくりお休みくださいませ。",
+     "fu": "ゆっくりおやすみくださいませ。",
+     "verdict": "off",
+     "why": "Hotel-staff keigo with a friend."
+    }
+   ]
+  },
+  {
+   "id": "s50",
+   "scene": "You are lost and ask a police officer at a kōban for help.",
+   "who": "stranger",
+   "options": [
+    {
+     "jp": "すみません、この住所に行きたいんですが…。",
+     "fu": "すみません、このじゅうしょにいきたいんですが…。",
+     "verdict": "best",
+     "why": "Polite, with a soft trailing んですが."
+    },
+    {
+     "jp": "この住所、どこ？",
+     "fu": "このじゅうしょ、どこ？",
+     "verdict": "off",
+     "why": "Casual with a police officer."
+    },
+    {
+     "jp": "この住所に参りたいのですが。",
+     "fu": "このじゅうしょにまいりたいのですが。",
+     "verdict": "ok",
+     "why": "Humble keigo is correct but more formal than needed."
+    }
+   ]
+  },
+  {
+   "id": "s51",
+   "scene": "Your boss asks for your opinion.",
+   "who": "boss",
+   "prompt": {
+    "jp": "君はどう思う？",
+    "fu": "きみはどうおもう？"
+   },
+   "options": [
+    {
+     "jp": "私は、A案のほうがいいと思います。",
+     "fu": "わたしは、エーあんのほうがいいとおもいます。",
+     "verdict": "best",
+     "why": "Polite and clear, with neutral 私."
+    },
+    {
+     "jp": "俺はA案がいいと思う。",
+     "fu": "おれはエーあんがいいとおもう。",
+     "verdict": "off",
+     "why": "俺 + plain form is too casual with a boss."
+    },
+    {
+     "jp": "A案がよろしいかと存じます。",
+     "fu": "エーあんがよろしいかとぞんじます。",
+     "verdict": "ok",
+     "why": "Very formal; fine in a formal meeting, stiff in a chat."
+    }
+   ]
+  },
+  {
+   "id": "s52",
+   "scene": "At the end of class the teacher asks if there are any questions.",
+   "who": "teacher",
+   "prompt": {
+    "jp": "何か質問はありますか。",
+    "fu": "なにかしつもんはありますか。"
+   },
+   "options": [
+    {
+     "jp": "いいえ、大丈夫です。",
+     "fu": "いいえ、だいじょうぶです。",
+     "verdict": "best",
+     "why": "Polite and natural."
+    },
+    {
+     "jp": "ない。",
+     "fu": "ない。",
+     "verdict": "off",
+     "why": "Plain and blunt with a teacher."
+    },
+    {
+     "jp": "特にございません。",
+     "fu": "とくにございません。",
+     "verdict": "ok",
+     "why": "Formal; fine in business, a bit stiff in class."
+    }
+   ]
+  },
+  {
+   "id": "s53",
+   "scene": "You are a restaurant server. Two customers walk in.",
+   "who": "customer",
+   "prompt": {
+    "jp": "二人です。",
+    "fu": "ふたりです。"
+   },
+   "options": [
+    {
+     "jp": "二名様ですね。こちらへどうぞ。",
+     "fu": "にめいさまですね。こちらへどうぞ。",
+     "verdict": "best",
+     "why": "Staff count guests as 〜名様 and use こちら."
+    },
+    {
+     "jp": "二人ね。こっち来て。",
+     "fu": "ふたりね。こっちきて。",
+     "verdict": "off",
+     "why": "Casual commands to customers."
+    },
+    {
+     "jp": "二人ですね。こっちです。",
+     "fu": "ふたりですね。こっちです。",
+     "verdict": "ok",
+     "why": "Polite, but staff are expected to use keigo."
+    }
+   ]
+  },
+  {
+   "id": "s54",
+   "scene": "Your friend asks to borrow 500 yen.",
+   "who": "friend",
+   "prompt": {
+    "jp": "ごめん、500円貸してくれない？",
+    "fu": "ごめん、ごひゃくえんかしてくれない？"
+   },
+   "options": [
+    {
+     "jp": "いいよ、はい。",
+     "fu": "いいよ、はい。",
+     "verdict": "best",
+     "why": "Casual and easy-going."
+    },
+    {
+     "jp": "かしこまりました。",
+     "fu": "かしこまりました。",
+     "verdict": "off",
+     "why": "Staff keigo with a friend."
+    },
+    {
+     "jp": "はい、いいですよ。",
+     "fu": "はい、いいですよ。",
+     "verdict": "ok",
+     "why": "Polite; a bit stiff between friends."
+    }
+   ]
+  },
+  {
+   "id": "s55",
+   "scene": "You are writing to your manager to say you will send the file tomorrow.",
+   "who": "boss",
+   "options": [
+    {
+     "jp": "明日、ファイルをお送りします。",
+     "fu": "あした、ファイルをおおくりします。",
+     "verdict": "best",
+     "why": "Humble お送りします is ideal in a work email."
+    },
+    {
+     "jp": "明日ファイル送るね。",
+     "fu": "あしたファイルおくるね。",
+     "verdict": "off",
+     "why": "Casual chat style in a work email."
+    },
+    {
+     "jp": "明日、ファイルを送ります。",
+     "fu": "あした、ファイルをおくります。",
+     "verdict": "ok",
+     "why": "Polite and acceptable, if a little plain for email."
+    }
+   ]
+  },
+  {
+   "id": "s56",
+   "scene": "You want the waiter to recommend a dish.",
+   "who": "clerk",
+   "options": [
+    {
+     "jp": "おすすめは何ですか。",
+     "fu": "おすすめはなんですか。",
+     "verdict": "best",
+     "why": "Polite and natural for a customer."
+    },
+    {
+     "jp": "何がうまい？",
+     "fu": "なにがうまい？",
+     "verdict": "off",
+     "why": "Casual, rough うまい: rude to staff."
+    },
+    {
+     "jp": "おすすめは何でございますか。",
+     "fu": "おすすめはなんでございますか。",
+     "verdict": "ok",
+     "why": "Grammatical but overdone; customers do not need でございます."
+    }
+   ]
+  },
+  {
+   "id": "s57",
+   "scene": "A child asks where you are from.",
+   "who": "child",
+   "prompt": {
+    "jp": "どこから来たの？",
+    "fu": "どこからきたの？"
+   },
+   "options": [
+    {
+     "jp": "アメリカから来たんだよ。",
+     "fu": "アメリカからきたんだよ。",
+     "verdict": "best",
+     "why": "Friendly casual explanation."
+    },
+    {
+     "jp": "アメリカから参りました。",
+     "fu": "アメリカからまいりました。",
+     "verdict": "off",
+     "why": "Humble keigo to a child is comical."
+    },
+    {
+     "jp": "アメリカから来ました。",
+     "fu": "アメリカからきました。",
+     "verdict": "ok",
+     "why": "Polite and fine, just a little formal for a child."
+    }
+   ]
+  },
+  {
+   "id": "s58",
+   "scene": "Your partner asks if you locked the door.",
+   "who": "family",
+   "prompt": {
+    "jp": "鍵、閉めた？",
+    "fu": "かぎ、しめた？"
+   },
+   "options": [
+    {
+     "jp": "あ、忘れた！ちょっと見てくる。",
+     "fu": "あ、わすれた！ちょっとみてくる。",
+     "verdict": "best",
+     "why": "Natural casual reply."
+    },
+    {
+     "jp": "閉めました。",
+     "fu": "しめました。",
+     "verdict": "ok",
+     "why": "Polite with a partner can sound distant or annoyed."
+    },
+    {
+     "jp": "施錠いたしました。",
+     "fu": "せじょういたしました。",
+     "verdict": "off",
+     "why": "Formal jargon plus keigo: like a security guard."
+    }
+   ]
+  },
+  {
+   "id": "s59",
+   "scene": "A stranger asks you the way to the post office, but you do not know.",
+   "who": "stranger",
+   "prompt": {
+    "jp": "すみません、郵便局はどこですか。",
+    "fu": "すみません、ゆうびんきょくはどこですか。"
+   },
+   "options": [
+    {
+     "jp": "すみません、ちょっとわからないです。",
+     "fu": "すみません、ちょっとわからないです。",
+     "verdict": "best",
+     "why": "Polite, softened with すみません and ちょっと."
+    },
+    {
+     "jp": "知らない。",
+     "fu": "しらない。",
+     "verdict": "off",
+     "why": "Plain and curt with a stranger."
+    },
+    {
+     "jp": "存じ上げません。",
+     "fu": "ぞんじあげません。",
+     "verdict": "off",
+     "why": "存じ上げる is for knowing people, and far too formal here."
+    }
+   ]
+  },
+  {
+   "id": "s60",
+   "scene": "Your teacher offers to lend you a book.",
+   "who": "teacher",
+   "prompt": {
+    "jp": "この本、貸しましょうか。",
+    "fu": "このほん、かしましょうか。"
+   },
+   "options": [
+    {
+     "jp": "いいんですか。ありがとうございます！",
+     "fu": "いいんですか。ありがとうございます！",
+     "verdict": "best",
+     "why": "Polite surprise and thanks."
+    },
+    {
+     "jp": "マジで？サンキュー！",
+     "fu": "マジで？サンキュー！",
+     "verdict": "off",
+     "why": "Slang: very casual with a teacher."
+    },
+    {
+     "jp": "では、お借りになります。",
+     "fu": "では、おかりになります。",
+     "verdict": "off",
+     "why": "お〜になる is respectful: for their actions, not yours."
+    }
+   ]
+  },
+  {
+   "id": "s61",
+   "scene": "Your boss arrives at the office in the morning.",
+   "who": "boss",
+   "options": [
+    {
+     "jp": "おはようございます。",
+     "fu": "おはようございます。",
+     "verdict": "best",
+     "why": "The polite morning greeting."
+    },
+    {
+     "jp": "おはよう。",
+     "fu": "おはよう。",
+     "verdict": "off",
+     "why": "Casual; only for peers and family."
+    },
+    {
+     "jp": "よう！",
+     "fu": "よう！",
+     "verdict": "off",
+     "why": "Rough \"yo!\": very rude with a boss."
+    }
+   ]
+  },
+  {
+   "id": "s62",
+   "scene": "The taxi driver asks where you are going.",
+   "who": "clerk",
+   "prompt": {
+    "jp": "どちらまで？",
+    "fu": "どちらまで？"
+   },
+   "options": [
+    {
+     "jp": "東京駅までお願いします。",
+     "fu": "とうきょうえきまでおねがいします。",
+     "verdict": "best",
+     "why": "Polite and clear."
+    },
+    {
+     "jp": "東京駅。",
+     "fu": "とうきょうえき。",
+     "verdict": "ok",
+     "why": "Understandable but curt."
+    },
+    {
+     "jp": "東京駅まで行け。",
+     "fu": "とうきょうえきまでいけ。",
+     "verdict": "off",
+     "why": "A rough command."
+    }
+   ]
+  }
+ ]
+}
