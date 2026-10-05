@@ -68,7 +68,7 @@ VIEWS.story = ({ id }) => {
       const opts = h('div.opts', q.opts.map((o, oi) => h('button.opt', { style: { fontFamily: 'var(--f-jp-hand)', fontSize: '1.05rem' }, onclick: e => {
         if (opts.dataset.done) return; opts.dataset.done = 1; const ok = oi === q.a; e.currentTarget.classList.add(ok ? 'right' : 'wrong'); if (!ok) opts.children[q.a].classList.add('right');
         answered++; if (ok) { right++; Sfx.ok(); } else Sfx.bad();
-        if (answered === s.qs.length) { const prev = S.stories[s.id]; S.stories[s.id] = { read: now(), score: Math.max(prev?.score || 0, right) }; addXP(prev ? 5 : 15 + right * 5); if (right === s.qs.length) petals(); window.Fun?.event?.('story', { id: s.id }); quiz.append(h('div.feedback.ok', h('strong', `${right}/${s.qs.length} correct · story complete`))); checkAchievements(); }
+        if (answered === s.qs.length) { const prev = S.stories[s.id]; S.stories[s.id] = { read: now(), score: Math.max(prev?.score || 0, right) }; if (!prev) addXP(15 + right * 5); if (right === s.qs.length) petals(); window.Fun?.event?.('story', { id: s.id }); quiz.append(h('div.feedback.ok', h('strong', `${right}/${s.qs.length} correct · story complete`))); checkAchievements(); }
       } }, o)));
       box.append(opts); quiz.append(box);
     });

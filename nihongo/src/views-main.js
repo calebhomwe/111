@@ -1,6 +1,6 @@
 // ─── App shell, router, home, learn path, lessons, reviews ────────────────
 const NAV = [
-  { id: 'home', label: 'Today', icon: 'home', count: () => window.Fun?.questBadge?.() || 0 },
+  { id: 'home', label: 'Today', icon: 'home', count: () => (S.placement || Object.keys(S.cards).length ? window.Fun?.questBadge?.() : 0) || 0 },
   { id: 'learn', label: 'Learn', icon: 'learn' },
   { id: 'review', label: 'Review', icon: 'review', count: () => dueCards().length },
   { id: 'practice', label: 'Dojo', icon: 'brush' },

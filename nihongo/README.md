@@ -10,12 +10,18 @@ A complete beginner-to-N4 Japanese course in a single HTML file. Open `index.htm
 | **Read** | 10 graded stories (kana, N5, N4). Tap any word to see its meaning, turn furigana on or off, listen sentence by sentence, and answer comprehension questions. |
 | **Sensei** | Runs only when opened as a claude.ai artifact. It role-plays eight real-life scenes and corrects your Japanese, writes new stories at your level from words you know, explains sentences, and critiques your handwriting. |
 
-Progress is saved in the browser. As an artifact, it is also saved to your Claude account.
+Progress is saved in the browser. As an artifact, it is also saved to your Claude account. The standalone site is installable and works offline.
+
+## Testing and hosting
+
+See [TESTING.md](TESTING.md) for how to open it on an iPhone, the Home Screen install, and a 10-minute test script.
 
 ## Building
 
 ```
 python3 nihongo/build.py                 # bundles src/ + data/ into index.html
+python3 nihongo/build.py --site DIR      # deployable static site (page, manifest, service worker, icons, img, audio)
+bash nihongo/tools/deploy_pages.sh       # publish that site to the gh-pages branch
 python3 nihongo/tools/gen_images.py      # optional: story art via OpenRouter (OPENROUTER_API_KEY)
 ```
 

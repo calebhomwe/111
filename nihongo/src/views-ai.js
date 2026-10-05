@@ -1,14 +1,16 @@
 // ─── Sensei: conversation partner, story writer, explainer (Claude via `sample`) ─
 const Sensei = {
-  fn: null, available: false, images: false,
+  fn: null, available: false, images: false, checked: false, hasHost: !!(window.claude && window.claude.use),
   async init() {
-    if (!window.claude?.use) return;
+    if (!window.claude?.use) { this.checked = true; return; }
     try {
-      const s = await claude.use('sample'); if (!s) return;
+      const s = await claude.use('sample'); if (!s) { this.checked = true; return; }
       this.fn = s; this.available = true;
       try { const lim = await s.limits(); this.images = !!lim?.images; } catch (e) {}
       if (App.route === 'read' || (App.route === 'sensei' && !App.params.scenario)) App.render();
     } catch (e) {}
+    this.checked = true;
+    if (!this.available && App.route === 'sensei') App.render();
   },
   errorText(e) {
     const c = e?.code;
@@ -82,7 +84,7 @@ VIEWS.sensei = (p) => {
   const tab = p.tab || 'talk';
   const tabs = h('div.tabs', [['talk', 'Conversation'], ['story', 'Story writer'], ['ask', 'Ask anything']].map(([id, l]) => h('button', { 'aria-selected': tab === id ? 'true' : 'false', onclick: () => App.go('sensei', { tab: id }) }, l)));
   const head = h('div.stack', h('div.sensei-head', art('sensei', '.avatar-lg', 'Sensei'), h('div.stack', { style: { gap: '4px' } }, h('div.eyebrow', '先生 · Sensei'), h('h1', 'Practice with Sensei'), h('p.muted', { style: { maxWidth: '62ch' } }, 'Sensei is Claude, set up as your Japanese tutor. It adapts to what you have learned in Michi, corrects your sentences (including speech style: casual vs polite) and suggests what to say next.'))), tabs);
-  if (!Sensei.available) return h('div', head, h('section.card.pad-lg.empty.stack', { style: { justifyItems: 'center' } }, h('span.hanko', '先'), h('h3', 'Sensei is waking up…'), h('p.muted', { style: { maxWidth: '52ch' } }, 'Sensei runs on your Claude account and only works while Michi is open in Claude. If this message stays, AI features are not available in this view. Lessons, reviews, writing and reading all work without it.')));
+  if (!Sensei.available) return h('div', head, h('section.card.pad-lg.empty.stack', { style: { justifyItems: 'center' } }, h('span.hanko', '先'), h('h3', Sensei.checked ? 'Sensei lives inside Claude' : 'Sensei is waking up…'), h('p.muted', { style: { maxWidth: '52ch' } }, Sensei.checked ? 'Conversation practice, story writing and sentence explanations run on your Claude account, so they only work when Michi is opened as an artifact in claude.ai. Everything else (lessons, reviews, writing, reading, drills, recorded voice) works here without it.' : 'Checking whether Claude is available in this view…')));
   if (tab === 'story') return h('div', head, storyWriter());
   if (tab === 'ask') return h('div', head, askAnything());
   return h('div', head, p.scenario ? chatView(SCENARIOS.find(s => s.id === p.scenario) || SCENARIOS[0]) : h('div.grid.g4', SCENARIOS.map(sc => h('button.scenario.scene-card', { onclick: () => App.go('sensei', { tab: 'talk', scenario: sc.id }) }, art('sc-' + sc.id, '.scene-img'), h('div.scene-meta', h('div.jp', sc.jp), h('div.muted.small', sc.en))))));

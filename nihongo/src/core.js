@@ -310,16 +310,17 @@ const Voice = {
   },
 };
 // Recorded native audio: audio/index.json maps exact text → [pack, offset, length, ms]; packs are MP3 byte ranges.
+const AV = () => (window.MICHI_STANDALONE?.v ? '?v=' + window.MICHI_STANDALONE.v : '');
 const Clips = {
   index: null, loading: null, packs: new Map(), urls: new Map(),
   load() {
-    if (!this.loading) this.loading = Promise.race([fetch('audio/index.json').then(r => r.ok ? r.json() : null).catch(() => null), new Promise(r => setTimeout(() => r(null), 2500))]).then(j => { this.index = j && isObj(j.clips) && Array.isArray(j.packs) ? j : null; return this.index; });
+    if (!this.loading) this.loading = Promise.race([fetch('audio/index.json' + AV()).then(r => r.ok ? r.json() : null).catch(() => null), new Promise(r => setTimeout(() => r(null), 2500))]).then(j => { this.index = j && isObj(j.clips) && Array.isArray(j.packs) ? j : null; return this.index; });
     return this.loading;
   },
   has(t) { return !!this.index?.clips?.[t]; },
   pack(p) {
     let pk = this.packs.get(p);
-    if (!pk) { pk = fetch('audio/' + this.index.packs[p]).then(r => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }); pk.catch(() => this.packs.delete(p)); this.packs.set(p, pk); }
+    if (!pk) { pk = fetch('audio/' + this.index.packs[p] + AV()).then(r => { if (!r.ok) throw new Error('pack'); return r.arrayBuffer(); }); pk.catch(() => this.packs.delete(p)); this.packs.set(p, pk); }
     return pk;
   },
   async url(t) {
