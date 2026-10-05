@@ -1,0 +1,2193 @@
+{
+ "reading": [
+  {
+   "id": "r-k1",
+   "lv": "k",
+   "kind": "menu",
+   "text": "コーヒー　300えん\nケーキ　400えん\nジュース　250えん",
+   "fu": "コーヒー　さんびゃくえん\nケーキ　よんひゃくえん\nジュース　にひゃくごじゅうえん",
+   "en": "Coffee ¥300 / Cake ¥400 / Juice ¥250",
+   "q": "How much is the cake?",
+   "opts": [
+    "¥400",
+    "¥300",
+    "¥250",
+    "¥700"
+   ],
+   "a": 0
+  },
+  {
+   "id": "r-k2",
+   "lv": "k",
+   "kind": "sign",
+   "text": "トイレは 2かいです。",
+   "fu": "トイレは にかいです。",
+   "en": "The toilets are on the 2nd floor.",
+   "q": "Where are the toilets?",
+   "opts": [
+    "Two minutes away",
+    "On the 2nd floor",
+    "Next to the exit",
+    "On the ground floor"
+   ],
+   "a": 1
+  },
+  {
+   "id": "r-k3",
+   "lv": "k",
+   "kind": "message",
+   "text": "あした うちで パーティーを します。きて ください！",
+   "fu": "あした うちで パーティーを します。きて ください！",
+   "en": "I'm having a party at my place tomorrow. Please come!",
+   "q": "What is this message?",
+   "opts": [
+    "An invitation to a party at a restaurant today",
+    "A request to bring food to a party",
+    "An invitation to a party at the writer's home tomorrow",
+    "A message cancelling tomorrow's party"
+   ],
+   "a": 2
+  },
+  {
+   "id": "r-k4",
+   "lv": "k",
+   "kind": "notice",
+   "text": "きょうは やすみです。",
+   "fu": "きょうは やすみです。",
+   "en": "We're closed today.",
+   "q": "You see this on a shop door. What does it mean?",
+   "opts": [
+    "The shop is open late today",
+    "There is a sale today",
+    "The shop will reopen in a few minutes",
+    "The shop is closed today"
+   ],
+   "a": 3
+  },
+  {
+   "id": "r-k5",
+   "lv": "k",
+   "kind": "message",
+   "text": "ごめんなさい。10ぷん おくれます。",
+   "fu": "ごめんなさい。じゅっぷん おくれます。",
+   "en": "Sorry. I'll be 10 minutes late.",
+   "q": "What is your friend telling you?",
+   "opts": [
+    "They'll be 10 minutes late",
+    "They're already there, waiting for you",
+    "They can't come today",
+    "They'll meet you at 10 o'clock"
+   ],
+   "a": 0
+  },
+  {
+   "id": "r-a1",
+   "lv": "n5a",
+   "kind": "sign",
+   "text": "月曜日は休みです。",
+   "fu": "げつようびはやすみです。",
+   "en": "We're closed on Mondays.",
+   "q": "This sign is on a restaurant door. When is the restaurant closed?",
+   "opts": [
+    "On Sundays",
+    "On Mondays",
+    "On Tuesdays",
+    "Never — it's open every day"
+   ],
+   "a": 1
+  },
+  {
+   "id": "r-a2",
+   "lv": "n5a",
+   "kind": "menu",
+   "text": "ラーメン　800円\nぎょうざ　400円\nごはん　200円",
+   "fu": "ラーメン　はっぴゃくえん\nぎょうざ　よんひゃくえん\nごはん　にひゃくえん",
+   "en": "Ramen ¥800 / Gyoza ¥400 / Rice ¥200",
+   "q": "You order ramen and gyoza. How much do you pay?",
+   "opts": [
+    "¥1,000",
+    "¥800",
+    "¥1,200",
+    "¥1,400"
+   ],
+   "a": 2
+  },
+  {
+   "id": "r-a3",
+   "lv": "n5a",
+   "kind": "sign",
+   "text": "午前10時〜午後8時\n日曜日は休みです。",
+   "fu": "ごぜんじゅうじからごごはちじまで\nにちようびはやすみです。",
+   "en": "Open 10 a.m.–8 p.m. Closed on Sundays.",
+   "q": "Which is true about this shop?",
+   "opts": [
+    "It opens at 8 a.m.",
+    "It closes at 10 p.m.",
+    "It's open every day",
+    "It's closed on Sundays"
+   ],
+   "a": 3
+  },
+  {
+   "id": "r-a4",
+   "lv": "n5a",
+   "kind": "message",
+   "text": "田中です。今日は学校を休みます。先生に言ってください。",
+   "fu": "たなかです。きょうはがっこうをやすみます。せんせいにいってください。",
+   "en": "It's Tanaka. I'm staying home from school today. Please tell the teacher.",
+   "q": "What does Tanaka want you to do?",
+   "opts": [
+    "Tell the teacher he's absent today",
+    "Come to his house after school",
+    "Meet him at school",
+    "Ask the teacher for the homework"
+   ],
+   "a": 0
+  },
+  {
+   "id": "r-a5",
+   "lv": "n5a",
+   "kind": "short text",
+   "text": "わたしは毎日電車で会社に行きます。会社は駅の前です。",
+   "fu": "わたしはまいにちでんしゃでかいしゃにいきます。かいしゃはえきのまえです。",
+   "en": "I go to work by train every day. My office is in front of the station.",
+   "q": "Where is the writer's office?",
+   "opts": [
+    "Behind the station",
+    "In front of the station",
+    "Next to the writer's house",
+    "Far from the station"
+   ],
+   "a": 1
+  },
+  {
+   "id": "r-b1",
+   "lv": "n5b",
+   "kind": "sign",
+   "text": "ここでしゃしんをとらないでください。",
+   "fu": "ここでしゃしんをとらないでください。",
+   "en": "Please do not take photos here.",
+   "q": "What does this sign ask you to do?",
+   "opts": [
+    "Have your photo taken here",
+    "Not eat or drink here",
+    "Not take photos here",
+    "Wait here to have your photo taken"
+   ],
+   "a": 2
+  },
+  {
+   "id": "r-b2",
+   "lv": "n5b",
+   "kind": "message",
+   "text": "ごめん、電車がおくれているから、七時半ごろになる。先に店に入っていて。",
+   "fu": "ごめん、でんしゃがおくれているから、しちじはんごろになる。さきにみせにはいっていて。",
+   "en": "Sorry, my train is running late, so I'll get there around 7:30. Go into the restaurant ahead of me.",
+   "q": "What does your friend want you to do?",
+   "opts": [
+    "Wait for them at the station",
+    "Go home without them",
+    "Come to the station at 7:30",
+    "Go into the restaurant first"
+   ],
+   "a": 3
+  },
+  {
+   "id": "r-b3",
+   "lv": "n5b",
+   "kind": "notice",
+   "text": "もえるゴミは、月曜日と木曜日のあさ八時までに出してください。",
+   "fu": "もえるゴミは、げつようびともくようびのあさはちじまでにだしてください。",
+   "en": "Please put out burnable garbage by 8 a.m. on Mondays and Thursdays.",
+   "q": "When should you put out burnable garbage?",
+   "opts": [
+    "By 8 a.m. on Mondays and Thursdays",
+    "Any time on Mondays and Thursdays",
+    "By 8 a.m. every day",
+    "After 8 p.m. on Mondays and Thursdays"
+   ],
+   "a": 0
+  },
+  {
+   "id": "r-b4",
+   "lv": "n5b",
+   "kind": "short text",
+   "text": "きのうは雨でしたから、どこにも行きませんでした。うちで本を読んだり、テレビを見たりしました。",
+   "fu": "きのうはあめでしたから、どこにもいきませんでした。うちでほんをよんだり、テレビをみたりしました。",
+   "en": "It rained yesterday, so I didn't go anywhere. I stayed home and did things like reading and watching TV.",
+   "q": "What did the writer do yesterday?",
+   "opts": [
+    "Went for a walk in the rain",
+    "Stayed home, reading and watching TV",
+    "Read books at the library",
+    "Watched a movie at a friend's house"
+   ],
+   "a": 1
+  },
+  {
+   "id": "r-b5",
+   "lv": "n5b",
+   "kind": "message",
+   "text": "山田さん、あしたのミーティングは十時からじゃなくて、十一時からです。よろしくおねがいします。",
+   "fu": "やまださん、あしたのミーティングはじゅうじからじゃなくて、じゅういちじからです。よろしくおねがいします。",
+   "en": "Ms. Yamada, tomorrow's meeting starts at 11, not 10. Thank you.",
+   "q": "What is the message about?",
+   "opts": [
+    "Tomorrow's meeting has been cancelled",
+    "Tomorrow's meeting starts at 10, not 11",
+    "Tomorrow's meeting starts at 11, not 10",
+    "The meeting has moved to the day after tomorrow"
+   ],
+   "a": 2
+  },
+  {
+   "id": "r-41",
+   "lv": "n4",
+   "kind": "notice",
+   "text": "図書館からのお知らせ\n来週の月曜日から水曜日まで、図書館は休みです。休みの間、本は駅前のボックスにかえしてください。",
+   "fu": "としょかんからのおしらせ\nらいしゅうのげつようびからすいようびまで、としょかんはやすみです。やすみのあいだ、ほんはえきまえのボックスにかえしてください。",
+   "en": "Notice from the library: The library will be closed from Monday to Wednesday next week. While it is closed, please return books to the box in front of the station.",
+   "q": "You want to return a book next Tuesday. What should you do?",
+   "opts": [
+    "Take it to the library counter",
+    "Mail it to the library",
+    "Keep it until next Monday",
+    "Put it in the box in front of the station"
+   ],
+   "a": 3
+  },
+  {
+   "id": "r-42",
+   "lv": "n4",
+   "kind": "message",
+   "text": "きのうはてつだってくれてありがとう。おかげで、ひっこしが早く終わったよ。今度ごはんおごるね！",
+   "fu": "きのうはてつだってくれてありがとう。おかげで、ひっこしがはやくおわったよ。こんどごはんおごるね！",
+   "en": "Thanks for helping yesterday. Thanks to you, the move was over quickly. I'll treat you to a meal next time!",
+   "q": "Why is your friend thanking you?",
+   "opts": [
+    "You helped them move house",
+    "You treated them to a meal",
+    "You lent them your car",
+    "You helped them study for a test"
+   ],
+   "a": 0
+  },
+  {
+   "id": "r-43",
+   "lv": "n4",
+   "kind": "sign",
+   "text": "ここでは写真をとってもいいですが、フラッシュは使わないでください。",
+   "fu": "ここではしゃしんをとってもいいですが、フラッシュはつかわないでください。",
+   "en": "You may take photos here, but please don't use flash.",
+   "q": "According to the sign, what is allowed here?",
+   "opts": [
+    "Taking photos with flash",
+    "Taking photos without flash",
+    "Nothing — photography is not allowed",
+    "Using flash if you ask the staff first"
+   ],
+   "a": 1
+  },
+  {
+   "id": "r-44",
+   "lv": "n4",
+   "kind": "short text",
+   "text": "日本に来たばかりのころは、はしを使うのが下手でしたが、毎日使っていたら、上手になりました。",
+   "fu": "にほんにきたばかりのころは、はしをつかうのがへたでしたが、まいにちつかっていたら、じょうずになりました。",
+   "en": "When I had just come to Japan, I was bad at using chopsticks, but after using them every day, I got good at it.",
+   "q": "What does the writer say about chopsticks?",
+   "opts": [
+    "They still can't use chopsticks well",
+    "They were already good at them before coming to Japan",
+    "They were bad at first but improved by using them every day",
+    "They stopped using chopsticks after a while"
+   ],
+   "a": 2
+  },
+  {
+   "id": "r-45",
+   "lv": "n4",
+   "kind": "message",
+   "text": "明日のテストですが、先生が病気のため、来週になりました。教室は同じです。",
+   "fu": "あしたのテストですが、せんせいがびょうきのため、らいしゅうになりました。きょうしつはおなじです。",
+   "en": "About tomorrow's test: because the teacher is ill, it has been moved to next week. The classroom is the same.",
+   "q": "What has changed?",
+   "opts": [
+    "The test will be in a different classroom",
+    "The test has been cancelled",
+    "Nothing — the test is tomorrow as planned",
+    "The test has been moved to next week"
+   ],
+   "a": 3
+  }
+ ],
+ "listening": [
+  {
+   "id": "l-k1",
+   "lv": "k",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "すみません、これは いくらですか。",
+     "fu": "すみません、これは いくらですか。"
+    },
+    {
+     "who": "B",
+     "jp": "ごひゃくえんです。",
+     "fu": "ごひゃくえんです。"
+    }
+   ],
+   "q": "How much is it?",
+   "opts": [
+    "¥5,000",
+    "¥500",
+    "¥50",
+    "¥900"
+   ],
+   "a": 1,
+   "en": "A: Excuse me, how much is this? B: It's 500 yen."
+  },
+  {
+   "id": "l-k2",
+   "lv": "k",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "すみません、トイレは どこですか。",
+     "fu": "すみません、トイレは どこですか。"
+    },
+    {
+     "who": "B",
+     "jp": "あそこです。",
+     "fu": "あそこです。"
+    }
+   ],
+   "q": "What is the person looking for?",
+   "opts": [
+    "The station",
+    "The exit",
+    "The toilet",
+    "A shop"
+   ],
+   "a": 2,
+   "en": "A: Excuse me, where is the toilet? B: It's over there."
+  },
+  {
+   "id": "l-k3",
+   "lv": "k",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "コーヒーと こうちゃ、どちらが いいですか。",
+     "fu": "コーヒーと こうちゃ、どちらが いいですか。"
+    },
+    {
+     "who": "B",
+     "jp": "こうちゃを おねがいします。",
+     "fu": "こうちゃを おねがいします。"
+    }
+   ],
+   "q": "What does B want?",
+   "opts": [
+    "Coffee",
+    "Both coffee and tea",
+    "Nothing",
+    "Tea"
+   ],
+   "a": 3,
+   "en": "A: Which would you like, coffee or tea? B: Tea, please."
+  },
+  {
+   "id": "l-k4",
+   "lv": "k",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "いま なんじですか。",
+     "fu": "いま なんじですか。"
+    },
+    {
+     "who": "B",
+     "jp": "よじです。",
+     "fu": "よじです。"
+    }
+   ],
+   "q": "What time is it?",
+   "opts": [
+    "4:00",
+    "7:00",
+    "8:00",
+    "1:00"
+   ],
+   "a": 0,
+   "en": "A: What time is it now? B: It's four o'clock."
+  },
+  {
+   "id": "l-k5",
+   "lv": "k",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "いってきます！",
+     "fu": "いってきます！"
+    },
+    {
+     "who": "B",
+     "jp": "いってらっしゃい。",
+     "fu": "いってらっしゃい。"
+    }
+   ],
+   "q": "What is happening?",
+   "opts": [
+    "A has just come home",
+    "A is leaving home",
+    "They are about to eat",
+    "They are going to bed"
+   ],
+   "a": 1,
+   "en": "A: I'm off! B: See you later! (lit. 'Go and come back.')"
+  },
+  {
+   "id": "l-a1",
+   "lv": "n5a",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "いらっしゃいませ。",
+     "fu": "いらっしゃいませ。"
+    },
+    {
+     "who": "B",
+     "jp": "すみません、りんごを三つください。",
+     "fu": "すみません、りんごをみっつください。"
+    },
+    {
+     "who": "A",
+     "jp": "はい、三百円です。",
+     "fu": "はい、さんびゃくえんです。"
+    }
+   ],
+   "q": "What does B buy, and how much is it?",
+   "opts": [
+    "Three apples for ¥3,000",
+    "Two apples for ¥300",
+    "Three apples for ¥300",
+    "Four apples for ¥400"
+   ],
+   "a": 2,
+   "en": "A: Welcome! B: Excuse me, three apples, please. A: Sure, that's 300 yen."
+  },
+  {
+   "id": "l-a2",
+   "lv": "n5a",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "田中さん、日曜日に何をしましたか。",
+     "fu": "たなかさん、にちようびになにをしましたか。"
+    },
+    {
+     "who": "B",
+     "jp": "友だちとえいがを見ました。",
+     "fu": "ともだちとえいがをみました。"
+    }
+   ],
+   "q": "What did Tanaka do on Sunday?",
+   "opts": [
+    "Watched TV at home alone",
+    "Went shopping with a friend",
+    "Studied with a friend",
+    "Saw a movie with a friend"
+   ],
+   "a": 3,
+   "en": "A: Mr. Tanaka, what did you do on Sunday? B: I saw a movie with a friend."
+  },
+  {
+   "id": "l-a3",
+   "lv": "n5a",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "すみません、駅はどこですか。",
+     "fu": "すみません、えきはどこですか。"
+    },
+    {
+     "who": "B",
+     "jp": "駅ですか。あのぎんこうの右ですよ。",
+     "fu": "えきですか。あのぎんこうのみぎですよ。"
+    }
+   ],
+   "q": "Where is the station?",
+   "opts": [
+    "To the right of the bank",
+    "To the left of the bank",
+    "Behind the bank",
+    "Inside the bank building"
+   ],
+   "a": 0,
+   "en": "A: Excuse me, where is the station? B: The station? It's to the right of that bank."
+  },
+  {
+   "id": "l-a4",
+   "lv": "n5a",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "先生、しゅくだいはいつまでですか。",
+     "fu": "せんせい、しゅくだいはいつまでですか。"
+    },
+    {
+     "who": "B",
+     "jp": "金曜日までです。",
+     "fu": "きんようびまでです。"
+    }
+   ],
+   "q": "When is the homework due?",
+   "opts": [
+    "By Monday",
+    "By Friday",
+    "By Thursday",
+    "Today"
+   ],
+   "a": 1,
+   "en": "A: Teacher, when is the homework due? B: It's due by Friday."
+  },
+  {
+   "id": "l-a5",
+   "lv": "n5a",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "おさけ、飲みますか。",
+     "fu": "おさけ、のみますか。"
+    },
+    {
+     "who": "B",
+     "jp": "いいえ、けっこうです。おちゃをください。",
+     "fu": "いいえ、けっこうです。おちゃをください。"
+    }
+   ],
+   "q": "What does B want to drink?",
+   "opts": [
+    "Sake",
+    "Water",
+    "Tea",
+    "Coffee"
+   ],
+   "a": 2,
+   "en": "A: Will you have some sake? B: No, thank you. I'd like some tea, please."
+  },
+  {
+   "id": "l-b1",
+   "lv": "n5b",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "あした、いっしょにうみに行きませんか。",
+     "fu": "あした、いっしょにうみにいきませんか。"
+    },
+    {
+     "who": "B",
+     "jp": "いいですね。何時にどこで会いましょうか。",
+     "fu": "いいですね。なんじにどこであいましょうか。"
+    },
+    {
+     "who": "A",
+     "jp": "九時に駅で会いましょう。",
+     "fu": "くじにえきであいましょう。"
+    }
+   ],
+   "q": "Where and when will they meet?",
+   "opts": [
+    "At the beach at 9:00",
+    "At the station at 10:00",
+    "At A's house at 9:00",
+    "At the station at 9:00"
+   ],
+   "a": 3,
+   "en": "A: Would you like to go to the beach together tomorrow? B: Sounds good. What time and where shall we meet? A: Let's meet at the station at nine."
+  },
+  {
+   "id": "l-b2",
+   "lv": "n5b",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "すみません、ここでたばこをすってもいいですか。",
+     "fu": "すみません、ここでたばこをすってもいいですか。"
+    },
+    {
+     "who": "B",
+     "jp": "すみません、ここはちょっと…。外にきつえんじょがありますよ。",
+     "fu": "すみません、ここはちょっと…。そとにきつえんじょがありますよ。"
+    }
+   ],
+   "q": "What does B tell A?",
+   "opts": [
+    "Smoking isn't allowed here, but there's a smoking area outside",
+    "It's fine to smoke here",
+    "Smoking isn't allowed anywhere nearby",
+    "A should ask someone else"
+   ],
+   "a": 0,
+   "en": "A: Excuse me, may I smoke here? B: Sorry, here is a bit... There's a smoking area outside."
+  },
+  {
+   "id": "l-b3",
+   "lv": "n5b",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "きのうのパーティー、どうでしたか。",
+     "fu": "きのうのパーティー、どうでしたか。"
+    },
+    {
+     "who": "B",
+     "jp": "たのしかったです。でも、人が多くて、ちょっとうるさかったです。",
+     "fu": "たのしかったです。でも、ひとがおおくて、ちょっとうるさかったです。"
+    }
+   ],
+   "q": "How was the party?",
+   "opts": [
+    "Boring and too quiet",
+    "Fun, but crowded and a bit noisy",
+    "Fun and quiet",
+    "B didn't go to the party"
+   ],
+   "a": 1,
+   "en": "A: How was the party yesterday? B: It was fun. But there were a lot of people, so it was a bit noisy."
+  },
+  {
+   "id": "l-b4",
+   "lv": "n5b",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "もしもし、今どこ？",
+     "fu": "もしもし、いまどこ？"
+    },
+    {
+     "who": "B",
+     "jp": "ごめん、まだうち。あと二十分でつく。",
+     "fu": "ごめん、まだうち。あとにじゅっぷんでつく。"
+    }
+   ],
+   "q": "Where is B, and when will B arrive?",
+   "opts": [
+    "At the station; arriving in 20 minutes",
+    "Still at home; arriving in 2 hours",
+    "Still at home; arriving in 20 minutes",
+    "Already there, waiting"
+   ],
+   "a": 2,
+   "en": "A: Hello? Where are you now? B: Sorry, still at home. I'll be there in 20 minutes."
+  },
+  {
+   "id": "l-b5",
+   "lv": "n5b",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "ごちゅうもん、おきまりですか。",
+     "fu": "ごちゅうもん、おきまりですか。"
+    },
+    {
+     "who": "B",
+     "jp": "カレーを一つと、コーヒーを二つおねがいします。",
+     "fu": "カレーをひとつと、コーヒーをふたつおねがいします。"
+    },
+    {
+     "who": "A",
+     "jp": "はい、カレーお一つと、コーヒーお二つですね。",
+     "fu": "はい、カレーおひとつと、コーヒーおふたつですね。"
+    }
+   ],
+   "q": "What did B order?",
+   "opts": [
+    "Two curries and one coffee",
+    "One curry and one coffee",
+    "Two curries and two coffees",
+    "One curry and two coffees"
+   ],
+   "a": 3,
+   "en": "A: Are you ready to order? B: One curry and two coffees, please. A: Certainly, one curry and two coffees."
+  },
+  {
+   "id": "l-41",
+   "lv": "n4",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "明日の飲み会、来られる？",
+     "fu": "あしたののみかい、こられる？"
+    },
+    {
+     "who": "B",
+     "jp": "行きたいんだけど、仕事がおそくなりそうで…。",
+     "fu": "いきたいんだけど、しごとがおそくなりそうで…。"
+    },
+    {
+     "who": "A",
+     "jp": "そっか、ざんねん。また今度ね。",
+     "fu": "そっか、ざんねん。またこんどね。"
+    }
+   ],
+   "q": "Is B going to tomorrow's drinking party?",
+   "opts": [
+    "Probably not, because B will likely be working late",
+    "Yes, B will come after work",
+    "No, because B doesn't like drinking parties",
+    "Yes, B will come early"
+   ],
+   "a": 0,
+   "en": "A: Can you come to the drinks tomorrow? B: I'd like to, but it looks like I'll be working late... A: I see, that's a shame. Next time, then."
+  },
+  {
+   "id": "l-42",
+   "lv": "n4",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "すみません、この電車は北山駅に止まりますか。",
+     "fu": "すみません、このでんしゃはきたやまえきにとまりますか。"
+    },
+    {
+     "who": "B",
+     "jp": "いいえ、これは急行なので止まりません。つぎのふつう電車に乗ってください。",
+     "fu": "いいえ、これはきゅうこうなのでとまりません。つぎのふつうでんしゃにのってください。"
+    }
+   ],
+   "q": "What should A do?",
+   "opts": [
+    "Stay on this train",
+    "Take the next local train",
+    "Wait for the next express",
+    "Change trains at Kitayama"
+   ],
+   "a": 1,
+   "en": "A: Excuse me, does this train stop at Kitayama? B: No, this is an express, so it doesn't stop there. Please take the next local train."
+  },
+  {
+   "id": "l-43",
+   "lv": "n4",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "今日はどうしましたか。",
+     "fu": "きょうはどうしましたか。"
+    },
+    {
+     "who": "B",
+     "jp": "きのうの夜からねつがあって、頭もいたいんです。",
+     "fu": "きのうのよるからねつがあって、あたまもいたいんです。"
+    },
+    {
+     "who": "A",
+     "jp": "じゃあ、くすりを出しますから、今日は早くねてください。",
+     "fu": "じゃあ、くすりをだしますから、きょうははやくねてください。"
+    }
+   ],
+   "q": "What does the doctor tell B?",
+   "opts": [
+    "B should come back to the clinic tomorrow",
+    "B doesn't need any medicine",
+    "B will get medicine and should go to bed early tonight",
+    "B should take a hot bath and then go to work"
+   ],
+   "a": 2,
+   "en": "A: What seems to be the problem today? B: I've had a fever since last night, and my head hurts too. A: All right, I'll give you some medicine, so go to bed early today."
+  },
+  {
+   "id": "l-44",
+   "lv": "n4",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "このケーキ、自分で作ったの？",
+     "fu": "このケーキ、じぶんでつくったの？"
+    },
+    {
+     "who": "B",
+     "jp": "うん。母に教えてもらったんだ。",
+     "fu": "うん。ははにおしえてもらったんだ。"
+    }
+   ],
+   "q": "Who made the cake?",
+   "opts": [
+    "B's mother made it",
+    "B bought it at a shop",
+    "A made it",
+    "B did, after learning how from their mother"
+   ],
+   "a": 3,
+   "en": "A: Did you make this cake yourself? B: Yeah. My mom taught me how."
+  },
+  {
+   "id": "l-45",
+   "lv": "n4",
+   "lines": [
+    {
+     "who": "A",
+     "jp": "すみません、この近くにコンビニはありますか。",
+     "fu": "すみません、このちかくにコンビニはありますか。"
+    },
+    {
+     "who": "B",
+     "jp": "ええ、この道をまっすぐ行って、二つ目のかどを左にまがると、右がわにありますよ。",
+     "fu": "ええ、このみちをまっすぐいって、ふたつめのかどをひだりにまがると、みぎがわにありますよ。"
+    }
+   ],
+   "q": "Where is the convenience store?",
+   "opts": [
+    "Go straight, turn left at the second corner, and it is on the right",
+    "Go straight, turn right at the second corner, and it is on the left",
+    "Turn left at the first corner, and it is on the right",
+    "At the end of this street, on the left"
+   ],
+   "a": 0,
+   "en": "A: Excuse me, is there a convenience store near here? B: Yes, go straight down this street, turn left at the second corner, and it's on your right."
+  }
+ ],
+ "writing": [
+  {
+   "id": "w-k1",
+   "lv": "k",
+   "prompt": "You're Satō (さとう), meeting your new class for the first time. Say: 'Nice to meet you. I'm Satō.' (polite)",
+   "reg": "polite",
+   "answers": [
+    "はじめましてさとうです",
+    "はじめましてわたしはさとうです",
+    "はじめましてさとうですよろしくおねがいします",
+    "はじめましてわたしはさとうですよろしくおねがいします"
+   ],
+   "keys": [
+    "はじめまして",
+    "さとう",
+    "です"
+   ],
+   "model": {
+    "jp": "はじめまして。さとうです。",
+    "fu": "はじめまして。さとうです。"
+   }
+  },
+  {
+   "id": "w-k2",
+   "lv": "k",
+   "prompt": "Point at an item in a shop and ask the clerk: 'How much is this?' (polite)",
+   "reg": "polite",
+   "answers": [
+    "これはいくらですか",
+    "これいくらですか",
+    "すみませんこれはいくらですか",
+    "すみませんこれいくらですか"
+   ],
+   "keys": [
+    "これ",
+    "いくら"
+   ],
+   "model": {
+    "jp": "これは いくらですか。",
+    "fu": "これは いくらですか。"
+   }
+  },
+  {
+   "id": "w-k3",
+   "lv": "k",
+   "prompt": "Your friend helped you after class. Say: 'Thanks! See you tomorrow.' (casual)",
+   "reg": "casual",
+   "answers": [
+    "ありがとうまたあした",
+    "ありがとうまたあしたね",
+    "ありがとうじゃあまたあした",
+    "ありがとうじゃあまたあしたね",
+    "ありがとうじゃあねまたあした"
+   ],
+   "keys": [
+    "ありがとう",
+    "またあした"
+   ],
+   "model": {
+    "jp": "ありがとう！またあしたね。",
+    "fu": "ありがとう！またあしたね。"
+   }
+  },
+  {
+   "id": "w-k4",
+   "lv": "k",
+   "prompt": "Your friend asks what food you like. Tell them: 'I like sushi.' (casual)",
+   "reg": "casual",
+   "answers": [
+    "すしがすき",
+    "すしがすきだよ",
+    "すしすき",
+    "わたしはすしがすき",
+    "おすしがすき",
+    "おすしがすきだよ",
+    "すしがだいすき",
+    "すしがだいすきだよ",
+    "おすしがだいすき",
+    "すしがすきだ",
+    "すしすきだよ",
+    "すしがすきなんだ"
+   ],
+   "keys": [
+    "すし",
+    "すき"
+   ],
+   "model": {
+    "jp": "すしが すきだよ。",
+    "fu": "すしが すきだよ。"
+   }
+  },
+  {
+   "id": "w-k5",
+   "lv": "k",
+   "prompt": "Your teacher asks you something you didn't follow. Say: 'Sorry, I don't understand.' (polite)",
+   "reg": "polite",
+   "answers": [
+    "すみませんわかりません",
+    "すみませんよくわかりません",
+    "すみませんちょっとわかりません",
+    "すみませんわかりませんでした",
+    "ごめんなさいわかりません"
+   ],
+   "keys": [
+    "わかりません"
+   ],
+   "model": {
+    "jp": "すみません、わかりません。",
+    "fu": "すみません、わかりません。"
+   }
+  },
+  {
+   "id": "w-a1",
+   "lv": "n5a",
+   "prompt": "Tell your friend you ate sushi yesterday. (casual)",
+   "reg": "casual",
+   "answers": [
+    "きのうすしをたべた",
+    "きのうすしたべた",
+    "きのうおすしをたべた",
+    "きのうおすしたべた",
+    "きのうすしをたべたよ",
+    "きのうおすしをたべたよ",
+    "きのうはすしをたべた",
+    "きのうはおすしをたべた",
+    "わたしはきのうすしをたべた",
+    "きのうすしたべたよ",
+    "きのうすしをたべたんだ"
+   ],
+   "keys": [
+    "きのう",
+    "すし",
+    "たべた"
+   ],
+   "model": {
+    "jp": "きのう、すしを食べた。",
+    "fu": "きのう、すしをたべた。"
+   }
+  },
+  {
+   "id": "w-a2",
+   "lv": "n5a",
+   "prompt": "Your teacher asks about your weekend plans. Say you will go to the mountains with a friend on Saturday. (polite)",
+   "reg": "polite",
+   "answers": [
+    "どようびにともだちとやまにいきます",
+    "どようびにともだちとやまへいきます",
+    "どようびはともだちとやまにいきます",
+    "どようびはともだちとやまへいきます",
+    "わたしはどようびにともだちとやまにいきます",
+    "わたしはどようびにともだちとやまへいきます",
+    "どようびにやまにともだちといきます"
+   ],
+   "keys": [
+    "どようび",
+    "ともだちと",
+    "やま",
+    "いきます"
+   ],
+   "model": {
+    "jp": "土曜日に友だちと山に行きます。",
+    "fu": "どようびにともだちとやまにいきます。"
+   }
+  },
+  {
+   "id": "w-a3",
+   "lv": "n5a",
+   "prompt": "You're lost. Politely ask a stranger where the station is. (polite)",
+   "reg": "polite",
+   "answers": [
+    "えきはどこですか",
+    "すみませんえきはどこですか",
+    "えきはどちらですか",
+    "すみませんえきはどちらですか",
+    "えきはどこにありますか",
+    "すみませんえきはどこにありますか"
+   ],
+   "keys": [
+    "えき"
+   ],
+   "model": {
+    "jp": "すみません、駅はどこですか。",
+    "fu": "すみません、えきはどこですか。"
+   }
+  },
+  {
+   "id": "w-a4",
+   "lv": "n5a",
+   "prompt": "Your friend offers to buy you a coffee. Tell them you don't drink coffee. (casual)",
+   "reg": "casual",
+   "answers": [
+    "コーヒーはのまない",
+    "コーヒーのまない",
+    "コーヒーはのまないよ",
+    "コーヒーはのまないんだ",
+    "わたしはコーヒーはのまない",
+    "わたしはコーヒーをのまない",
+    "コーヒーをのまない"
+   ],
+   "keys": [
+    "コーヒー",
+    "のまない"
+   ],
+   "model": {
+    "jp": "コーヒーは飲まない。",
+    "fu": "コーヒーはのまない。"
+   }
+  },
+  {
+   "id": "w-a5",
+   "lv": "n5a",
+   "prompt": "A coworker asks about your routine. Tell them: 'I get up at 7 every morning.' (polite)",
+   "reg": "polite",
+   "answers": [
+    "まいあさしちじにおきます",
+    "まいあさななじにおきます",
+    "わたしはまいあさしちじにおきます",
+    "わたしはまいあさななじにおきます",
+    "まいあさ7じにおきます",
+    "わたしはまいあさ7じにおきます"
+   ],
+   "keys": [
+    "まいあさ",
+    "おきます"
+   ],
+   "model": {
+    "jp": "まいあさ七時におきます。",
+    "fu": "まいあさしちじにおきます。"
+   }
+  },
+  {
+   "id": "w-b1",
+   "lv": "n5b",
+   "prompt": "Text your friend inviting them to see a movie together this weekend. (casual)",
+   "reg": "casual",
+   "answers": [
+    "しゅうまついっしょにえいがをみない",
+    "しゅうまついっしょにえいがみない",
+    "しゅうまつえいがをみにいかない",
+    "しゅうまつえいがみにいかない",
+    "しゅうまついっしょにえいがをみにいかない",
+    "しゅうまついっしょにえいがみにいかない",
+    "しゅうまついっしょにえいがをみよう",
+    "しゅうまついっしょにえいがみにいこう",
+    "こんしゅうまついっしょにえいがをみない",
+    "こんしゅうまついっしょにえいがみにいかない",
+    "しゅうまつえいがいかない",
+    "しゅうまつえいがみにいこう",
+    "しゅうまついっしょにえいがみようよ"
+   ],
+   "keys": [
+    "しゅうまつ",
+    "えいが"
+   ],
+   "model": {
+    "jp": "しゅうまつ、いっしょにえいがを見に行かない？",
+    "fu": "しゅうまつ、いっしょにえいがをみにいかない？"
+   }
+  },
+  {
+   "id": "w-b2",
+   "lv": "n5b",
+   "prompt": "You're in a museum. Politely ask a staff member if you may take photos here. (polite)",
+   "reg": "polite",
+   "answers": [
+    "ここでしゃしんをとってもいいですか",
+    "ここでしゃしんとってもいいですか",
+    "すみませんここでしゃしんをとってもいいですか",
+    "すみませんここでしゃしんとってもいいですか",
+    "ここでしゃしんをとってもだいじょうぶですか",
+    "すみませんしゃしんをとってもいいですか",
+    "しゃしんをとってもよろしいですか",
+    "しゃしんをとってもいいですか"
+   ],
+   "keys": [
+    "しゃしん",
+    "とっても"
+   ],
+   "model": {
+    "jp": "すみません、ここでしゃしんをとってもいいですか。",
+    "fu": "すみません、ここでしゃしんをとってもいいですか。"
+   }
+  },
+  {
+   "id": "w-b3",
+   "lv": "n5b",
+   "prompt": "You're out with a friend. Text them: 'I'm tired, so I'm going home.' (casual)",
+   "reg": "casual",
+   "answers": [
+    "つかれたからかえる",
+    "つかれたからもうかえる",
+    "つかれたからかえるね",
+    "つかれたからもうかえるね",
+    "つかれたからさきにかえる",
+    "つかれたからさきにかえるね",
+    "つかれたのでかえる",
+    "つかれたのでかえるね"
+   ],
+   "keys": [
+    "つかれた",
+    "かえる"
+   ],
+   "model": {
+    "jp": "つかれたから、かえるね。",
+    "fu": "つかれたから、かえるね。"
+   }
+  },
+  {
+   "id": "w-b4",
+   "lv": "n5b",
+   "prompt": "Your teacher asks if you've tried nattō. Say you have never eaten it. (polite)",
+   "reg": "polite",
+   "answers": [
+    "なっとうをたべたことがありません",
+    "なっとうはたべたことがありません",
+    "まだなっとうをたべたことがありません",
+    "なっとうはまだたべたことがありません",
+    "わたしはなっとうをたべたことがありません",
+    "わたしはなっとうはたべたことがありません",
+    "いいえなっとうはたべたことがありません",
+    "いいえたべたことがありません",
+    "いちどもたべたことがありません",
+    "たべたことがないです",
+    "なっとうはたべたことはありません"
+   ],
+   "keys": [
+    "たべたこと"
+   ],
+   "model": {
+    "jp": "なっとうを食べたことがありません。",
+    "fu": "なっとうをたべたことがありません。"
+   }
+  },
+  {
+   "id": "w-b5",
+   "lv": "n5b",
+   "prompt": "Your friend asks you to hang out. Tell them: 'I have to study today.' (casual)",
+   "reg": "casual",
+   "answers": [
+    "きょうはべんきょうしなきゃ",
+    "きょうはべんきょうしなきゃいけない",
+    "きょうはべんきょうしなきゃいけないんだ",
+    "きょうはべんきょうしないといけない",
+    "きょうはべんきょうしないといけないんだ",
+    "きょうはべんきょうしなくちゃ",
+    "きょうはべんきょうしなくちゃいけない",
+    "きょうべんきょうしなきゃ",
+    "きょうべんきょうしないといけない",
+    "ごめんきょうはべんきょうしなきゃ",
+    "ごめんきょうはべんきょうしないといけない",
+    "きょうはべんきょうしないと",
+    "きょうはべんきょうしなきゃだめ",
+    "きょうべんきょうしないと"
+   ],
+   "keys": [
+    "きょう",
+    "べんきょうし"
+   ],
+   "model": {
+    "jp": "今日はべんきょうしないといけない。",
+    "fu": "きょうはべんきょうしないといけない。"
+   }
+  },
+  {
+   "id": "w-41",
+   "lv": "n4",
+   "prompt": "Email your teacher: 'I'm sorry, I have a fever, so I can't come to class tomorrow.' (polite)",
+   "reg": "polite",
+   "answers": [
+    "すみませんねつがあるのであしたのじゅぎょうにいけません",
+    "すみませんねつがあるのであしたじゅぎょうにいけません",
+    "もうしわけありませんねつがあるのであしたのじゅぎょうにいけません",
+    "すみませんねつがあるのであしたのじゅぎょうにでられません",
+    "もうしわけありませんねつがあるのであしたのじゅぎょうにでられません",
+    "すみませんねつがあるのであしたのじゅぎょうをやすみます",
+    "もうしわけありませんねつがあるのであしたのじゅぎょうをやすみます",
+    "すみませんねつがあるからあしたのじゅぎょうにいけません",
+    "すみませんねつがでたのであしたのじゅぎょうにいけません",
+    "もうしわけありませんねつがでたのであしたのじゅぎょうをやすみます",
+    "すみませんねつがあってあしたのじゅぎょうにいけません",
+    "もうしわけございませんねつがあるのであしたのじゅぎょうにいけません"
+   ],
+   "keys": [
+    "ねつ",
+    "あした",
+    "じゅぎょう"
+   ],
+   "model": {
+    "jp": "すみません、ねつがあるので、明日のじゅぎょうに行けません。",
+    "fu": "すみません、ねつがあるので、あしたのじゅぎょうにいけません。"
+   }
+  },
+  {
+   "id": "w-42",
+   "lv": "n4",
+   "prompt": "You and a friend are planning tomorrow. Say: 'If it rains tomorrow, let's stay home.' (casual)",
+   "reg": "casual",
+   "answers": [
+    "あしたあめがふったらうちにいよう",
+    "あしたあめがふったらいえにいよう",
+    "あしたあめだったらうちにいよう",
+    "あしたあめだったらいえにいよう",
+    "あしたあめならうちにいよう",
+    "あしたあめならいえにいよう",
+    "あめがふったらうちにいよう",
+    "あしたあめがふったらうちにいようよ",
+    "あしたあめだったらうちにいようよ",
+    "あしたあめふったらうちにいよう",
+    "あしたあめふったらうちにいようよ",
+    "あしたあめふったらうちにいようか"
+   ],
+   "keys": [
+    "あめ",
+    "いよう"
+   ],
+   "model": {
+    "jp": "明日雨がふったら、家にいよう。",
+    "fu": "あしたあめがふったら、うちにいよう。"
+   }
+  },
+  {
+   "id": "w-43",
+   "lv": "n4",
+   "prompt": "Mr. Tanaka texted that his train is delayed. Tell your coworker: 'I think Mr. Tanaka will be late today.' (polite)",
+   "reg": "polite",
+   "answers": [
+    "たなかさんはきょうおくれるとおもいます",
+    "きょうたなかさんはおくれるとおもいます",
+    "たなかさんはきょうはおくれるとおもいます",
+    "たなかさんはきょうおくれてくるとおもいます",
+    "きょうたなかさんはおくれてくるとおもいます",
+    "たなかさんはきょうおそくなるとおもいます",
+    "きょうたなかさんはおそくなるとおもいます",
+    "たなかさんはきょうちこくするとおもいます",
+    "きょうたなかさんはちこくするとおもいます"
+   ],
+   "keys": [
+    "たなかさん",
+    "きょう",
+    "とおもいます"
+   ],
+   "model": {
+    "jp": "田中さんは今日おくれると思います。",
+    "fu": "たなかさんはきょうおくれるとおもいます。"
+   }
+  },
+  {
+   "id": "w-44",
+   "lv": "n4",
+   "prompt": "Your friend suggests a very spicy curry restaurant. Tell them you can't eat spicy food. (casual)",
+   "reg": "casual",
+   "answers": [
+    "からいものがたべられない",
+    "からいものはたべられない",
+    "からいのがたべられない",
+    "からいのはたべられない",
+    "からいものたべられない",
+    "からいものがたべられないんだ",
+    "からいものはたべられないんだ",
+    "からいのはたべられないんだ",
+    "からいものはたべられないよ",
+    "わたしはからいものがたべられない",
+    "ごめんからいものはたべられないんだ",
+    "からいものがたべれない",
+    "からいものはたべれない",
+    "からいのはたべれない"
+   ],
+   "keys": [
+    "からい"
+   ],
+   "model": {
+    "jp": "からい物は食べられないんだ。",
+    "fu": "からいものはたべられないんだ。"
+   }
+  },
+  {
+   "id": "w-45",
+   "lv": "n4",
+   "prompt": "In a shop, you'd like a closer look at a bag on the shelf behind the counter. Ask the clerk: 'Could you show me that bag?' (polite)",
+   "reg": "polite",
+   "answers": [
+    "あのかばんをみせてください",
+    "あのかばんをみせてもらえますか",
+    "あのかばんをみせてもらえませんか",
+    "あのかばんをみせてくれませんか",
+    "あのかばんをみせていただけますか",
+    "あのかばんをみせていただけませんか",
+    "そのかばんをみせてください",
+    "そのかばんをみせてもらえますか",
+    "そのかばんをみせてもらえませんか",
+    "そのかばんをみせていただけますか",
+    "そのかばんをみせていただけませんか",
+    "すみませんあのかばんをみせてください",
+    "すみませんあのかばんをみせてもらえますか",
+    "すみませんあのかばんをみせてもらえませんか",
+    "すみませんそのかばんをみせてもらえますか"
+   ],
+   "keys": [
+    "かばん",
+    "みせて"
+   ],
+   "model": {
+    "jp": "すみません、あのかばんを見せてもらえますか。",
+    "fu": "すみません、あのかばんをみせてもらえますか。"
+   }
+  }
+ ],
+ "speaking": [
+  {
+   "id": "s-k1",
+   "lv": "k",
+   "scene": "You walk into class in the morning. Your teacher greets you.",
+   "prompt": {
+    "jp": "おはようございます。",
+    "fu": "おはようございます。"
+   },
+   "opts": [
+    {
+     "jp": "おはよう。",
+     "fu": "おはよう。",
+     "ok": false,
+     "why": "Too casual for a teacher; use it with friends and family."
+    },
+    {
+     "jp": "こんばんは。",
+     "fu": "こんばんは。",
+     "ok": false,
+     "why": "This means 'good evening' — wrong time of day."
+    },
+    {
+     "jp": "おはようございます。",
+     "fu": "おはようございます。",
+     "ok": true,
+     "why": "The polite morning greeting is right for a teacher."
+    },
+    {
+     "jp": "おやすみなさい。",
+     "fu": "おやすみなさい。",
+     "ok": false,
+     "why": "This means 'good night', said before going to bed."
+    }
+   ],
+   "en": "Good morning."
+  },
+  {
+   "id": "s-k2",
+   "lv": "k",
+   "scene": "Your friend hands you a small souvenir from their trip.",
+   "prompt": {
+    "jp": "はい、これ、おみやげ。",
+    "fu": "はい、これ、おみやげ。"
+   },
+   "opts": [
+    {
+     "jp": "どういたしまして。",
+     "fu": "どういたしまして。",
+     "ok": false,
+     "why": "This means 'you're welcome' — a reply to someone else's thanks."
+    },
+    {
+     "jp": "ごめんなさい。",
+     "fu": "ごめんなさい。",
+     "ok": false,
+     "why": "This is an apology; nothing went wrong."
+    },
+    {
+     "jp": "おめでとう！",
+     "fu": "おめでとう！",
+     "ok": false,
+     "why": "This means 'congratulations'."
+    },
+    {
+     "jp": "わあ、ありがとう！",
+     "fu": "わあ、ありがとう！",
+     "ok": true,
+     "why": "A warm, casual thank-you fits a friend giving you a gift."
+    }
+   ],
+   "en": "Wow, thanks!"
+  },
+  {
+   "id": "s-k3",
+   "lv": "k",
+   "scene": "On a crowded train, you accidentally step on a stranger's foot.",
+   "prompt": null,
+   "opts": [
+    {
+     "jp": "あっ、すみません。",
+     "fu": "あっ、すみません。",
+     "ok": true,
+     "why": "The standard quick apology to a stranger."
+    },
+    {
+     "jp": "ありがとうございます。",
+     "fu": "ありがとうございます。",
+     "ok": false,
+     "why": "This thanks them instead of apologising."
+    },
+    {
+     "jp": "どういたしまして。",
+     "fu": "どういたしまして。",
+     "ok": false,
+     "why": "This means 'you're welcome'."
+    },
+    {
+     "jp": "おつかれさまです。",
+     "fu": "おつかれさまです。",
+     "ok": false,
+     "why": "A greeting between coworkers, not an apology."
+    }
+   ],
+   "en": "Oh, sorry!"
+  },
+  {
+   "id": "s-k4",
+   "lv": "k",
+   "scene": "A close friend messages you casually, asking how you are.",
+   "prompt": {
+    "jp": "げんき？",
+    "fu": "げんき？"
+   },
+   "opts": [
+    {
+     "jp": "はい、げんきでございます。",
+     "fu": "はい、げんきでございます。",
+     "ok": false,
+     "why": "Very formal, humble speech — strange with a close friend."
+    },
+    {
+     "jp": "うん、げんきだよ！",
+     "fu": "うん、げんきだよ！",
+     "ok": true,
+     "why": "A casual 'yes, I'm fine' that matches your friend's casual question."
+    },
+    {
+     "jp": "はじめまして。",
+     "fu": "はじめまして。",
+     "ok": false,
+     "why": "Only said when meeting someone for the first time."
+    },
+    {
+     "jp": "げんきですか。",
+     "fu": "げんきですか。",
+     "ok": false,
+     "why": "Just asks the same question back, politely, without answering it."
+    }
+   ],
+   "en": "Yeah, I'm good!"
+  },
+  {
+   "id": "s-k5",
+   "lv": "k",
+   "scene": "You pick up a glove a stranger dropped and hand it back. They thank you.",
+   "prompt": {
+    "jp": "あ、ありがとうございます。",
+    "fu": "あ、ありがとうございます。"
+   },
+   "opts": [
+    {
+     "jp": "はい、ありがとうございます。",
+     "fu": "はい、ありがとうございます。",
+     "ok": false,
+     "why": "Thanking them back sounds as if they had done something for you."
+    },
+    {
+     "jp": "いただきます。",
+     "fu": "いただきます。",
+     "ok": false,
+     "why": "Said just before eating."
+    },
+    {
+     "jp": "いえいえ。",
+     "fu": "いえいえ。",
+     "ok": true,
+     "why": "A modest 'not at all' — the natural reply to thanks."
+    },
+    {
+     "jp": "おかえりなさい。",
+     "fu": "おかえりなさい。",
+     "ok": false,
+     "why": "This means 'welcome home'."
+    }
+   ],
+   "en": "Not at all."
+  },
+  {
+   "id": "s-a1",
+   "lv": "n5a",
+   "scene": "At a convenience store you buy a bento. The clerk asks if you want it heated. You do.",
+   "prompt": {
+    "jp": "おべんとう、あたためますか。",
+    "fu": "おべんとう、あたためますか。"
+   },
+   "opts": [
+    {
+     "jp": "はい、あたためます。",
+     "fu": "はい、あたためます。",
+     "ok": false,
+     "why": "This says that you yourself will heat it."
+    },
+    {
+     "jp": "はい、いただきます。",
+     "fu": "はい、いただきます。",
+     "ok": false,
+     "why": "Said when you are about to eat or drink, not to accept a service."
+    },
+    {
+     "jp": "いいえ、ちがいます。",
+     "fu": "いいえ、ちがいます。",
+     "ok": false,
+     "why": "This means 'No, that's wrong' — and you do want it heated."
+    },
+    {
+     "jp": "はい、おねがいします。",
+     "fu": "はい、おねがいします。",
+     "ok": true,
+     "why": "Politely accepts the offer."
+    }
+   ],
+   "en": "Yes, please."
+  },
+  {
+   "id": "s-a2",
+   "lv": "n5a",
+   "scene": "At a ramen shop, a staff member asks how many are in your group. You are with one friend.",
+   "prompt": {
+    "jp": "何名さまですか。",
+    "fu": "なんめいさまですか。"
+   },
+   "opts": [
+    {
+     "jp": "二人です。",
+     "fu": "ふたりです。",
+     "ok": true,
+     "why": "Uses the correct counter for people."
+    },
+    {
+     "jp": "二つです。",
+     "fu": "ふたつです。",
+     "ok": false,
+     "why": "つ counts things, not people."
+    },
+    {
+     "jp": "二名さまです。",
+     "fu": "にめいさまです。",
+     "ok": false,
+     "why": "さま is an honorific; never use it about yourself."
+    },
+    {
+     "jp": "二時です。",
+     "fu": "にじです。",
+     "ok": false,
+     "why": "Gives a time, not a number of people."
+    }
+   ],
+   "en": "Two people."
+  },
+  {
+   "id": "s-a3",
+   "lv": "n5a",
+   "scene": "Your friend asks casually if you are free tomorrow. You are.",
+   "prompt": {
+    "jp": "あした、ひま？",
+    "fu": "あした、ひま？"
+   },
+   "opts": [
+    {
+     "jp": "ううん、ひまじゃない。",
+     "fu": "ううん、ひまじゃない。",
+     "ok": false,
+     "why": "Says you're busy — but you are free."
+    },
+    {
+     "jp": "うん、ひまだよ。どうして？",
+     "fu": "うん、ひまだよ。どうして？",
+     "ok": true,
+     "why": "A casual 'yes' that fits a friend's question and asks why."
+    },
+    {
+     "jp": "はい、ひまでございます。",
+     "fu": "はい、ひまでございます。",
+     "ok": false,
+     "why": "Stiff, formal speech — very odd with a friend."
+    },
+    {
+     "jp": "ひまですか？",
+     "fu": "ひまですか？",
+     "ok": false,
+     "why": "Just repeats the question back instead of answering."
+    }
+   ],
+   "en": "Yeah, I'm free. Why?"
+  },
+  {
+   "id": "s-a4",
+   "lv": "n5a",
+   "scene": "You arrive ten minutes late to class. As you walk in, the teacher looks at you.",
+   "prompt": null,
+   "opts": [
+    {
+     "jp": "ごめん、おそくなった。",
+     "fu": "ごめん、おそくなった。",
+     "ok": false,
+     "why": "Too casual for a teacher."
+    },
+    {
+     "jp": "おそいですね。",
+     "fu": "おそいですね。",
+     "ok": false,
+     "why": "Means 'It's late, isn't it?' — no apology."
+    },
+    {
+     "jp": "おそくなって、すみません。",
+     "fu": "おそくなって、すみません。",
+     "ok": true,
+     "why": "A polite apology for being late."
+    },
+    {
+     "jp": "いってきます。",
+     "fu": "いってきます。",
+     "ok": false,
+     "why": "Said when leaving home."
+    }
+   ],
+   "en": "Sorry I'm late."
+  },
+  {
+   "id": "s-a5",
+   "lv": "n5a",
+   "scene": "A coworker offers you a coffee, and you'd like one.",
+   "prompt": {
+    "jp": "コーヒー、飲みますか。",
+    "fu": "コーヒー、のみますか。"
+   },
+   "opts": [
+    {
+     "jp": "いいえ、飲みません。",
+     "fu": "いいえ、のみません。",
+     "ok": false,
+     "why": "Refuses — but you want one."
+    },
+    {
+     "jp": "はい、どうぞ。",
+     "fu": "はい、どうぞ。",
+     "ok": false,
+     "why": "Means 'Here you go' — as if you were offering it to them."
+    },
+    {
+     "jp": "はい、ごちそうさまでした。",
+     "fu": "はい、ごちそうさまでした。",
+     "ok": false,
+     "why": "Said after finishing a meal or drink, not before."
+    },
+    {
+     "jp": "あ、ありがとうございます。いただきます。",
+     "fu": "あ、ありがとうございます。いただきます。",
+     "ok": true,
+     "why": "Polite thanks plus いただきます, the natural way to accept a drink."
+    }
+   ],
+   "en": "Oh, thank you. I will."
+  },
+  {
+   "id": "s-b1",
+   "lv": "n5b",
+   "scene": "Your friend invites you to karaoke on Saturday, but you have your part-time job that day.",
+   "prompt": {
+    "jp": "今週の土曜日、カラオケ行かない？",
+    "fu": "こんしゅうのどようび、カラオケいかない？"
+   },
+   "opts": [
+    {
+     "jp": "ごめん、土曜日はバイトなんだ。またこんどさそって！",
+     "fu": "ごめん、どようびはバイトなんだ。またこんどさそって！",
+     "ok": true,
+     "why": "A casual apology, a reason, and an invitation to ask again — natural with a friend."
+    },
+    {
+     "jp": "いいえ、行きません。",
+     "fu": "いいえ、いきません。",
+     "ok": false,
+     "why": "A blunt polite-form refusal with no reason — sounds cold to a friend."
+    },
+    {
+     "jp": "ざんねんですね。",
+     "fu": "ざんねんですね。",
+     "ok": false,
+     "why": "Sounds as if your friend is the one who cannot go."
+    },
+    {
+     "jp": "もうしわけございませんが、まいりません。",
+     "fu": "もうしわけございませんが、まいりません。",
+     "ok": false,
+     "why": "Stiff humble business language — very odd between friends."
+    }
+   ],
+   "en": "Sorry, I have my part-time job on Saturday. Ask me again next time!"
+  },
+  {
+   "id": "s-b2",
+   "lv": "n5b",
+   "scene": "Your manager invites you to dinner tonight. You can't go and want to decline politely.",
+   "prompt": {
+    "jp": "こんばん、いっしょに食べに行きませんか。",
+    "fu": "こんばん、いっしょにたべにいきませんか。"
+   },
+   "opts": [
+    {
+     "jp": "行きたくないです。",
+     "fu": "いきたくないです。",
+     "ok": false,
+     "why": "Too direct — it says you don't want to go."
+    },
+    {
+     "jp": "すみません、今日はちょっと…。",
+     "fu": "すみません、きょうはちょっと…。",
+     "ok": true,
+     "why": "Apologising and trailing off with ちょっと is the polite, indirect way to decline."
+    },
+    {
+     "jp": "ううん、むり。",
+     "fu": "ううん、むり。",
+     "ok": false,
+     "why": "Casual and blunt — rude to a manager."
+    },
+    {
+     "jp": "いいですね。行きましょう。",
+     "fu": "いいですね。いきましょう。",
+     "ok": false,
+     "why": "Accepts the invitation — but you can't go."
+    }
+   ],
+   "en": "I'm sorry, tonight's a bit…"
+  },
+  {
+   "id": "s-b3",
+   "lv": "n5b",
+   "scene": "At a restaurant, the server asks if you are ready to order. You are still deciding.",
+   "prompt": {
+    "jp": "ごちゅうもんは、おきまりですか。",
+    "fu": "ごちゅうもんは、おきまりですか。"
+   },
+   "opts": [
+    {
+     "jp": "ちょっとまって！",
+     "fu": "ちょっとまって！",
+     "ok": false,
+     "why": "A casual command — rude to a server."
+    },
+    {
+     "jp": "はい、まだです。",
+     "fu": "はい、まだです。",
+     "ok": false,
+     "why": "'Yes' means you're ready, then 'not yet' contradicts it."
+    },
+    {
+     "jp": "すみません、もう少しまってください。",
+     "fu": "すみません、もうすこしまってください。",
+     "ok": true,
+     "why": "Politely asks for a little more time."
+    },
+    {
+     "jp": "いいえ、ちゅうもんしません。",
+     "fu": "いいえ、ちゅうもんしません。",
+     "ok": false,
+     "why": "Says you won't order anything at all."
+    }
+   ],
+   "en": "Sorry, could you give me a little more time?"
+  },
+  {
+   "id": "s-b4",
+   "lv": "n5b",
+   "scene": "Your Japanese friend compliments your Japanese.",
+   "prompt": {
+    "jp": "日本語、上手だね！",
+    "fu": "にほんご、じょうずだね！"
+   },
+   "opts": [
+    {
+     "jp": "はい、上手です。",
+     "fu": "はい、じょうずです。",
+     "ok": false,
+     "why": "Bluntly agrees you are skilled, in polite form — sounds boastful and stiff."
+    },
+    {
+     "jp": "どういたしまして。",
+     "fu": "どういたしまして。",
+     "ok": false,
+     "why": "Means 'you're welcome' — a reply to thanks, not to praise."
+    },
+    {
+     "jp": "上手ですね。",
+     "fu": "じょうずですね。",
+     "ok": false,
+     "why": "Praises your friend instead of answering the compliment."
+    },
+    {
+     "jp": "いやいや、まだまだだよ。",
+     "fu": "いやいや、まだまだだよ。",
+     "ok": true,
+     "why": "A modest, casual reply — the usual response to a compliment."
+    }
+   ],
+   "en": "No, no, I've still got a long way to go."
+  },
+  {
+   "id": "s-b5",
+   "lv": "n5b",
+   "scene": "Your phone rings. The caller asks if this is the Tanaka home. You're not Tanaka — it's a wrong number.",
+   "prompt": {
+    "jp": "もしもし、田中さんのおたくですか。",
+    "fu": "もしもし、たなかさんのおたくですか。"
+   },
+   "opts": [
+    {
+     "jp": "いいえ、ちがいます。",
+     "fu": "いいえ、ちがいます。",
+     "ok": true,
+     "why": "Politely tells the caller they have the wrong number."
+    },
+    {
+     "jp": "はい、そうです。",
+     "fu": "はい、そうです。",
+     "ok": false,
+     "why": "Says it IS the Tanaka home."
+    },
+    {
+     "jp": "はい、田中です。",
+     "fu": "はい、たなかです。",
+     "ok": false,
+     "why": "Claims that you are Tanaka."
+    },
+    {
+     "jp": "田中さん、おげんきですか。",
+     "fu": "たなかさん、おげんきですか。",
+     "ok": false,
+     "why": "Asks after Tanaka as if you knew them."
+    }
+   ],
+   "en": "No, you've got the wrong number."
+  },
+  {
+   "id": "s-41",
+   "lv": "n4",
+   "scene": "You arrive 15 minutes late to a meeting with your professor because your train was delayed.",
+   "prompt": {
+    "jp": "ああ、来ましたね。",
+    "fu": "ああ、きましたね。"
+   },
+   "opts": [
+    {
+     "jp": "ごめんね、電車がおくれちゃって。",
+     "fu": "ごめんね、でんしゃがおくれちゃって。",
+     "ok": false,
+     "why": "Too casual for a professor."
+    },
+    {
+     "jp": "おそくなって、もうしわけありません。電車がおくれてしまって…。",
+     "fu": "おそくなって、もうしわけありません。でんしゃがおくれてしまって…。",
+     "ok": true,
+     "why": "Apologises politely first, then gives the reason softly."
+    },
+    {
+     "jp": "電車がおくれたから、しかたがないです。",
+     "fu": "でんしゃがおくれたから、しかたがないです。",
+     "ok": false,
+     "why": "Blames the train and says it couldn't be helped — no apology."
+    },
+    {
+     "jp": "おまたせ！",
+     "fu": "おまたせ！",
+     "ok": false,
+     "why": "A casual 'sorry to keep you waiting' — for friends only."
+    }
+   ],
+   "en": "I'm very sorry I'm late. My train was delayed…"
+  },
+  {
+   "id": "s-42",
+   "lv": "n4",
+   "scene": "In a clothes shop, a clerk comes up to you. You're just browsing.",
+   "prompt": {
+    "jp": "何かおさがしですか。",
+    "fu": "なにかおさがしですか。"
+   },
+   "opts": [
+    {
+     "jp": "はい、おさがしです。",
+     "fu": "はい、おさがしです。",
+     "ok": false,
+     "why": "お〜です is honorific — never use it about yourself."
+    },
+    {
+     "jp": "いいえ、さがしません。",
+     "fu": "いいえ、さがしません。",
+     "ok": false,
+     "why": "Means 'I won't look for anything' — abrupt and odd."
+    },
+    {
+     "jp": "いえ、ちょっと見ているだけです。",
+     "fu": "いえ、ちょっとみているだけです。",
+     "ok": true,
+     "why": "The standard polite way to say you are just looking."
+    },
+    {
+     "jp": "はい、見ています。",
+     "fu": "はい、みています。",
+     "ok": false,
+     "why": "'Yes' suggests you want help finding something, and the rest doesn't answer the question."
+    }
+   ],
+   "en": "No, I'm just looking."
+  },
+  {
+   "id": "s-43",
+   "lv": "n4",
+   "scene": "It's 6 p.m. You are leaving the office while your coworkers are still working.",
+   "prompt": null,
+   "opts": [
+    {
+     "jp": "いってきます。",
+     "fu": "いってきます。",
+     "ok": false,
+     "why": "Means you're heading out and will come back."
+    },
+    {
+     "jp": "ごくろうさまでした。",
+     "fu": "ごくろうさまでした。",
+     "ok": false,
+     "why": "Thanks others for their work and is used by seniors to juniors — not a phrase for leaving."
+    },
+    {
+     "jp": "じゃあね！",
+     "fu": "じゃあね！",
+     "ok": false,
+     "why": "Too casual for the workplace."
+    },
+    {
+     "jp": "お先にしつれいします。",
+     "fu": "おさきにしつれいします。",
+     "ok": true,
+     "why": "The set phrase for leaving work before others."
+    }
+   ],
+   "en": "Excuse me for leaving before you."
+  },
+  {
+   "id": "s-44",
+   "lv": "n4",
+   "scene": "A close friend asks how you liked the book they lent you. You enjoyed it.",
+   "prompt": {
+    "jp": "この前貸した本、どうだった？",
+    "fu": "このまえかしたほん、どうだった？"
+   },
+   "opts": [
+    {
+     "jp": "すごくおもしろかったよ！ありがとう。",
+     "fu": "すごくおもしろかったよ！ありがとう。",
+     "ok": true,
+     "why": "Answers warmly in casual speech and thanks your friend."
+    },
+    {
+     "jp": "はい、おもしろかったです。",
+     "fu": "はい、おもしろかったです。",
+     "ok": false,
+     "why": "Polite form sounds distant with a close friend."
+    },
+    {
+     "jp": "うん、貸したよ。",
+     "fu": "うん、かしたよ。",
+     "ok": false,
+     "why": "Says you lent it — mixes up who lent the book."
+    },
+    {
+     "jp": "おもしろそうだね。",
+     "fu": "おもしろそうだね。",
+     "ok": false,
+     "why": "Means 'It looks interesting' — as if you haven't read it."
+    }
+   ],
+   "en": "It was really good! Thanks."
+  },
+  {
+   "id": "s-45",
+   "lv": "n4",
+   "scene": "On a hot summer day, an elderly neighbour you don't know well says it's hot today.",
+   "prompt": {
+    "jp": "今日は暑いですね。",
+    "fu": "きょうはあついですね。"
+   },
+   "opts": [
+    {
+     "jp": "うん、暑い。",
+     "fu": "うん、あつい。",
+     "ok": false,
+     "why": "Too casual for a neighbour you don't know well."
+    },
+    {
+     "jp": "ほんとうに暑いですね。",
+     "fu": "ほんとうにあついですね。",
+     "ok": true,
+     "why": "Agrees politely — the expected small-talk reply."
+    },
+    {
+     "jp": "いいえ、暑くないです。",
+     "fu": "いいえ、あつくないです。",
+     "ok": false,
+     "why": "Flatly contradicts friendly small talk on an obviously hot day."
+    },
+    {
+     "jp": "暑そうですね。",
+     "fu": "あつそうですね。",
+     "ok": false,
+     "why": "Means 'You look hot' — as if you weren't feeling the heat yourself."
+    }
+   ],
+   "en": "It really is hot, isn't it?"
+  }
+ ],
+ "cando": [
+  {
+   "id": "c01",
+   "skill": "reading",
+   "lv": "k",
+   "text": "I can read simple signs, menus and messages written in hiragana and katakana, like item names and prices."
+  },
+  {
+   "id": "c02",
+   "skill": "reading",
+   "lv": "n5a",
+   "text": "I can read opening hours, days of the week and prices written with basic kanji."
+  },
+  {
+   "id": "c03",
+   "skill": "reading",
+   "lv": "n5b",
+   "text": "I can understand a short text from a friend about plans, such as when they'll arrive or where to wait."
+  },
+  {
+   "id": "c04",
+   "skill": "reading",
+   "lv": "n5b",
+   "text": "I can follow short notices about everyday rules, like when to put out the garbage or where not to take photos."
+  },
+  {
+   "id": "c05",
+   "skill": "reading",
+   "lv": "n4",
+   "text": "I can read a short notice or email about a schedule change and work out what I need to do."
+  },
+  {
+   "id": "c06",
+   "skill": "listening",
+   "lv": "k",
+   "text": "I can catch simple greetings, and understand a price or the time when someone says it slowly."
+  },
+  {
+   "id": "c07",
+   "skill": "listening",
+   "lv": "n5a",
+   "text": "I can understand a shop clerk telling me how much something costs and how many I asked for."
+  },
+  {
+   "id": "c08",
+   "skill": "listening",
+   "lv": "n5b",
+   "text": "I can follow a short conversation about when and where to meet."
+  },
+  {
+   "id": "c09",
+   "skill": "listening",
+   "lv": "n4",
+   "text": "I can follow simple directions to a place, like 'go straight and turn left at the second corner'."
+  },
+  {
+   "id": "c10",
+   "skill": "listening",
+   "lv": "n4",
+   "text": "I can understand when a friend is turning something down, even if they never say 'no' directly."
+  },
+  {
+   "id": "c11",
+   "skill": "writing",
+   "lv": "k",
+   "text": "I can write my name and basic greetings in hiragana."
+  },
+  {
+   "id": "c12",
+   "skill": "writing",
+   "lv": "n5a",
+   "text": "I can write simple sentences about what I did or will do, such as where I went at the weekend."
+  },
+  {
+   "id": "c13",
+   "skill": "writing",
+   "lv": "n5b",
+   "text": "I can send a short casual message inviting a friend somewhere."
+  },
+  {
+   "id": "c14",
+   "skill": "writing",
+   "lv": "n5b",
+   "text": "I can write a polite question to a stranger or staff member, such as asking if I may take photos."
+  },
+  {
+   "id": "c15",
+   "skill": "writing",
+   "lv": "n4",
+   "text": "I can write a short polite message to a teacher explaining that I'll be absent and why."
+  },
+  {
+   "id": "c16",
+   "skill": "speaking",
+   "lv": "k",
+   "text": "I can greet people and say thank you and sorry at the right moments."
+  },
+  {
+   "id": "c17",
+   "skill": "speaking",
+   "lv": "n5a",
+   "text": "I can answer simple questions from shop and restaurant staff, like how many people are in my group."
+  },
+  {
+   "id": "c18",
+   "skill": "speaking",
+   "lv": "n5b",
+   "text": "I can accept or turn down a friend's invitation in casual Japanese."
+  },
+  {
+   "id": "c19",
+   "skill": "speaking",
+   "lv": "n4",
+   "text": "I can politely decline an invitation from a boss or teacher without saying 'no' directly."
+  },
+  {
+   "id": "c20",
+   "skill": "speaking",
+   "lv": "n4",
+   "text": "I can switch between casual speech with friends and polite speech with teachers, coworkers and strangers."
+  }
+ ]
+}
