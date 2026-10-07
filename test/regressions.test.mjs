@@ -113,6 +113,26 @@ export default async function run() {
         return { sex: stored.sex, age: stored.age };
       }), { sex: "female", age: 41 });
 
+    // The JSON importer writes any ft_ key verbatim. Goals and the quick-add
+    // list were the two records not coerced on the way back in.
+    await page.evaluate((today) => {
+      localStorage.clear();
+      localStorage.setItem("ft_goals", JSON.stringify({ cal: "2000", p: "abc", c: null, f: -5 }));
+      localStorage.setItem("ft_recent", JSON.stringify([{}, null, { name: "Egg, 1 large", kcal: 72, p: 6.3, c: 0.4, f: 5, n: 2, at: 1 }]));
+      localStorage.setItem("ft_day_" + today, JSON.stringify({ meals: {}, water: 200000, exercises: [], weight: null }));
+    }, isoDay(0));
+    await page.reload();
+    await page.waitForTimeout(300);
+    check("a string calorie goal does not concatenate into 20,000 left", await page.textContent("#calRemaining"), "2,000");
+    check("garbage macro goals fall back", [await page.textContent("#pGoal"), await page.textContent("#cGoal")], ["120", "250"]);
+    check("a negative goal is clamped, not displayed", await page.textContent("#fGoal"), "0");
+    check("a quick-add list with junk entries still renders the good one",
+      await page.evaluate(() => [...document.querySelectorAll("#quickChips .chip")].map(b => b.title.includes("Egg"))), [true]);
+    check("stored water is capped at the UI's own ceiling",
+      await page.evaluate(() => document.querySelectorAll("#glasses .glass").length), 40);
+    check("a non-array quick-add list is ignored",
+      await page.evaluate(() => { localStorage.setItem("ft_recent", "{}"); render(); return $("#quickCard").hidden; }), true);
+
     check("no console errors", [...page.errors], []);
     await page.close();
 

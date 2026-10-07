@@ -1114,6 +1114,9 @@ const MEALS = [
 ];
 
 const DEFAULT_GOALS = { cal: 2000, p: 120, c: 250, f: 65, water: 8 };
+/* The Settings inputs clamp to these; stored goals are clamped the same way. */
+const GOAL_RANGE = { cal: [800, 8000], p: [0, 500], c: [0, 900], f: [0, 400], water: [1, 30] };
+const MAX_WATER = 40;
 /* Mirrors the [data-theme] blocks in the stylesheet; swatch is [bg, accent, accent-2]. */
 const THEMES = [
   { id: "obsidian",  name: "Obsidian & Gold", scheme: "dark",  swatch: ["#09090b", "#d4af37", "#f0dda4"] },
@@ -1198,6 +1201,21 @@ const finite = (v, fallback = 0) => {
   return Number.isFinite(n) ? n : fallback;
 };
 
+/* A hand-edited export can carry "2000" (which concatenates: "20,000 kcal
+   left"), "abc" (NaN in the HUD) or 0, so goals are coerced like every
+   other stored record. */
+function normalizeGoals(raw) {
+  const g = { ...DEFAULT_GOALS };
+  if (!raw || typeof raw !== "object") return g;
+  for (const k of Object.keys(g)) {
+    const [lo, hi] = GOAL_RANGE[k];
+    const v = raw[k];
+    const n = (v === null || v === "") ? g[k] : finite(v, g[k]);   // Number(null) is 0, not "missing"
+    g[k] = Math.min(hi, Math.max(lo, Math.round(n)));
+  }
+  return g;
+}
+
 /* Stored days are attacker-supplyable — the JSON importer writes any ft_ key
    verbatim — so every field is coerced to its declared type on the way in.
    Without this a string qty or min reached innerHTML and executed. */
@@ -1226,7 +1244,7 @@ function loadDay(date) {
   for (const m of MEALS) {
     if (Array.isArray(d.meals?.[m.id])) base.meals[m.id] = d.meals[m.id].map(normalizeItem).filter(Boolean);
   }
-  base.water = Math.max(0, finite(d.water));
+  base.water = Math.min(MAX_WATER, Math.max(0, Math.round(finite(d.water))));
   base.exercises = Array.isArray(d.exercises) ? d.exercises.map(normalizeExercise).filter(Boolean) : [];
   base.weight = Number.isFinite(Number(d.weight)) && d.weight !== null ? Number(d.weight) : null;
   return base;
@@ -1261,7 +1279,7 @@ function shiftISO(iso, days) {
    ============================================================ */
 const state = {
   date: todayISO(),
-  goals: { ...DEFAULT_GOALS, ...readJSON(KEY.goals, {}) },
+  goals: normalizeGoals(readJSON(KEY.goals, {})),
   prefs: loadPrefs(),
   day: null,
   view: "Today",
@@ -1323,8 +1341,18 @@ const mealTotal = (items) => items.reduce((s, it) => s + it.kcal * it.qty, 0);
 /* ============================================================
    Recent foods (quick add)
    ============================================================ */
-function bumpRecent(food) {
+/* Same treatment as stored days: a non-array or an entry without a name used
+   to throw inside render() and take the whole app down until a wipe. */
+function loadRecent() {
   const list = readJSON(KEY.recent, []);
+  if (!Array.isArray(list)) return [];
+  return list.map(r => {
+    const it = typeof r?.name === "string" ? normalizeItem(r) : null;
+    return it && { name: it.name, kcal: it.kcal, p: it.p, c: it.c, f: it.f, n: Math.max(1, finite(r.n, 1)), at: finite(r.at) };
+  }).filter(Boolean);
+}
+function bumpRecent(food) {
+  const list = loadRecent();
   const key = food.name;
   const found = list.find(r => r.name === key);
   if (found) { found.n = (found.n || 1) + 1; found.at = Date.now(); }
@@ -1333,7 +1361,7 @@ function bumpRecent(food) {
   writeJSON(KEY.recent, list.slice(0, 24));
 }
 function topRecent(limit = 10) {
-  return readJSON(KEY.recent, []).slice(0, limit);
+  return loadRecent().slice(0, limit);
 }
 
 /* ============================================================
@@ -1929,7 +1957,7 @@ $("#themeBtn").addEventListener("click", () => {
    Water & exercise buttons
    ============================================================ */
 $("#waterPlus").addEventListener("click", () => {
-  state.day.water = Math.min(state.day.water + 1, 40);
+  state.day.water = Math.min(state.day.water + 1, MAX_WATER);
   persist(); render();
 });
 $("#waterMinus").addEventListener("click", () => {
@@ -2359,7 +2387,7 @@ $("#importFile").addEventListener("change", async (e) => {
       if (!k.startsWith("ft_")) continue;
       writeJSON(k, v); n++;
     }
-    state.goals = { ...DEFAULT_GOALS, ...readJSON(KEY.goals, {}) };
+    state.goals = normalizeGoals(readJSON(KEY.goals, {}));
     state.prefs = loadPrefs();
     state.day = loadDay(state.date);
     render();
