@@ -113,6 +113,21 @@ export default async function run() {
         return { sex: stored.sex, age: stored.age };
       }), { sex: "female", age: 41 });
 
+    // Quick-add's undo found its item by object identity, which a date hop
+    // breaks because the day is re-read from storage: Undo did nothing.
+    check("quick-add undo survives a date hop",
+      await page.evaluate((today) => {
+        localStorage.clear();
+        localStorage.setItem("ft_recent", JSON.stringify([{ name: "Apple, 1 medium", kcal: 95, p: 0.5, c: 25, f: 0.3, n: 3, at: 1 }]));
+        state.date = today; state.day = emptyDay(); persist();
+        setView("Today");
+        quickAdd(0);
+        const meal = MEALS.map(m => m.id).find(id => state.day.meals[id].length === 1);
+        goToDate(shiftISO(today, -1)); goToDate(today);
+        state.lastUndo();
+        return loadDay(today).meals[meal].length;
+      }, isoDay(0)), 0);
+
     // The JSON importer writes any ft_ key verbatim. Goals and the quick-add
     // list were the two records not coerced on the way back in.
     await page.evaluate((today) => {

@@ -1475,14 +1475,18 @@ function quickAdd(index) {
   if (!r) return;
   const mealId = guessMeal();
   const item = { name: r.name, kcal: r.kcal, p: r.p, c: r.c, f: r.f, qty: 1 };
-  state.day.meals[mealId].push(item);
+  const at = state.day.meals[mealId].push(item) - 1;
   bumpRecent(item);
   persist(); render();
   const mealName = MEALS.find(m => m.id === mealId).name.toLowerCase();
   const onDate = state.date;
   toast(`${r.name.split(",")[0]} → ${mealName}`, () => undoOn(onDate, (day) => {
-    const idx = day.meals[mealId].lastIndexOf(item);
-    if (idx > -1) day.meals[mealId].splice(idx, 1);
+    // A date hop re-reads the day from storage, so the pushed object is no
+    // longer in it; fall back to the slot it went into.
+    const list = day.meals[mealId];
+    let idx = list.lastIndexOf(item);
+    if (idx === -1 && list[at]?.name === item.name) idx = at;
+    if (idx > -1) list.splice(idx, 1);
   }));
 }
 
