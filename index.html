@@ -1224,7 +1224,8 @@ function normalizeItem(raw) {
   const qty = finite(raw.qty, 1);
   return {
     name: String(raw.name ?? "Unnamed food"),
-    kcal: finite(raw.kcal), p: finite(raw.p), c: finite(raw.c), f: finite(raw.f),
+    kcal: Math.max(0, finite(raw.kcal)),
+    p: Math.max(0, finite(raw.p)), c: Math.max(0, finite(raw.c)), f: Math.max(0, finite(raw.f)),
     qty: qty > 0 ? qty : 1,
   };
 }
@@ -2149,10 +2150,12 @@ $("#portionQty").addEventListener("keydown", (e) => {
   if (e.key === "Enter") { e.preventDefault(); commitPortion(); }
 });
 
+/* The macro fields are min="0", but a typed minus sign still gets through,
+   so the reads clamp like the loader does — otherwise the HUD showed "-50 g". */
 function customDerived() {
-  const p = parseFloat($("#customP").value) || 0;
-  const c = parseFloat($("#customC").value) || 0;
-  const f = parseFloat($("#customF").value) || 0;
+  const p = Math.max(0, parseFloat($("#customP").value) || 0);
+  const c = Math.max(0, parseFloat($("#customC").value) || 0);
+  const f = Math.max(0, parseFloat($("#customF").value) || 0);
   const derived = p * 4 + c * 4 + f * 9;
   $("#customDerived").textContent = derived > 0
     ? `Those macros work out to about ${fmt(derived)} kcal.`
@@ -2162,9 +2165,9 @@ function customDerived() {
 
 $("#customAdd").addEventListener("click", () => {
   const name = $("#customName").value.trim() || "Custom food";
-  const p = parseFloat($("#customP").value) || 0;
-  const c = parseFloat($("#customC").value) || 0;
-  const f = parseFloat($("#customF").value) || 0;
+  const p = Math.max(0, parseFloat($("#customP").value) || 0);
+  const c = Math.max(0, parseFloat($("#customC").value) || 0);
+  const f = Math.max(0, parseFloat($("#customF").value) || 0);
   let kcal = parseFloat($("#customKcal").value);
   if (!Number.isFinite(kcal) || kcal <= 0) kcal = p * 4 + c * 4 + f * 9;
   if (kcal <= 0) { toast("Enter calories, or the macros to work them out."); $("#customKcal").focus(); return; }
@@ -2201,8 +2204,9 @@ $("#addExerciseBtn").addEventListener("click", () => {
   openDialog(exDialog);
 });
 $("#exAdd").addEventListener("click", () => {
-  const min = parseInt($("#exMin").value, 10) || 0;
-  const kcal = parseInt($("#exKcal").value, 10) || 0;
+  // Clamped like normalizeExercise, so the HUD after the click matches the next load.
+  const min = Math.max(0, parseInt($("#exMin").value, 10) || 0);
+  const kcal = Math.max(0, parseInt($("#exKcal").value, 10) || 0);
   const sel = $("#exType");
   const name = sel.options[sel.selectedIndex].dataset.name;
   if (min <= 0) { toast("How many minutes?"); $("#exMin").focus(); return; }

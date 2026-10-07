@@ -148,6 +148,26 @@ export default async function run() {
     check("a non-array quick-add list is ignored",
       await page.evaluate(() => { localStorage.setItem("ft_recent", "{}"); render(); return $("#quickCard").hidden; }), true);
 
+    // min="0" does not stop a typed minus sign. The exercise handler skipped
+    // the clamp the loader applies, so the HUD showed "-200" until a reload
+    // flipped it to 0; a negative custom-food macro was stored and shown as is.
+    await page.evaluate(() => { localStorage.clear(); state.day = emptyDay(); persist(); render(); });
+    await page.click("#addExerciseBtn");
+    await page.fill("#exKcal", "-200");
+    await page.click("#exAdd");
+    check("a negative burn is clamped before it reaches the HUD",
+      [await page.textContent("#calBurned"), await page.textContent("#calRemaining")], ["0", "2,000"]);
+    check("a negative custom-food macro is stored as zero",
+      await page.evaluate(() => {
+        state.pendingMeal = "lunch";
+        $("#customKcal").value = "100"; $("#customP").value = "-50";
+        $("#customAdd").click();
+        return [$("#pVal").textContent, loadDay(state.date).meals.lunch[0].p];
+      }), ["0", 0]);
+    check("an imported negative macro is coerced like a negative exercise",
+      await page.evaluate(() => normalizeItem({ name: "x", kcal: -100, p: -50, c: -1, f: -2, qty: 1 })),
+      { name: "x", kcal: 0, p: 0, c: 0, f: 0, qty: 1 });
+
     check("no console errors", [...page.errors], []);
     await page.close();
 

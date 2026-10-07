@@ -14,7 +14,7 @@ Apple Health and Health Connect sync.
 
 ```sh
 python3 -m http.server 8000   # http://localhost:8000 (or just open index.html; Web Bluetooth needs localhost/HTTPS)
-npm ci && npx playwright install chromium && npm test    # 108 assertions in Chromium (CI: .github/workflows/smoke.yml)
+npm ci && npx playwright install chromium && npm test    # 111 assertions in Chromium (CI: .github/workflows/smoke.yml)
 ```
 
 The repo's GitHub Pages site (https://calebhomwe.github.io/111/) currently serves the Michi Japanese course from the `gh-pages` branch (PR #6), not FitTrack.
