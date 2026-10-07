@@ -1158,6 +1158,17 @@ function writeJSON(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); }
   catch { toast("Couldn't save — storage is full or blocked."); }
 }
+/* Chrome with site data blocked (and sandboxed frames) throws on every
+   localStorage access, not only on writes, so the calls that bypass
+   readJSON/writeJSON wrap too — otherwise a throw mid-handler leaves the
+   HUD showing the value from before the click. */
+function removeKey(key) {
+  try { localStorage.removeItem(key); } catch { /* blocked, or nothing stored */ }
+}
+function storedKeys(prefix = "ft_") {
+  try { return Object.keys(localStorage).filter(k => k.startsWith(prefix)); }
+  catch { return []; }
+}
 
 /* v2 stored "dark"/"light"; map those onto the palettes that look identical. */
 function normalizeFont(id) {
@@ -1221,7 +1232,7 @@ function loadDay(date) {
   return base;
 }
 function saveDay(date, data) {
-  if (isDayEmpty(data)) localStorage.removeItem(KEY.day(date));
+  if (isDayEmpty(data)) removeKey(KEY.day(date));
   else writeJSON(KEY.day(date), data);
 }
 function isDayEmpty(d) {
@@ -1802,10 +1813,7 @@ function renderSettings() {
   el.textContent = `Your macros add up to ${fmt(macroKcal)} kcal — ${Math.abs(diff) < 50 ? "a good match for" : (diff > 0 ? `${fmt(diff)} above` : `${fmt(-diff)} below`)} your ${fmt(g.cal)} kcal target.`;
   el.classList.toggle("bad", Math.abs(diff) > g.cal * 0.12);
 
-  let dayCount = 0;
-  for (let i = 0; i < localStorage.length; i++) {
-    if ((localStorage.key(i) || "").startsWith("ft_day_")) dayCount++;
-  }
+  const dayCount = storedKeys("ft_day_").length;
   renderDevices();
   $("#dataSummary").textContent = dayCount === 0
     ? "No days logged yet."
@@ -2274,7 +2282,7 @@ $("#resetDayBtn").addEventListener("click", () => {
 
 $("#wipeBtn").addEventListener("click", () => {
   if (!confirm("Delete all FitTrack data on this device? This cannot be undone.")) return;
-  Object.keys(localStorage).filter(k => k.startsWith("ft_")).forEach(k => localStorage.removeItem(k));
+  storedKeys().forEach(removeKey);
   state.goals = { ...DEFAULT_GOALS };
   state.prefs = { ...DEFAULT_PREFS };
   state.date = todayISO();
@@ -2313,10 +2321,7 @@ async function exportNative(json) {
 
 $("#exportBtn").addEventListener("click", () => {
   const all = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (k && k.startsWith("ft_")) all[k] = readJSON(k, null);
-  }
+  for (const k of storedKeys()) all[k] = readJSON(k, null);
   const json = JSON.stringify({ app: "fittrack", version: 2, data: all }, null, 2);
 
   if (nativePlatform() !== "web") {

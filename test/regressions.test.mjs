@@ -115,6 +115,25 @@ export default async function run() {
 
     check("no console errors", [...page.errors], []);
     await page.close();
+
+    // Chrome with site data blocked throws on every localStorage access, not
+    // only on writes. The raw calls outside readJSON/writeJSON threw mid-handler
+    // and left the HUD showing the value from before the click.
+    const blocked = await openApp(browser, {
+      initScript: () => Object.defineProperty(window, "localStorage", {
+        get() { throw new DOMException("Access is denied for this document.", "SecurityError"); },
+      }),
+    });
+    await blocked.click("#waterPlus");
+    await blocked.click("#waterMinus");
+    check("blocked storage: the HUD still follows the water buttons", await blocked.textContent("#waterVal"), "0");
+    await blocked.click('nav.tabbar button[data-view="Settings"]');
+    check("blocked storage: Settings still renders", await blocked.textContent("#dataSummary"), "No days logged yet.");
+    blocked.once("dialog", (d) => d.accept());
+    await blocked.click("#wipeBtn");
+    await blocked.waitForTimeout(50);
+    check("blocked storage: no uncaught errors", [...blocked.errors], []);
+    await blocked.close();
   });
   return report();
 }
