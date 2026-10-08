@@ -66,7 +66,7 @@ npm test               # all suites
 npm test security      # one suite: app | health | regressions | security | accessibility | typography
 ```
 
-The tests drive the real app in Chromium — 108 assertions covering the logging
+The tests drive the real app in Chromium — 111 assertions covering the logging
 flows, the theme contract and its contrast floors, layout at phone width, file
 import, the native bridge under five different conditions, every defect found in
 review, and the stored-XSS payload. Any console error fails the run.
