@@ -1114,6 +1114,9 @@ const MEALS = [
 ];
 
 const DEFAULT_GOALS = { cal: 2000, p: 120, c: 250, f: 65, water: 8 };
+/* The Settings inputs clamp to these; stored goals are clamped the same way. */
+const GOAL_RANGE = { cal: [800, 8000], p: [0, 500], c: [0, 900], f: [0, 400], water: [1, 30] };
+const MAX_WATER = 40;
 /* Mirrors the [data-theme] blocks in the stylesheet; swatch is [bg, accent, accent-2]. */
 const THEMES = [
   { id: "obsidian",  name: "Obsidian & Gold", scheme: "dark",  swatch: ["#09090b", "#d4af37", "#f0dda4"] },
@@ -1158,6 +1161,17 @@ function writeJSON(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); }
   catch { toast("Couldn't save — storage is full or blocked."); }
 }
+/* Chrome with site data blocked (and sandboxed frames) throws on every
+   localStorage access, not only on writes, so the calls that bypass
+   readJSON/writeJSON wrap too — otherwise a throw mid-handler leaves the
+   HUD showing the value from before the click. */
+function removeKey(key) {
+  try { localStorage.removeItem(key); } catch { /* blocked, or nothing stored */ }
+}
+function storedKeys(prefix = "ft_") {
+  try { return Object.keys(localStorage).filter(k => k.startsWith(prefix)); }
+  catch { return []; }
+}
 
 /* v2 stored "dark"/"light"; map those onto the palettes that look identical. */
 function normalizeFont(id) {
@@ -1187,6 +1201,21 @@ const finite = (v, fallback = 0) => {
   return Number.isFinite(n) ? n : fallback;
 };
 
+/* A hand-edited export can carry "2000" (which concatenates: "20,000 kcal
+   left"), "abc" (NaN in the HUD) or 0, so goals are coerced like every
+   other stored record. */
+function normalizeGoals(raw) {
+  const g = { ...DEFAULT_GOALS };
+  if (!raw || typeof raw !== "object") return g;
+  for (const k of Object.keys(g)) {
+    const [lo, hi] = GOAL_RANGE[k];
+    const v = raw[k];
+    const n = (v === null || v === "") ? g[k] : finite(v, g[k]);   // Number(null) is 0, not "missing"
+    g[k] = Math.min(hi, Math.max(lo, Math.round(n)));
+  }
+  return g;
+}
+
 /* Stored days are attacker-supplyable — the JSON importer writes any ft_ key
    verbatim — so every field is coerced to its declared type on the way in.
    Without this a string qty or min reached innerHTML and executed. */
@@ -1195,7 +1224,8 @@ function normalizeItem(raw) {
   const qty = finite(raw.qty, 1);
   return {
     name: String(raw.name ?? "Unnamed food"),
-    kcal: finite(raw.kcal), p: finite(raw.p), c: finite(raw.c), f: finite(raw.f),
+    kcal: Math.max(0, finite(raw.kcal)),
+    p: Math.max(0, finite(raw.p)), c: Math.max(0, finite(raw.c)), f: Math.max(0, finite(raw.f)),
     qty: qty > 0 ? qty : 1,
   };
 }
@@ -1215,13 +1245,13 @@ function loadDay(date) {
   for (const m of MEALS) {
     if (Array.isArray(d.meals?.[m.id])) base.meals[m.id] = d.meals[m.id].map(normalizeItem).filter(Boolean);
   }
-  base.water = Math.max(0, finite(d.water));
+  base.water = Math.min(MAX_WATER, Math.max(0, Math.round(finite(d.water))));
   base.exercises = Array.isArray(d.exercises) ? d.exercises.map(normalizeExercise).filter(Boolean) : [];
   base.weight = Number.isFinite(Number(d.weight)) && d.weight !== null ? Number(d.weight) : null;
   return base;
 }
 function saveDay(date, data) {
-  if (isDayEmpty(data)) localStorage.removeItem(KEY.day(date));
+  if (isDayEmpty(data)) removeKey(KEY.day(date));
   else writeJSON(KEY.day(date), data);
 }
 function isDayEmpty(d) {
@@ -1250,7 +1280,7 @@ function shiftISO(iso, days) {
    ============================================================ */
 const state = {
   date: todayISO(),
-  goals: { ...DEFAULT_GOALS, ...readJSON(KEY.goals, {}) },
+  goals: normalizeGoals(readJSON(KEY.goals, {})),
   prefs: loadPrefs(),
   day: null,
   view: "Today",
@@ -1312,8 +1342,18 @@ const mealTotal = (items) => items.reduce((s, it) => s + it.kcal * it.qty, 0);
 /* ============================================================
    Recent foods (quick add)
    ============================================================ */
-function bumpRecent(food) {
+/* Same treatment as stored days: a non-array or an entry without a name used
+   to throw inside render() and take the whole app down until a wipe. */
+function loadRecent() {
   const list = readJSON(KEY.recent, []);
+  if (!Array.isArray(list)) return [];
+  return list.map(r => {
+    const it = typeof r?.name === "string" ? normalizeItem(r) : null;
+    return it && { name: it.name, kcal: it.kcal, p: it.p, c: it.c, f: it.f, n: Math.max(1, finite(r.n, 1)), at: finite(r.at) };
+  }).filter(Boolean);
+}
+function bumpRecent(food) {
+  const list = loadRecent();
   const key = food.name;
   const found = list.find(r => r.name === key);
   if (found) { found.n = (found.n || 1) + 1; found.at = Date.now(); }
@@ -1322,7 +1362,7 @@ function bumpRecent(food) {
   writeJSON(KEY.recent, list.slice(0, 24));
 }
 function topRecent(limit = 10) {
-  return readJSON(KEY.recent, []).slice(0, limit);
+  return loadRecent().slice(0, limit);
 }
 
 /* ============================================================
@@ -1436,14 +1476,18 @@ function quickAdd(index) {
   if (!r) return;
   const mealId = guessMeal();
   const item = { name: r.name, kcal: r.kcal, p: r.p, c: r.c, f: r.f, qty: 1 };
-  state.day.meals[mealId].push(item);
+  const at = state.day.meals[mealId].push(item) - 1;
   bumpRecent(item);
   persist(); render();
   const mealName = MEALS.find(m => m.id === mealId).name.toLowerCase();
   const onDate = state.date;
   toast(`${r.name.split(",")[0]} → ${mealName}`, () => undoOn(onDate, (day) => {
-    const idx = day.meals[mealId].lastIndexOf(item);
-    if (idx > -1) day.meals[mealId].splice(idx, 1);
+    // A date hop re-reads the day from storage, so the pushed object is no
+    // longer in it; fall back to the slot it went into.
+    const list = day.meals[mealId];
+    let idx = list.lastIndexOf(item);
+    if (idx === -1 && list[at]?.name === item.name) idx = at;
+    if (idx > -1) list.splice(idx, 1);
   }));
 }
 
@@ -1802,10 +1846,7 @@ function renderSettings() {
   el.textContent = `Your macros add up to ${fmt(macroKcal)} kcal — ${Math.abs(diff) < 50 ? "a good match for" : (diff > 0 ? `${fmt(diff)} above` : `${fmt(-diff)} below`)} your ${fmt(g.cal)} kcal target.`;
   el.classList.toggle("bad", Math.abs(diff) > g.cal * 0.12);
 
-  let dayCount = 0;
-  for (let i = 0; i < localStorage.length; i++) {
-    if ((localStorage.key(i) || "").startsWith("ft_day_")) dayCount++;
-  }
+  const dayCount = storedKeys("ft_day_").length;
   renderDevices();
   $("#dataSummary").textContent = dayCount === 0
     ? "No days logged yet."
@@ -1921,7 +1962,7 @@ $("#themeBtn").addEventListener("click", () => {
    Water & exercise buttons
    ============================================================ */
 $("#waterPlus").addEventListener("click", () => {
-  state.day.water = Math.min(state.day.water + 1, 40);
+  state.day.water = Math.min(state.day.water + 1, MAX_WATER);
   persist(); render();
 });
 $("#waterMinus").addEventListener("click", () => {
@@ -2109,10 +2150,12 @@ $("#portionQty").addEventListener("keydown", (e) => {
   if (e.key === "Enter") { e.preventDefault(); commitPortion(); }
 });
 
+/* The macro fields are min="0", but a typed minus sign still gets through,
+   so the reads clamp like the loader does — otherwise the HUD showed "-50 g". */
 function customDerived() {
-  const p = parseFloat($("#customP").value) || 0;
-  const c = parseFloat($("#customC").value) || 0;
-  const f = parseFloat($("#customF").value) || 0;
+  const p = Math.max(0, parseFloat($("#customP").value) || 0);
+  const c = Math.max(0, parseFloat($("#customC").value) || 0);
+  const f = Math.max(0, parseFloat($("#customF").value) || 0);
   const derived = p * 4 + c * 4 + f * 9;
   $("#customDerived").textContent = derived > 0
     ? `Those macros work out to about ${fmt(derived)} kcal.`
@@ -2122,9 +2165,9 @@ function customDerived() {
 
 $("#customAdd").addEventListener("click", () => {
   const name = $("#customName").value.trim() || "Custom food";
-  const p = parseFloat($("#customP").value) || 0;
-  const c = parseFloat($("#customC").value) || 0;
-  const f = parseFloat($("#customF").value) || 0;
+  const p = Math.max(0, parseFloat($("#customP").value) || 0);
+  const c = Math.max(0, parseFloat($("#customC").value) || 0);
+  const f = Math.max(0, parseFloat($("#customF").value) || 0);
   let kcal = parseFloat($("#customKcal").value);
   if (!Number.isFinite(kcal) || kcal <= 0) kcal = p * 4 + c * 4 + f * 9;
   if (kcal <= 0) { toast("Enter calories, or the macros to work them out."); $("#customKcal").focus(); return; }
@@ -2161,8 +2204,9 @@ $("#addExerciseBtn").addEventListener("click", () => {
   openDialog(exDialog);
 });
 $("#exAdd").addEventListener("click", () => {
-  const min = parseInt($("#exMin").value, 10) || 0;
-  const kcal = parseInt($("#exKcal").value, 10) || 0;
+  // Clamped like normalizeExercise, so the HUD after the click matches the next load.
+  const min = Math.max(0, parseInt($("#exMin").value, 10) || 0);
+  const kcal = Math.max(0, parseInt($("#exKcal").value, 10) || 0);
   const sel = $("#exType");
   const name = sel.options[sel.selectedIndex].dataset.name;
   if (min <= 0) { toast("How many minutes?"); $("#exMin").focus(); return; }
@@ -2274,7 +2318,7 @@ $("#resetDayBtn").addEventListener("click", () => {
 
 $("#wipeBtn").addEventListener("click", () => {
   if (!confirm("Delete all FitTrack data on this device? This cannot be undone.")) return;
-  Object.keys(localStorage).filter(k => k.startsWith("ft_")).forEach(k => localStorage.removeItem(k));
+  storedKeys().forEach(removeKey);
   state.goals = { ...DEFAULT_GOALS };
   state.prefs = { ...DEFAULT_PREFS };
   state.date = todayISO();
@@ -2313,10 +2357,7 @@ async function exportNative(json) {
 
 $("#exportBtn").addEventListener("click", () => {
   const all = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (k && k.startsWith("ft_")) all[k] = readJSON(k, null);
-  }
+  for (const k of storedKeys()) all[k] = readJSON(k, null);
   const json = JSON.stringify({ app: "fittrack", version: 2, data: all }, null, 2);
 
   if (nativePlatform() !== "web") {
@@ -2354,7 +2395,7 @@ $("#importFile").addEventListener("change", async (e) => {
       if (!k.startsWith("ft_")) continue;
       writeJSON(k, v); n++;
     }
-    state.goals = { ...DEFAULT_GOALS, ...readJSON(KEY.goals, {}) };
+    state.goals = normalizeGoals(readJSON(KEY.goals, {}));
     state.prefs = loadPrefs();
     state.day = loadDay(state.date);
     render();

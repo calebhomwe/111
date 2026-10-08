@@ -10,6 +10,15 @@ linked precisely so that loading the page contacts nothing.
 The same `index.html` is also the payload for an iOS and Android app, which adds
 Apple Health and Health Connect sync.
 
+## Play / Test
+
+```sh
+python3 -m http.server 8000   # http://localhost:8000 (or just open index.html; Web Bluetooth needs localhost/HTTPS)
+npm ci && npx playwright install chromium && npm test    # 111 assertions in Chromium (CI: .github/workflows/smoke.yml)
+```
+
+The repo's GitHub Pages site (https://calebhomwe.github.io/111/) currently serves the Michi Japanese course from the `gh-pages` branch (PR #6), not FitTrack.
+
 ## Using it
 
 | | |
@@ -54,10 +63,10 @@ arrives either through the export file or through the native build. See
 ```sh
 npm install
 npm test               # all suites
-npm test security      # one suite: app | health | regressions | security
+npm test security      # one suite: app | health | regressions | security | accessibility | typography
 ```
 
-The tests drive the real app in Chromium — 64 assertions covering the logging
+The tests drive the real app in Chromium — 111 assertions covering the logging
 flows, the theme contract and its contrast floors, layout at phone width, file
 import, the native bridge under five different conditions, every defect found in
 review, and the stored-XSS payload. Any console error fails the run.
